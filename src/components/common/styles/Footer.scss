@@ -1,0 +1,105 @@
+.footer {
+    width: 100%;
+    background: #88d0b9;
+
+    /* ───────────── 구독 박스 ───────────── */
+    .subscribe-box {
+        width: 90%;
+        margin: 0 auto;
+        margin-top: 60px;
+        background: #d2f4e4;
+        border-radius: 20px;
+        display: flex;
+        justify-content: space-between;
+        padding: 40px 50px;
+
+        .text-area {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+
+            h2 {
+                font-size: 28px;
+                font-weight: 700;
+            }
+
+            p {
+                font-size: 14px;
+                color: #333;
+                line-height: 1.4;
+            }
+
+            .input-area {
+                display: flex;
+                gap: 10px;
+
+                input {
+                    width: 260px;
+                    padding: 12px 14px;
+                    border: none;
+                    border-radius: 8px;
+                    font-size: 14px;
+                }
+
+                button {
+                    padding: 0 18px;
+                    font-size: 14px;
+                    background: #0f351d;
+                    color: white;
+                    border-radius: 6px;
+                    border: none;
+                    cursor: pointer;
+                }
+            }
+
+            .sns {
+                display: flex;
+                gap: 16px;
+                margin-top: 10px;
+
+                i {
+                    font-size: 20px;
+                    cursor: pointer;
+                    transition: 0.2s;
+
+                    &:hover {
+                        opacity: 0.7;
+                    }
+                }
+            }
+        }
+
+        .image-area img {
+            width: 200px;
+        }
+    }
+
+    /* ───────────── 푸터 메뉴 ───────────── */
+    .footer-menu {
+        width: 90%;
+        margin: 50px auto;
+        padding-bottom: 50px;
+
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 40px;
+
+        .column {
+            h4 {
+                font-size: 15px;
+                font-weight: 600;
+                margin-bottom: 16px;
+            }
+
+            p {
+                font-size: 14px;
+                margin-bottom: 10px;
+                cursor: pointer;
+
+                &:hover {
+                    opacity: 0.7;
+                }
+            }
+        }
+    }
+}
