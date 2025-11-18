@@ -1,6 +1,6 @@
 import React from 'react'
 import '../../styles/components/home/HeroSearchWrap.scss'
-const HeroSearchWrap = () => {
+const   HeroSearchWrap = () => {
     return (
         <div className='container'>
 

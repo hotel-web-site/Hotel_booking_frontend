@@ -1,7 +1,10 @@
+
 const SearchPage = () => {
   return (
- <div className="top-container">
-      <h1>Search Page</h1>
+    <div className="top-container">
+      <h1>
+        <HotelListPage />
+      </h1>
     </div>
   );
 };

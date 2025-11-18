@@ -1,14 +1,15 @@
-import React, { useRef, useState } from "react";
-// Import Swiper React components
+import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import HeroCard from "./HeroCard";
 
-// Import Swiper styles
+// styles
 import "swiper/css";
 import "swiper/css/pagination";
-
+import "swiper/css/autoplay";
 import "../../styles/components/home/HeroSection.scss";
-import { Pagination } from "swiper/modules";
+
+// modules
+import { Pagination, Autoplay } from "swiper/modules";
 
 const HeroSection = () => {
     const heroSlides = [
@@ -31,7 +32,8 @@ const HeroSection = () => {
         {
             title: "럭셔리 휴양지",
             subtitle: "프리미엄 리조트에서\n완벽한 휴식을",
-            description: "최고급 시설과 서비스로\n당신만의 특별한 시간을 보내세요.",
+            description:
+                "최고급 시설과 서비스로\n당신만의 특별한 시간을 보내세요.",
             backgroundImage: "/images/hero-bg-3.jpg",
             className: "hero-card-3",
         },
@@ -40,14 +42,14 @@ const HeroSection = () => {
     return (
         <div className="hero-section">
             <Swiper
-                pagination={true}
-                modules={[Pagination]}
                 className="hero-swiper"
                 loop={true}
+                pagination={{ clickable: true }}
                 autoplay={{
                     delay: 5000,
                     disableOnInteraction: false,
                 }}
+                modules={[Pagination, Autoplay]}
             >
                 {heroSlides.map((slide, index) => (
                     <SwiperSlide key={index}>
@@ -57,7 +59,7 @@ const HeroSection = () => {
                             description={slide.description}
                             backgroundImage={slide.backgroundImage}
                             className={slide.className}
-                            searchForm={index === 0} // 첫 번째 슬라이드에만 검색 폼 표시
+                            searchForm={index === 0}
                         />
                     </SwiperSlide>
                 ))}
