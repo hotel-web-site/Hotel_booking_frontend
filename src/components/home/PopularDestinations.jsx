@@ -13,8 +13,11 @@ const PopularDestinations = () => {
         <section className="container">
             <div className="inner">
                 <div className="section-header">
-                    <h2>어떻게 빠지다</h2>
-                    <p>최고의호주로 여행놓은 드롭을 생애에빠뜨440</p>
+                    <div className="text-box">
+                        <h2>여행에 빠지다</h2>
+                        <p>특가상품으로 진행하는 여행을 예약해보세요</p>
+                    </div>
+
                     <button className="btn-see-all">See All</button>
                 </div>
 

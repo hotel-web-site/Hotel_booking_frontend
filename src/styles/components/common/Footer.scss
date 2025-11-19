@@ -1,105 +1,195 @@
 .footer {
+    background: #cfe9dd;
     width: 100%;
-    background: #88d0b9;
+    padding: 60px 0;
+    border-radius: 30px 30px 0 0;
+}
 
-    /* ───────────── 구독 박스 ───────────── */
-    .subscribe-box {
+/* ========== Newsletter ========== */
+.newsletter-wrapper {
+    width: 90%;
+    max-width: 1240px;
+    background: #ffffff;
+    border-radius: 24px;
+    padding: 40px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.newsletter-text {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    h2 {
+        font-size: 32px;
+        font-weight: 700;
+        margin: 0;
+        color: #00234d;
+    }
+
+    .newsletter-subtitle {
+        font-size: 16px;
+        color: #00234d;
+        font-weight: 600;
+        margin-top: 8px;
+    }
+
+    p {
+        font-size: 14px;
+        color: #444;
+        margin-bottom: 16px;
+    }
+}
+
+.newsletter-form {
+    display: flex;
+    gap: 12px;
+
+    input {
+        width: 260px;
+        padding: 12px 16px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        font-size: 14px;
+    }
+
+    button {
+        background: #00234d;
+        color: #fff;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+
+        &:hover {
+            background: #001930;
+        }
+    }
+}
+
+.newsletter-image {
+    width: 260px;
+    height: 180px;
+    background-image: url("/assets/footer/mailbox.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+/* ========== Footer Links ========== */
+.footer-links {
+    margin-top: 60px;
+
+    .inner {
         width: 90%;
+        max-width: 1240px;
         margin: 0 auto;
-        margin-top: 60px;
-        background: #d2f4e4;
-        border-radius: 20px;
+
         display: flex;
         justify-content: space-between;
-        padding: 40px 50px;
+        align-items: flex-start;
+    }
+}
 
-        .text-area {
-            display: flex;
-            flex-direction: column;
-            gap: 18px;
+/* Social */
+.social-section {
+    .social-icons {
+        display: flex;
+        gap: 12px;
 
-            h2 {
-                font-size: 28px;
-                font-weight: 700;
-            }
+        .social-link {
+            width: 28px;
+            height: 28px;
+            background-size: cover;
 
-            p {
-                font-size: 14px;
-                color: #333;
-                line-height: 1.4;
-            }
+            &.facebook { background-image: url("/assets/icons/facebook.svg"); }
+            &.instagram { background-image: url("/assets/icons/instagram.svg"); }
+            &.youtube { background-image: url("/assets/icons/youtube.svg"); }
+        }
+    }
+}
 
-            .input-area {
-                display: flex;
-                gap: 10px;
+/* Link Columns */
+.link-columns {
+    display: flex;
+    gap: 60px;
 
-                input {
-                    width: 260px;
-                    padding: 12px 14px;
-                    border: none;
-                    border-radius: 8px;
+    .link-column {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        h4 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+
+            li {
+                margin-bottom: 6px;
+
+                a {
+                    color: #1e2b26;
                     font-size: 14px;
-                }
-
-                button {
-                    padding: 0 18px;
-                    font-size: 14px;
-                    background: #0f351d;
-                    color: white;
-                    border-radius: 6px;
-                    border: none;
-                    cursor: pointer;
-                }
-            }
-
-            .sns {
-                display: flex;
-                gap: 16px;
-                margin-top: 10px;
-
-                i {
-                    font-size: 20px;
-                    cursor: pointer;
-                    transition: 0.2s;
 
                     &:hover {
-                        opacity: 0.7;
+                        text-decoration: underline;
                     }
                 }
             }
         }
+    }
+}
 
-        .image-area img {
-            width: 200px;
-        }
+.follow-us {
+    h4 {
+        font-size: 16px;
+        font-weight: 700;
+        margin-bottom: 12px;
     }
 
-    /* ───────────── 푸터 메뉴 ───────────── */
-    .footer-menu {
-        width: 90%;
-        margin: 50px auto;
-        padding-bottom: 50px;
+    .follow-icons {
+        display: flex;
+        gap: 12px;
 
-        display: grid;
-        grid-template-columns: repeat(5, 1fr);
-        gap: 40px;
+        .follow-link {
+            width: 28px;
+            height: 28px;
+            background-size: cover;
 
-        .column {
-            h4 {
-                font-size: 15px;
-                font-weight: 600;
-                margin-bottom: 16px;
-            }
-
-            p {
-                font-size: 14px;
-                margin-bottom: 10px;
-                cursor: pointer;
-
-                &:hover {
-                    opacity: 0.7;
-                }
-            }
+            &.facebook { background-image: url("/assets/icons/facebook.svg"); }
+            &.instagram { background-image: url("/assets/icons/instagram.svg"); }
+            &.youtube { background-image: url("/assets/icons/youtube.svg"); }
         }
+    }
+}
+
+/* ========== Bottom ========== */
+.footer-bottom {
+    margin-top: 60px;
+    background: #fafafa;
+    padding: 30px 0;
+
+    .inner {
+        width: 90%;
+        max-width: 1240px;
+        margin: 0 auto;
+
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 14px;
+        line-height: 1.6;
+        color: #666;
     }
 }
