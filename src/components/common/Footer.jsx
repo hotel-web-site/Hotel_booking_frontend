@@ -1,44 +1,73 @@
-import "./styles/Footer.scss";
+import React from "react";
+import Newsletter from "../home/Newsletter";
+import { socialLinks, footerNavData } from "../../api/mockFooter";
+import "../../styles/components/common/Footer.scss";
 
 const Footer = () => {
     return (
-        <footer className="footer">
-            {/* ───────────── 푸터 메뉴 ───────────── */}
-            <div className="footer-menu">
-                <div className="column">
-                    <h4>Our Destinations</h4>
-                    <p>Canada</p>
-                    <p>Alaska</p>
-                    <p>France</p>
-                    <p>Iceland</p>
-                </div>
+        <footer>
+            <Newsletter />
+            <div className="footer-links">
+                <div className="inner">
+                    <div className="social-links">
+                        <div className="logo">HotelHub</div>
+                        <p className="description">
+                            혁신적 호텔 여행의 모든 순간, HotelHub과 함께하세요.
+                        </p>
+                        <div className="social-icons">
+                            {socialLinks.map((social, index) => (
+                                <a
+                                    key={index}
+                                    href={social.href}
+                                    className={`social-link ${social.className}`}
+                                    aria-label={social.ariaLabel}
+                                ></a>
+                            ))}
+                        </div>
+                    </div>
 
-                <div className="column">
-                    <h4>Our Activities</h4>
-                    <p>Northern Lights</p>
-                    <p>Cruising & sailing</p>
-                    <p>Multi-activities</p>
-                    <p>Kayaking</p>
-                </div>
+                    <div className="link-columns">
+                        {footerNavData.map((column, columnIndex) => (
+                            <div key={columnIndex} className="link-column">
+                                <h4>{column.title}</h4>
+                                <ul>
+                                    {column.links.map((link, linkIndex) => (
+                                        <li key={linkIndex}>
+                                            <a href={link.href}>{link.name}</a>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        ))}
+                    </div>
 
-                <div className="column">
-                    <h4>Travel Blogs</h4>
-                    <p>Bali Travel Guide</p>
-                    <p>Sri Lanka Travel Guide</p>
-                    <p>Peru Travel Guide</p>
-                    <p>Bali Travel Guide</p>
+                    <div className="follow-us">
+                        <h4 className="follow-title">Follow Us</h4>
+                        <div className="follow-icons">
+                            <a href="#" className="follow-link facebook" aria-label="Facebook"></a>
+                            <a href="#" className="follow-link instagram" aria-label="Instagram"></a>
+                            <a href="#" className="follow-link youtube" aria-label="YouTube"></a>
+                        </div>
+                    </div>
                 </div>
+            </div>
 
-                <div className="column">
-                    <h4>About Us</h4>
-                    <p>Our Story</p>
-                    <p>Work with us</p>
-                </div>
-
-                <div className="column">
-                    <h4>Contact Us</h4>
-                    <p>Our Story</p>
-                    <p>Work with us</p>
+            <div className="footer-bottom">
+                <div className="inner">
+                    <div className="footer-info">
+                        <div className="company-info">
+                            (주)호텔허브 | 대표: 홍길동 | 사업자등록번호: 123-45-67890
+                            <br />
+                            주소: 서울특별시 강남구 테헤란로 123, 4567 | 통신판매업신고:
+                            제2025-서울강남-1234호
+                        </div>
+                        <div className="copyright">© 2025 HotelHub Inc. All rights reserved.</div>
+                    </div>
+                    <div className="footer-contact">
+                        <div className="contact-info">
+                            고객센터: 1588-0000 (09:00 - 18:00) | 이메일: support@hotelhub.com
+                        </div>
+                    </div>
                 </div>
             </div>
         </footer>
