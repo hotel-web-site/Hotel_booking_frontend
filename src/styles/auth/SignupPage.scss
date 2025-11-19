@@ -1,0 +1,198 @@
+/* 전체 구조 */
+.page-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 80px;
+    width: 100%;
+    height: 100vh;
+    background: white;
+
+    /* RIGHT 슬라이더 */
+    .slider-container {
+        width: 320px;
+        height: 500px;
+        border-radius: 20px;
+        overflow: hidden;
+        position: relative;
+
+        .slide-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .indicator-box {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+
+            .indicator {
+                width: 10px;
+                height: 10px;
+                background: #ccc;
+                border-radius: 50%;
+
+                &.active {
+                    background: #6fc2a3;
+                }
+            }
+        }
+    }
+
+    /* LEFT: SIGN UP FORM */
+    .signup-container {
+        width: 500px;
+        text-align: left;
+
+        .sign-up-text {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        h1 {
+            font-size: 32px;
+            margin: 0;
+            font-weight: bold;
+        }
+
+        .sub {
+            color: #777;
+            margin-bottom: 30px;
+        }
+
+        /* form */
+        .signup-form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+
+            .row {
+                display: flex;
+                gap: 15px;
+
+                input {
+                    flex: 1;
+                }
+            }
+
+            input {
+                padding: 12px;
+                border: 1px solid #ccc;
+                border-radius: 6px;
+                font-size: 15px;
+            }
+
+            /* PW BOX */
+            .pw-box {
+                position: relative;
+
+                input {
+                    width: 500px;
+                }
+
+                .pw-toggle {
+                    position: absolute;
+                    right: 12px;
+                    top: 10px;
+                    cursor: pointer;
+                    font-size: 18px;
+                }
+            }
+
+            /* 동의 체크박스 */
+            .agree-row {
+                display: flex;
+                gap: 8px;
+                align-items: center;
+                font-size: 14px;
+            }
+
+            /* 버튼 */
+            .create-btn {
+                height: 45px;
+                padding: 14px;
+                background: #a8d5b6;
+                border: none;
+                color: white;
+                font-size: 17px;
+                font-weight: bold;
+                border-radius: 8px;
+                cursor: pointer;
+            }
+
+            .back-login {
+                background: none;
+                margin-top: 10px;
+                border: 1px solid #6fc2a3;
+                border-radius: 8px;
+                cursor: pointer;
+                font-size: 17px;
+                font-weight: bold;
+                color: #6fc2a3;
+                height: 45px;
+            }
+        }
+
+        .error-msg {
+            color: red;
+            margin-top: 10px;
+        }
+
+        /* Divider */
+        .divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 25px 0 20px;
+            width: 100%;
+
+            &::before,
+            &::after {
+                content: "";
+                flex: 1;
+                height: 1px;
+                background: #d3d3d3;
+                margin: 0 12px;
+            }
+
+            span {
+                color: #777;
+                font-size: 14px;
+                white-space: nowrap;
+            }
+        }
+
+        /* SNS */
+        .social-box {
+            display: flex;
+            justify-content: space-between;
+
+            .social-btn {
+                width: 150px;
+                height: 45px;
+                border-radius: 8px;
+                border: 1.5px solid #98c9b8;
+                background: white;
+                cursor: pointer;
+
+                display: flex;
+                /* 가로·세로 중앙 정렬 */
+                align-items: center;
+                justify-content: center;
+
+                img {
+                    width: 22px;
+                    height: 22px;
+                    display: block;
+                    /* 이미지 가운데로 */
+                    margin: 0 auto;
+                }
+            }
+
+        }
+    }
+}
