@@ -1,8 +1,16 @@
 import React from "react";
-import AppRouter from "./AppRouter"; // 라우트 정의 파일
+import { Routes, Route } from "react-router-dom";
+import LoginPage from "./pages/auth/LoginPage";
+import SignupPage from "./pages/auth/SignupPage";
 
-const App = () => {
-  return       <AppRouter />
-};
+function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<LoginPage />} />
+      <Route path="/loginpage" element={<LoginPage />} />
+      <Route path="/signuppage" element={<SignupPage />} />
+    </Routes>
+  );
+}
 
 export default App;
