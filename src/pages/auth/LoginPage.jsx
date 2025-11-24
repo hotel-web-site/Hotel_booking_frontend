@@ -92,6 +92,15 @@ const LoginPage = () => {
           >
             회원가입
           </button>
+
+          {/* ✅ 추가된 '비밀번호 찾기' 버튼 */}
+          <button
+            type="button"
+            className="resetpw-btn"
+            onClick={() => navigate("/findpassword")}
+          >
+            비밀번호 찾기
+          </button>
         </form>
 
         {message && <p className="auth-message">{message}</p>}
