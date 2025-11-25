@@ -14,7 +14,7 @@ import { Pagination, Autoplay } from "swiper/modules";
 const HeroSection = () => {
     const heroSlides = [
         {
-            title: "신정해보세요",
+            title: "신청해보세요",
             subtitle: "퍼펙트 호텔 및 다양한\n숙소를 확인하세요!",
             description:
                 "컴퓨터를 통해 유용한 예약과 고객 사을 지원 부웅\n함한 북시즈 확인하세요.",

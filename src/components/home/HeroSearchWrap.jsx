@@ -1,8 +1,9 @@
 import React from 'react'
 import '../../styles/components/home/HeroSearchWrap.scss'
-const   HeroSearchWrap = () => {
+
+const HeroSearchWrap = () => {
     return (
-        <div className='container'>
+        <div className='hero-search-container'>
 
             <div className="search-form">
                 <h3>Where are you staying?</h3>
@@ -37,23 +38,8 @@ const   HeroSearchWrap = () => {
                 </div>
             </div>
 
-            <div className="user-menu">
-                <div className="user-info">
-                    <div className="avatar">T</div>
-                    <div className="user-details">
-                        <span className="username">Tomhoon</span>
-                        <span className="status">Online</span>
-                    </div>
-                </div>
-                <div className="menu-items">
-                    <div className="menu-item">위시</div>
-                    <div className="menu-item">출연내역</div>
-                    <div className="menu-item">설정</div>
-                    <div className="menu-item">로그아웃</div>
-                </div>
-            </div>
         </div>
     )
 }
 
-export default HeroSearchWrap
+export default HeroSearchWrap;

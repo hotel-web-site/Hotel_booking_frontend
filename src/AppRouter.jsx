@@ -3,6 +3,7 @@ import MainLayout from "./components/layouts/MainLayout";
 import AuthLayout from "./components/layouts/AuthLayout";
 import MyPageLayout from "./components/layouts/MyPageLayout";
 import ProtectedRoute from "./components/common/ProtectedRoute";
+import AddPaymentPage from "./pages/payment/AddPaymentPage";
 
 // pages
 import HomePage from "./pages/home/HomePage";
@@ -23,7 +24,8 @@ import ResetPasswordPage from "./pages/auth/ResetPasswordPage";
 import KakaoCallbackPage from "./pages/auth/KakaoCallbackPage";
 import GoogleCallbackPage from "./pages/auth/GoogleCallbackPage";
 
-import MyOverviewPage from "./pages/mypage/MyOverviewPage";
+import MyAccountPage from "./pages/mypage/MyAccountPage";
+import MyPaymentPage from "./pages/mypage/MyPaymentPage";
 import ProfilePage from "./pages/mypage/ProfilePage";
 import MyBookingsPage from "./pages/mypage/MyBookingsPage";
 import MyBookingDetailPage from "./pages/mypage/MyBookingDetailPage";
@@ -94,12 +96,16 @@ const AppRouter = () => {
             </ProtectedRoute>
           }
         >
-          <Route index element={<MyOverviewPage />} />
-          <Route path="profile" element={<ProfilePage />} />
+          <Route index element={<MyAccountPage />} />
+          <Route path="account" element={<MyAccountPage />} />
           <Route path="bookings">
             <Route index element={<MyBookingsPage />} />
             <Route path=":bookingId" element={<MyBookingDetailPage />} />
           </Route>
+          <Route path="payment" element={<MyPaymentPage />} />
+
+          {/* 기존 라우트들 (필요시 제거 가능) */}
+          <Route path="profile" element={<ProfilePage />} />
           <Route path="reviews" element={<MyReviewsPage />} />
           <Route path="wishlist" element={<WishlistPage />} />
           <Route path="coupons" element={<MyCouponsPage />} />
@@ -112,6 +118,7 @@ const AppRouter = () => {
           <Route path="login" element={<LoginPage />} />
           <Route path="signup" element={<SignupPage />} />
           <Route path="reset-password" element={<ResetPasswordPage />} />
+          <Route path="add-payment" element={<AddPaymentPage />} />
 
           {/* 소셜 로그인 콜백 (카카오, 구글) */}
           <Route path="oauth">

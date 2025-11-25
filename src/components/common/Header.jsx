@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import "./styles/Header.scss";
+import "../../styles/components/common/Header.scss";
 
 const Header = ({ user }) => {
     const [openMenu, setOpenMenu] = useState(false);
@@ -48,18 +48,33 @@ const Header = ({ user }) => {
                                 <span>{user.nickname}</span>
                             </div>
 
+
+
                             {/* 🔽 드롭다운 메뉴 */}
                             {openMenu && (
                                 <div className="profile-menu">
-                                    <Link className="item" to="/profile">계정</Link>
-                                    <Link className="item" to="/payments">결제내역</Link>
-                                    <Link className="item" to="/settings">설정</Link>
+                                    <div className="user-menu">
+                                        <div className="user-info">
+                                            <div className="avatar">T</div>
+                                            <div className="user-details">
+                                                <span className="username">Tomhoon</span>
+                                                <span className="status">Online</span>
+                                            </div>
+                                        </div>
+                                        <div className="menu-items">
+                                            <Link className="item" to="/profile">계정</Link>
+                                            <Link className="item" to="/payments">결제내역</Link>
+                                            <Link className="item" to="/settings">설정</Link>
 
-                                    <div className="divider"></div>
+                                            <div className="divider"></div>
 
-                                    <Link className="item logout" to="/logout">
-                                        로그아웃
-                                    </Link>
+                                            <Link className="item logout" to="/logout">
+                                                로그아웃
+                                            </Link>
+                                        </div>
+
+                                    </div>
+
                                 </div>
                             )}
                         </div>
