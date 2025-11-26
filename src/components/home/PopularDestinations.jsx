@@ -63,4 +63,4 @@ const PopularDestinations = () => {
     );
 };
 
-export default PopularDestin
+export default PopularDestinations
