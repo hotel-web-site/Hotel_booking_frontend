@@ -48,15 +48,28 @@ body, html {
         color: black;
         font-size: 15px;
       }
+
+      /* 🔥 체크박스 스타일 재정의 (크기 정상화) */
+      input[type="checkbox"] {
+        width: 16px;
+        height: 16px;
+        padding: 0;
+        margin: 0;
+        border: 1px solid #888;
+        border-radius: 3px;
+        background-color: white;
+        cursor: pointer;
+      }
     }
 
-    /* 비밀번호 기억하기 */
+    /* 비밀번호 기억하기 줄 */
     .remember-row {
       display: flex;
       align-items: center;
       gap: 6px;
       font-size: 14px;
       color: #444;
+      margin-top: 4px;
     }
 
     /* 로그인 버튼 */
@@ -178,20 +191,20 @@ body, html {
     }
   }
 }
+
+/* 비밀번호 찾기 버튼 */
 .resetpw-btn {
   background: none;
   border: none;
   font-size: 13px;
-  color: #9e9e9e;  /* 회색 텍스트 */
+  color: #9e9e9e;
   cursor: pointer;
-
   width: 100%;
-  text-align: right; /* 오른쪽 구석으로 정렬 */
-
+  text-align: right;
   margin-top: 6px;
   padding-right: 4px;
 
   &:hover {
-    color: #bfbfbf; /* hover 시 조금 더 밝게 */
+    color: #bfbfbf;
   }
 }

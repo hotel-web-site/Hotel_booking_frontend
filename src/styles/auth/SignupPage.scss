@@ -62,6 +62,7 @@
         .sub {
             color: #777;
             margin-bottom: 30px;
+            text-align: center;
         }
 
         /* form */
@@ -70,6 +71,15 @@
             flex-direction: column;
             gap: 16px;
 
+            /* 기본 input */
+            input {
+                padding: 12px;
+                border: 1px solid #ccc;
+                border-radius: 6px;
+                font-size: 15px;
+            }
+
+            /* 이름 + 성 같이 있는 줄 */
             .row {
                 display: flex;
                 gap: 15px;
@@ -79,19 +89,12 @@
                 }
             }
 
-            input {
-                padding: 12px;
-                border: 1px solid #ccc;
-                border-radius: 6px;
-                font-size: 15px;
-            }
-
             /* PW BOX */
             .pw-box {
                 position: relative;
 
                 input {
-                    width: 500px;
+                    width: 100%; /* 🔥 고정폭 제거해서 줄 깨짐 방지 */
                 }
 
                 .pw-toggle {
@@ -103,15 +106,26 @@
                 }
             }
 
-            /* 동의 체크박스 */
+            /* 동의 체크박스 라인 */
             .agree-row {
                 display: flex;
                 gap: 8px;
                 align-items: center;
                 font-size: 14px;
+
+                /* 🔥 체크박스 이상하게 보이던 문제 해결 */
+                input[type="checkbox"] {
+                    width: 16px;
+                    height: 16px;
+                    padding: 0;
+                    margin: 0;
+                    border: 1px solid #888;
+                    border-radius: 3px;
+                    cursor: pointer;
+                }
             }
 
-            /* 버튼 */
+            /* CREATE ACCOUNT 버튼 */
             .create-btn {
                 height: 45px;
                 padding: 14px;
@@ -122,8 +136,14 @@
                 font-weight: bold;
                 border-radius: 8px;
                 cursor: pointer;
+                transition: 0.2s;
+
+                &:hover {
+                    background: #96c9a7;
+                }
             }
 
+            /* Login으로 돌아가기 */
             .back-login {
                 background: none;
                 margin-top: 10px;
@@ -166,7 +186,7 @@
             }
         }
 
-        /* SNS */
+        /* SNS LOGIN */
         .social-box {
             display: flex;
             justify-content: space-between;
@@ -180,7 +200,6 @@
                 cursor: pointer;
 
                 display: flex;
-                /* 가로·세로 중앙 정렬 */
                 align-items: center;
                 justify-content: center;
 
@@ -188,11 +207,12 @@
                     width: 22px;
                     height: 22px;
                     display: block;
-                    /* 이미지 가운데로 */
-                    margin: 0 auto;
+                }
+
+                &:hover {
+                    background: #f3faf7;
                 }
             }
-
         }
     }
 }
