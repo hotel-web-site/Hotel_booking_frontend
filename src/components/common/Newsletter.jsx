@@ -31,7 +31,7 @@ const Newsletter = () => {
                 {/* 우측 이미지 */}
                 <div className="newsletter-right">
                     <img
-                        src="/images/hotel-3.png"
+                        src="newsletter.png"
                         alt="hotel-subscribe"
                         className="newsletter-img"
                     />

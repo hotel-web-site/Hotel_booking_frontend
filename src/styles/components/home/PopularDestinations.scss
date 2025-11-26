@@ -91,3 +91,78 @@
         background: #00234d;
     }
 }
+
+/* 기존 container, inner, header, swiper는 그대로 두고  
+   카드 디자인만 추가하면 됨! */
+
+.destination-card {
+    width: 100%;
+    max-width: 280px;
+    background: transparent;
+    border-radius: 14px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    color: #000000;
+    transition: 0.2s ease;
+    cursor: pointer;
+}
+
+.card-img {
+    width: 100%;
+    height: 340px;
+    object-fit: cover;
+}
+
+/* 아래 내용 */
+.card-body {
+    padding: 16px 18px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.name-price {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    h3 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 700;
+    }
+
+    span {
+        font-size: 15px;
+        opacity: 0.9;
+        font-weight: 600;
+    }
+}
+
+.desc {
+    font-size: 13px;
+    opacity: 0.85;
+}
+
+/* 버튼 */
+.book-btn {
+    width: 100%;
+    padding: 12px 0;
+    background: #99d3c3 !important;
+    border-radius: 8px;
+    border: none;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    color: #000000;
+
+    &:hover {
+        background: #7fb8a6 !important;
+    }
+}
+
+.destinations-swiper .swiper-button-next,
+.destinations-swiper .swiper-button-prev {
+    display: none;
+}

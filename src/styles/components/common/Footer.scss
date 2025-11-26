@@ -1,9 +1,11 @@
 .footer {
-    background: #279c79; /* ← 더 진한 초록색으로 변경 */
+    background: #279c79;
+    /* ← 더 진한 초록색으로 변경 */
     width: 100%;
     padding: 60px 0 0 0;
     border-radius: 30px 30px 0 0;
     position: relative;
+    margin-top: 200px;
 }
 
 /* =========================================================
@@ -16,7 +18,8 @@
     justify-content: center;
 
     position: relative;
-    top: -170px;   /* footer 위로 겹치게 */
+    top: -170px;
+    /* footer 위로 겹치게 */
     z-index: 10;
 }
 
@@ -102,8 +105,8 @@
 }
 
 .newsletter-img {
-    width: 420px;
-    height: auto;
+    width: 250px;
+    height: 400px;
     display: block;
 }
 
@@ -120,6 +123,7 @@
         color: #1e2b26;
         margin-bottom: 12px;
     }
+
     .description {
         font-size: 14px;
         color: #555;
@@ -128,7 +132,8 @@
 }
 
 .footer-links {
-    margin-top: -60px; /* newsletter가 떠 있으므로 margin 줄임 */
+    margin-top: -60px;
+    /* newsletter가 떠 있으므로 margin 줄임 */
 
     .inner {
         width: 90%;
@@ -192,12 +197,15 @@
 
     .follow-icons {
         display: flex;
-        gap: 16px; /* 아이콘 간 간격 넓혀서 깔끔하게 */
+        gap: 16px;
+        /* 아이콘 간 간격 넓혀서 깔끔하게 */
 
         .follow-link {
-            width: 36px;   /* 기존 28 → 36px */
+            width: 36px;
+            /* 기존 28 → 36px */
             height: 36px;
-            background-size: contain; /* 아이콘 비율 유지 */
+            background-size: contain;
+            /* 아이콘 비율 유지 */
             background-position: center;
             background-repeat: no-repeat;
         }
@@ -224,5 +232,144 @@
         font-size: 14px;
         line-height: 1.6;
         color: #666;
+    }
+}
+
+/* ============================================
+   📱 1024px 이하 (태블릿)
+   ============================================ */
+@media (max-width: 1024px) {
+    .newsletter {
+        flex-direction: column;
+        padding: 40px 32px;
+        text-align: center;
+    }
+
+    .newsletter-left {
+        width: 100%;
+        align-items: center;
+    }
+
+    .newsletter-input-wrapper {
+        justify-content: center;
+        width: 100%;
+    }
+
+    .newsletter-right {
+        margin-left: 0;
+        margin-top: 24px;
+    }
+
+    .newsletter-img {
+        width: 220px;
+        height: auto;
+    }
+
+    /* Footer */
+    .footer-links .inner {
+        flex-direction: column;
+        gap: 40px;
+    }
+
+    .footer-menu {
+        gap: 100px;
+    }
+}
+
+
+
+/* ============================================
+   📱 768px 이하 (모바일)
+   ============================================ */
+@media (max-width: 768px) {
+
+    /* Newsletter */
+    .newsletter {
+        padding: 32px 20px;
+    }
+
+    .newsletter-title {
+        font-size: 32px;
+    }
+
+    .newsletter-desc .travel-title {
+        font-size: 14px;
+    }
+
+    .newsletter-desc .travel-sub {
+        font-size: 13px;
+    }
+
+    .newsletter-img {
+        width: 180px;
+    }
+
+    /* Footer */
+    .footer-menu {
+        flex-direction: column;
+        gap: 40px;
+    }
+
+    .link-columns {
+        flex-direction: column;
+        gap: 28px;
+    }
+
+    .follow-us {
+        text-align: center;
+
+        .follow-icons {
+            justify-content: center;
+        }
+    }
+
+    .footer-bottom .inner {
+        flex-direction: column;
+        text-align: center;
+        gap: 16px;
+    }
+}
+
+
+
+/* ============================================
+   📱 480px 이하 (작은 모바일)
+   ============================================ */
+@media (max-width: 480px) {
+
+    /* Newsletter */
+    .newsletter {
+        padding: 24px 16px;
+    }
+
+    .newsletter-title {
+        font-size: 26px;
+    }
+
+    .newsletter-input {
+        padding: 10px 12px;
+        font-size: 13px;
+    }
+
+    .newsletter-btn {
+        padding: 10px 14px;
+        font-size: 13px;
+    }
+
+    .newsletter-img {
+        width: 150px;
+    }
+
+    /* Footer */
+    .footer {
+        padding: 40px 0 0 0;
+    }
+
+    .footer-menu {
+        gap: 26px;
+    }
+
+    .footer-bottom {
+        padding: 20px 0;
     }
 }

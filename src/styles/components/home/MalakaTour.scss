@@ -3,10 +3,11 @@
     padding: 32px;
     border-radius: 20px;
     width: 48%;
-    height: 380px;
+    height: 100%;
     max-width: 460px;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     gap: 18px;
 }
 
@@ -67,5 +68,67 @@
 
     &:hover {
         background: #f1f1f1;
+    }
+}
+
+/* ================================
+   Malaka Tour Card
+================================ */
+
+@media (max-width: 1024px) {
+    .malaka-tour {
+        width: 50%;
+        max-width: none;
+        height: auto;
+        padding: 24px;
+    }
+}
+
+@media (max-width: 768px) {
+    .malaka-tour {
+        width: 100%;
+        height: auto;
+        padding: 20px;
+    }
+
+    .tour-title {
+        font-size: 20px;
+    }
+
+    .price-tag {
+        width: 60px;
+        height: 60px;
+
+        strong {
+            font-size: 16px;
+        }
+    }
+
+    .tour-desc {
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 480px) {
+    .malaka-tour {
+        padding: 16px;
+        gap: 14px;
+    }
+
+    .tour-title {
+        font-size: 18px;
+    }
+
+    .price-tag {
+        width: 52px;
+        height: 52px;
+
+        strong {
+            font-size: 15px;
+        }
+    }
+
+    .tour-desc {
+        font-size: 12px;
     }
 }

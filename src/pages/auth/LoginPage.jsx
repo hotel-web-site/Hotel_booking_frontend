@@ -1,6 +1,13 @@
-import React from "react";
-import LoginForm from "../../components/auth/LoginForm";
-import AuthImageWrap from "../../components/auth/AuthImageWrap";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import "../../styles/auth/LoginPage.scss";
+
+import img1 from "../../assets/image1.jpeg";
+import img2 from "../../assets/image2.jpeg";
+import img3 from "../../assets/image3.jpeg";
+
+const imageList = [img1, img2, img3];
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -44,15 +51,87 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="auth-layout-page">
-      <div className="auth-layout-container">
-        <div className="auth-layout-content">
-          <div className="auth-layout-form-section">
-            <LoginForm />
-          </div>
-          <div className="auth-layout-image-section">
-            <AuthImageWrap />
-          </div>
+    <div className="page-wrapper">
+      <div className="auth-container">
+        <h2 className="login-title">Login</h2>
+
+        <form onSubmit={handleSubmit} className="auth-form">
+          <input
+            type="email"
+            name="email"
+            placeholder="이메일"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
+
+          <input
+            type="password"
+            name="password"
+            placeholder="비밀번호"
+            value={formData.password}
+            onChange={handleChange}
+            required
+          />
+
+          <label className="remember-row">
+            <input
+              type="checkbox"
+              checked={remember}
+              onChange={handleChange}
+            />
+            비밀번호 기억하기
+          </label>
+
+          <button type="submit" className="login-btn">로그인</button>
+
+          <button
+            type="button"
+            className="signup-btn"
+            onClick={() => navigate("/signup")}
+          >
+            회원가입
+          </button>
+
+          {/* ✅ 추가된 '비밀번호 찾기' 버튼 */}
+          <button
+            type="button"
+            className="resetpw-btn"
+            onClick={() => navigate("/findpassword")}
+          >
+            비밀번호 찾기
+          </button>
+        </form>
+
+        {message && <p className="auth-message">{message}</p>}
+
+        <div className="social-divider">
+          <span>Or login with</span>
+        </div>
+
+        <div className="social-login-box">
+          <button className="social-btn">
+            <img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" />
+          </button>
+          <button className="social-btn">
+            <img src="https://cdn-icons-png.flaticon.com/512/300/300221.png" />
+          </button>
+          <button className="social-btn">
+            <img src="https://cdn-icons-png.flaticon.com/512/179/179309.png" />
+          </button>
+        </div>
+      </div>
+
+      {/* RIGHT SLIDER */}
+      <div className="slider-container">
+        <img src={imageList[current]} className="slide-image" />
+        <div className="indicator-box">
+          {imageList.map((_, i) => (
+            <div
+              key={i}
+              className={`indicator ${current === i ? "active" : ""}`}
+            />
+          ))}
         </div>
       </div>
     </div>

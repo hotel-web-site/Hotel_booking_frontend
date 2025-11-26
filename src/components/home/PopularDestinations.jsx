@@ -4,13 +4,13 @@ import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+
 import "../../styles/components/home/PopularDestinations.scss";
-import DestinationCard from "./DestinationCard";
 import { mockDestinations } from "../../api/mockData";
 
 const PopularDestinations = () => {
     return (
-        <section className="container">
+        <section className="destinations-container">
             <div className="inner">
                 <div className="section-header">
                     <div className="text-box">
@@ -28,17 +28,34 @@ const PopularDestinations = () => {
                     navigation
                     pagination={{ clickable: true }}
                     breakpoints={{
-                        320: { slidesPerView: 1, spaceBetween: 15 },
-                        640: { slidesPerView: 2, spaceBetween: 15 },
-                        1024: { slidesPerView: 3, spaceBetween: 20 },
-                        1280: { slidesPerView: 4, spaceBetween: 20 },
+                        320: { slidesPerView: 1 },
+                        640: { slidesPerView: 2 },
+                        1024: { slidesPerView: 3 },
+                        1280: { slidesPerView: 4 },
                     }}
                     className="destinations-swiper"
                 >
-                    {mockDestinations.map((destination) => (
+                    {mockDestinations.map((item) => (
                         <SwiperSlide key={destination.id}>
-                            <DestinationCard destination={destination} />
+                            <div
+                                className="destination-card"
+                                style={{
+                                    backgroundImage: `url(${destination.image})`,
+                                }}
+                            >
+                                <div className="card-overlay">
+                                    <div className="name-price">
+                                        <h3>{destination.name}</h3>
+                                        <span>₩{destination.price.toLocaleString()}</span>
+                                    </div>
+
+                                    <p className="desc">{destination.description}</p>
+
+                                    <button className="book-btn">Book a Hotel</button>
+                                </div>
+                            </div>
                         </SwiperSlide>
+
                     ))}
                 </Swiper>
             </div>
@@ -46,4 +63,4 @@ const PopularDestinations = () => {
     );
 };
 
-export default PopularDestinations;
+export default PopularDestin
