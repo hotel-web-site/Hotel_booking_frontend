@@ -1,89 +1,134 @@
 .footer {
-    background: #cfe9dd;
+    background: #279c79; /* ← 더 진한 초록색으로 변경 */
     width: 100%;
-    padding: 60px 0;
+    padding: 60px 0 0 0;
     border-radius: 30px 30px 0 0;
+    position: relative;
 }
 
-/* ========== Newsletter ========== */
+/* =========================================================
+   ========== Newsletter (떠 있는 카드 디자인) ==========
+   ========================================================= */
+
 .newsletter-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+
+    position: relative;
+    top: -170px;   /* footer 위로 겹치게 */
+    z-index: 10;
+}
+
+.newsletter {
     width: 90%;
     max-width: 1240px;
-    background: #ffffff;
-    border-radius: 24px;
-    padding: 40px;
-    margin: 0 auto;
+    background: #99d3c3;
+    border-radius: 20px;
+    padding: 48px;
+
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    /* 떠 있는 카드 느낌 */
+    box-shadow: 0 18px 28px rgba(0, 0, 0, 0.18);
 }
 
-.newsletter-text {
+/* 텍스트 */
+.newsletter-left {
+    width: 50%;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 22px;
+}
 
-    h2 {
-        font-size: 32px;
-        font-weight: 700;
-        margin: 0;
-        color: #00234d;
-    }
+.newsletter-title {
+    font-size: 40px;
+    font-weight: 800;
+    color: #00234d;
+    margin: 0;
+    line-height: 1.3;
+}
 
-    .newsletter-subtitle {
+.newsletter-desc {
+    .travel-title {
         font-size: 16px;
+        font-weight: 600;
         color: #00234d;
-        font-weight: 600;
-        margin-top: 8px;
+        margin-bottom: 6px;
     }
 
-    p {
+    .travel-sub {
         font-size: 14px;
-        color: #444;
-        margin-bottom: 16px;
+        color: #333;
     }
 }
 
-.newsletter-form {
+/* 입력 영역 */
+.newsletter-input-wrapper {
     display: flex;
-    gap: 12px;
+    margin-top: 8px;
+}
 
-    input {
-        width: 260px;
-        padding: 12px 16px;
-        border-radius: 8px;
-        border: 1px solid #ccc;
-        font-size: 14px;
-    }
+.newsletter-input {
+    flex: 1;
+    border: 1px solid #ddd;
+    border-right: none;
+    padding: 12px 16px;
+    border-radius: 8px 0 0 8px;
+    font-size: 14px;
+    outline: none;
+}
 
-    button {
-        background: #00234d;
-        color: #fff;
-        border: none;
-        padding: 12px 20px;
-        border-radius: 8px;
-        font-size: 14px;
-        font-weight: 600;
-        cursor: pointer;
+.newsletter-btn {
+    background: #1e293b;
+    color: #fff;
+    padding: 12px 20px;
+    border-radius: 0 8px 8px 0;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
 
-        &:hover {
-            background: #001930;
-        }
+    &:hover {
+        background: #2563eb;
     }
 }
 
-.newsletter-image {
-    width: 260px;
-    height: 180px;
-    background-image: url("/assets/footer/mailbox.png");
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
+/* 이미지 */
+.newsletter-right {
+    margin-left: 10px;
 }
 
-/* ========== Footer Links ========== */
+.newsletter-img {
+    width: 420px;
+    height: auto;
+    display: block;
+}
+
+
+
+/* =========================================================
+   ========== Footer Links ==========
+   ========================================================= */
+
+.social-links {
+    .logo {
+        font-size: 28px;
+        font-weight: 800;
+        color: #1e2b26;
+        margin-bottom: 12px;
+    }
+    .description {
+        font-size: 14px;
+        color: #555;
+        line-height: 1.6;
+    }
+}
+
 .footer-links {
-    margin-top: 60px;
+    margin-top: -60px; /* newsletter가 떠 있으므로 margin 줄임 */
 
     .inner {
         width: 90%;
@@ -96,22 +141,9 @@
     }
 }
 
-/* Social */
-.social-section {
-    .social-icons {
-        display: flex;
-        gap: 12px;
-
-        .social-link {
-            width: 28px;
-            height: 28px;
-            background-size: cover;
-
-            &.facebook { background-image: url("/assets/icons/facebook.svg"); }
-            &.instagram { background-image: url("/assets/icons/instagram.svg"); }
-            &.youtube { background-image: url("/assets/icons/youtube.svg"); }
-        }
-    }
+.footer-menu {
+    display: flex;
+    gap: 200px;
 }
 
 /* Link Columns */
@@ -160,21 +192,22 @@
 
     .follow-icons {
         display: flex;
-        gap: 12px;
+        gap: 16px; /* 아이콘 간 간격 넓혀서 깔끔하게 */
 
         .follow-link {
-            width: 28px;
-            height: 28px;
-            background-size: cover;
-
-            &.facebook { background-image: url("/assets/icons/facebook.svg"); }
-            &.instagram { background-image: url("/assets/icons/instagram.svg"); }
-            &.youtube { background-image: url("/assets/icons/youtube.svg"); }
+            width: 36px;   /* 기존 28 → 36px */
+            height: 36px;
+            background-size: contain; /* 아이콘 비율 유지 */
+            background-position: center;
+            background-repeat: no-repeat;
         }
     }
 }
 
-/* ========== Bottom ========== */
+/* =========================================================
+   ========== Bottom ==========
+   ========================================================= */
+
 .footer-bottom {
     margin-top: 60px;
     background: #fafafa;
