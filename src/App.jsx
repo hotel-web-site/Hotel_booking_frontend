@@ -11,6 +11,9 @@ import AddPaymentPage from "./pages/payment/AddPaymentPage";
 
 import Header from "./components/common/Header";
 import Footer from "./components/common/Footer";
+import MyAccountPage from "./pages/mypage/MyAccountPage";
+import MyBookingDetailPage from "./pages/mypage/MyBookingDetailPage";
+import MyPaymentPage from "./pages/mypage/MyPaymentPage"
 
 function App() {
   const location = useLocation();  // ← 현재 URL 가져오기
@@ -21,6 +24,9 @@ function App() {
 
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/myaccountpage" element={<MyAccountPage/>}/>
+        <Route path="/mybookingdetailpage" element={<MyBookingDetailPage/>}/>
+        <Route path="/mypaymentpage" element={<MyPaymentPage/>}/>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/payment" element={<AddPaymentPage />} />
@@ -29,8 +35,7 @@ function App() {
         <Route path="/resetpassword" element={<ResetPasswordPage />} />
       </Routes>
 
-      {/* 🔥 Footer는 메인페이지(/) 에서만 렌더링 */}
-      {location.pathname === "/" && <Footer />}
+      <Footer />
     </>
   );
 }
