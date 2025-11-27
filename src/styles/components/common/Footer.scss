@@ -133,14 +133,16 @@
 
 .footer-links {
     margin-top: -60px;
+    display: flex;
     /* newsletter가 떠 있으므로 margin 줄임 */
 
     .inner {
         width: 90%;
         max-width: 1240px;
         margin: 0 auto;
-
+        gap: 5rem;
         display: flex;
+        flex-direction: column;
         justify-content: space-between;
         align-items: flex-start;
     }

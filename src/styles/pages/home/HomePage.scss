@@ -1,0 +1,18 @@
+@use "../../common/variables" as *;
+@use "../../common/mixins" as *;
+
+.home-page {
+
+    // 전체 페이지 레이아웃 스타일
+    .container {
+        max-width: 120rem;
+        margin: 0 auto;
+    }
+
+    // 반응형 디자인
+    @media (max-width: 76.8rem) {
+        .container {
+            padding: 0 1.5rem;
+        }
+    }
+}
