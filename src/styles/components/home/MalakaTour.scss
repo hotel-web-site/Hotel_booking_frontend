@@ -3,10 +3,11 @@
     padding: 32px;
     border-radius: 20px;
     width: 48%;
-    height: 380px;
+    height: 100%;
     max-width: 460px;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     gap: 18px;
 }
 
@@ -69,3 +70,6 @@
         background: #f1f1f1;
     }
 }
+
+/* ================================
+   Malaka Tour Card
