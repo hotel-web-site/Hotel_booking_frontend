@@ -67,7 +67,7 @@
     gap: 12px;
     /* 기존 24px → 더 가까이 */
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: stretch;
 }
 
 .malaka-tour {
@@ -79,3 +79,6 @@
     width: 57%;
     /* 오른쪽 이미지 공간 넓게 */
 }
+
+/* ================================
+   Travel More 전체 컨테이너

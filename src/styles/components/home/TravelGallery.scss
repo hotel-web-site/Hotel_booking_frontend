@@ -1,5 +1,6 @@
 .travel-gallery {
     width: 52%;
+    height: 100%;
     display: flex;
     justify-content: flex-start;
 }
@@ -7,13 +8,17 @@
 .gallery-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: 1fr;
     grid-gap: 16px;
     width: 100%;
 }
 
 .gallery-img {
     width: 100%;
-    height: 180px;
+    height: 100%;
     object-fit: cover;
     border-radius: 14px;
 }
+
+/* ================================
+   1440px 이하 — 약간 레이아웃 조정

@@ -5,19 +5,20 @@ const DestinationCard = ({ destination }) => {
 
     return (
         <div className="destination-card">
-            <div className="card-image">
-                <img src={image} alt={name} />
-            </div>
-            <div className="card-content">
-                <h3 className="destination-name">{name}</h3>
-                <p className="destination-country">{country}</p>
-                <p className="destination-description">{description}</p>
-                <div className="card-footer">
-                    <span className="price">₩{price.toLocaleString()}</span>
-                    <button className="btn-book">Book a Hotel</button>
+            <img className="card-img" src={image} alt={name} />
+
+            <div className="card-body">
+                <div className="name-price">
+                    <h3>{name}</h3>
+                    <span>₩{price.toLocaleString()}</span>
                 </div>
+
+                <p className="desc">{description}</p>
+
+                <button className="book-btn">Book a Hotel</button>
             </div>
         </div>
+
     );
 };
 

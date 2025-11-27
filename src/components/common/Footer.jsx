@@ -36,16 +36,16 @@ const Footer = () => {
                             <h4 className="follow-title">Follow Us</h4>
                             <div className="follow-icons">
                                 <a href="#" className="follow-link" aria-label="Facebook">
-                                    <img src="/Facebook.png" alt="facebook" className="icon-img" />
+                                    <img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="facebook" className="icon-img" />
                                 </a>
                                 <a href="#" className="follow-link" aria-label="Twitter">
-                                    <img src="/Twitter.png" alt="twitter" className="icon-img" />
+                                    <img src="https://cdn-icons-png.flaticon.com/512/733/733579.png" alt="twitter" className="icon-img" />
                                 </a>
                                 <a href="#" className="follow-link" aria-label="YouTube">
-                                    <img src="/Youtube.png" alt="youtube" className="icon-img" />
+                                    <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" alt="youtube" className="icon-img" />
                                 </a>
                                 <a href="#" className="follow-link" aria-label="Instagram">
-                                    <img src="/Instagram.png" alt="instagram" className="icon-img" />
+                                    <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="instagram" className="icon-img" />
                                 </a>
                             </div>
                         </div>

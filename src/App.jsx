@@ -29,8 +29,10 @@ function App() {
         <Route path="/resetpassword" element={<ResetPasswordPage />} />
       </Routes>
 
-      {/* 🔥 Footer는 메인페이지(/) 에서만 렌더링 */}
-      {location.pathname === "/" && <Footer />}
+      {/* 새 비밀번호 설정 */}
+      <Route path="/resetpassword" element={<ResetPasswordPage />} />  {/* 🔥 핵심 */}
+    </Routes>
+    <Footer />
     </>
   );
 }
