@@ -12,19 +12,19 @@ const HeroSearchWrap = () => {
                         <label>Enter Destination</label>
                         <input
                             type="text"
-                            placeholder="예) 서울시 어머님댁 저희집"
+                            placeholder="예) 대한민국 서울"
                             className="destination-input"
                         />
                     </div>
 
                     <div className="form-group">
                         <label>Check In</label>
-                        <input type="date" defaultValue="2024-01-22" className="date-input" />
+                        <input type="date" defaultValue="2025-01-22" className="date-input" />
                     </div>
 
                     <div className="form-group">
                         <label>Check Out</label>
-                        <input type="date" defaultValue="2024-01-24" className="date-input" />
+                        <input type="date" defaultValue="2025-01-24" className="date-input" />
                     </div>
 
                     <div className="form-group">

@@ -45,8 +45,11 @@
         }
 
         .login-btn {
-            background: #2563eb;
+            background: #1e293b;
             color: #fff;
+            &:hover {
+                background: #2563eb;
+            }
         }
 
         .signup-btn {

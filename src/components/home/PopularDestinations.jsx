@@ -18,7 +18,7 @@ const PopularDestinations = () => {
                         <p>특가상품으로 진행하는 여행을 예약해보세요</p>
                     </div>
 
-                    <button className="btn-see-all">See All</button>
+                    <button className="btn--primary">See All</button>
                 </div>
 
                 <Swiper

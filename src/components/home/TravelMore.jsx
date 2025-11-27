@@ -9,7 +9,7 @@ const TravelMore = () => {
             <div className="container">
                 <div className="section-header">
                     <h2 className="section-title">여행 더보기</h2>
-                    <button className="see-all-btn">See All</button>
+                    <button className="btn--primary">See All</button>
                 </div>
                 <p className="section-subtitle">
                     Going somewhere to celebrate this season? Whether you're going home or
