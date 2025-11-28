@@ -1,28 +1,46 @@
 /* -------------------------------
-   Frame 117  →  section.container
+   Section Wrapper (TravelMore 스타일 적용)
 -------------------------------- */
 .destinations-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;   /* 가운데 정렬 */
+    padding: 0;                /* ⭐ 바깥 패딩 제거 (안쪽 container에서만 처리) */
+    margin: 100px auto 0;
+    margin-bottom: 100px;
+}
+
+/* PopularDestinations 전용 container 반응형 */
+.destinations-container .container {
+    width: 100%;               /* ⭐ 항상 화면 너비 기준으로 */
+    max-width: 120rem;         /* 홈과 동일한 전체 레이아웃 */
+    margin: 0 auto;
+    padding: 0 1.5rem;         /* 기본 좌우 여백 */
     display: flex;
     flex-direction: column;
-    align-items: center;
-
-    padding: 0px 104px;
-    gap: 80px;
-
-    /* Figma absolute는 제거하고 웹 방식으로 변환 */
-    width: 100%;
-    max-width: 1440px;
-    margin: 100px auto 0;  /* top: 886px → margin-top으로 변환 */
-    margin-bottom: 100px;
+    gap: 24px;
     box-sizing: border-box;
 }
 
-/* 실제 내부 컨텐츠 영역 */
-.inner {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 40px;
+/* 1024px 이하 (태블릿 가로) */
+@media (max-width: 1024px) {
+    .destinations-container .container {
+        padding: 0 3.2rem;   /* TravelMore 기준 32px */
+    }
+}
+
+/* 768px 이하 (태블릿 세로) */
+@media (max-width: 768px) {
+    .destinations-container .container {
+        padding: 0 2rem;     /* TravelMore 기준 20px */
+    }
+}
+
+/* 480px 이하 (모바일) */
+@media (max-width: 480px) {
+    .destinations-container .container {
+        padding: 0 1.4rem;   /* TravelMore 기준 14px */
+    }
 }
 
 /* -------------------------------
@@ -32,7 +50,7 @@
     width: 100%;
     display: flex;
     justify-content: space-between;
-    align-items: center;   /* 🔥 세로 가운데 정렬 */
+    align-items: center;
 
     .text-box {
         display: flex;
@@ -55,22 +73,19 @@
     }
 }
 
-
-
-
 /* -------------------------------
    Swiper 영역
 -------------------------------- */
 .destinations-swiper {
     width: 100%;
-    padding-bottom: 40px; /* Pagination 공간 */
+    padding-bottom: 40px;
 
     .swiper-slide {
         display: flex;
+        /* ⭐ 좌우로 넘치는 문제 줄이기 위해 center 유지 */
         justify-content: center;
     }
 
-    /* Navigation arrows */
     .swiper-button-next,
     .swiper-button-prev {
         color: #00234d;
@@ -81,7 +96,6 @@
         }
     }
 
-    /* Pagination bullets */
     .swiper-pagination-bullet {
         background: #ccc;
         opacity: 1;
@@ -92,12 +106,12 @@
     }
 }
 
-/* 기존 container, inner, header, swiper는 그대로 두고  
-   카드 디자인만 추가하면 됨! */
-
+/* -------------------------------
+   카드 디자인
+-------------------------------- */
 .destination-card {
-    width: 100%;
-    max-width: 280px;
+    width: 100%;              /* ⭐ 슬라이드 너비에 딱 맞게 */
+    max-width: none;          /* ⭐ 280px 고정 제거 → 넘침 방지 */
     background: transparent;
     border-radius: 14px;
     overflow: hidden;
@@ -114,7 +128,6 @@
     object-fit: cover;
 }
 
-/* 아래 내용 */
 .card-body {
     padding: 16px 18px 20px;
     display: flex;
@@ -162,6 +175,7 @@
     }
 }
 
+/* Swiper 화살표 제거 (최하단 유지) */
 .destinations-swiper .swiper-button-next,
 .destinations-swiper .swiper-button-prev {
     display: none;

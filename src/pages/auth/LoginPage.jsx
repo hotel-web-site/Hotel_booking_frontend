@@ -35,12 +35,13 @@ const LoginPage = () => {
 
     try {
       const res = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/user/login`,
+        `${import.meta.env.VITE_API_URL}/api/auth/login`,
         formData,
         { withCredentials: true }
       );
 
-      const { token } = res.data || {};
+      // ✅ 백엔드 response 구조 반영
+      const { token } = res.data.data || {};
       if (!token) throw new Error("토큰 없음");
 
       localStorage.setItem("token", token);
@@ -93,7 +94,6 @@ const LoginPage = () => {
             회원가입
           </button>
 
-          {/* ✅ 추가된 '비밀번호 찾기' 버튼 */}
           <button
             type="button"
             className="resetpw-btn"
@@ -122,7 +122,6 @@ const LoginPage = () => {
         </div>
       </div>
 
-      {/* RIGHT SLIDER */}
       <div className="slider-container">
         <img src={imageList[current]} className="slide-image" />
         <div className="indicator-box">

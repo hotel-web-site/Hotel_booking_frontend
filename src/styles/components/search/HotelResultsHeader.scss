@@ -1,0 +1,50 @@
+.hotel-results-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 14px 0 20px 0;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #e2e8f0;
+
+    .results-info {
+        font-size: 14px;
+        color: #475569;
+
+        strong {
+            color: #111;
+            font-weight: 600;
+        }
+
+        .total {
+            color: #ef4444; // 빨간 포인트 컬러
+        }
+    }
+
+    /* Sort by 박스 */
+    .sort-dropdown {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        label {
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        select {
+            padding: 8px 14px;
+            border-radius: 8px;
+            border: 1px solid #d1d5db;
+            background: #fff;
+            font-size: 14px;
+            cursor: pointer;
+            color: #374151;
+            transition: 0.2s;
+
+            &:hover {
+                border-color: #a3b3c2;
+            }
+        }
+    }
+}
