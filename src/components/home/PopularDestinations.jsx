@@ -12,7 +12,7 @@ import DestinationCard from "./DestinationCard"; // ✅ 추가
 const PopularDestinations = () => {
     return (
         <section className="destinations-container">
-            <div className="container">
+            <div className="inner">
                 <div className="section-header">
                     <div className="text-box">
                         <h2 className="section-title">여행에 빠지다</h2>

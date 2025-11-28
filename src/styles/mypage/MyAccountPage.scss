@@ -1,0 +1,53 @@
+.account-page {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  font-family: "Pretendard", sans-serif;
+  color: #222;
+  padding-top: 80px;
+
+  /* 🟡 계정 정보 박스만 유지 */
+  .account-box {
+    margin-top: 30px;
+    background: #fff;
+    border-radius: 14px;
+    padding: 30px;
+    border: 1px solid #eee;
+
+    h2 {
+      margin-bottom: 20px;
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .account-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 0;
+      border-bottom: 1px solid #f1f1f1;
+
+      .item-label {
+        font-weight: 600;
+      }
+
+      .item-value {
+        margin-top: 4px;
+        color: #444;
+      }
+
+      .change-btn {
+        padding: 8px 12px;
+        background: #f6f6f6;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+
+        &:hover {
+          background: #eaeaea;
+        }
+      }
+    }
+  }
+}

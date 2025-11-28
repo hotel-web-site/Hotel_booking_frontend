@@ -9,8 +9,12 @@ import ResetPasswordPage from "./pages/auth/ResetPasswordPage";
 import HomePage from "./pages/home/HomePage";
 import SearchLayout from "./components/layouts/SearchLayout";
 import SearchPage from "./pages/search/SearchPage";
+import AddPaymentPage from "./pages/payment/AddPaymentPage";
 import Header from "./components/common/Header";
 import Footer from "./components/common/Footer";
+import MyAccountPage from "./pages/mypage/MyAccountPage";
+import MyBookingDetailPage from "./pages/mypage/MyBookingDetailPage";
+import MyPaymentPage from "./pages/mypage/MyPaymentPage"
 
 function App() {
   const location = useLocation();  // ← 현재 URL 가져오기
@@ -34,9 +38,17 @@ function App() {
 
         {/* 새 비밀번호 설정 */}
         <Route path="/resetpassword" element={<ResetPasswordPage />} />  {/* 🔥 핵심 */}
-      </Routes>
+        <Route path="/myaccountpage" element={<MyAccountPage/>}/>
+        <Route path="/mybookingdetailpage" element={<MyBookingDetailPage/>}/>
+        <Route path="/mypaymentpage" element={<MyPaymentPage/>}/>
+        <Route path="/payment" element={<AddPaymentPage />} />
+        <Route path="/findpassword" element={<FindPasswordPage />} />
+        <Route path="/emailauth" element={<EmailAuth />} />
+        <Route path="/resetpassword" element={<ResetPasswordPage />} />
+
       <Footer />
     </>
+      </Routes>      
   );
 }
 
