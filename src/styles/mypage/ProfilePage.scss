@@ -5,40 +5,46 @@
   font-family: "Pretendard", sans-serif;
   color: #222;
 
-  // 📌 Cover Section
+  /* 📌 Cover Section */
   .cover-section {
     width: 100%;
-    height: 220px;
+    height: 250px; /* 🔥 기존 220px → 300px */
     border-radius: 20px;
     overflow: hidden;
     position: relative;
 
     .cover-img {
       width: 100%;
-      height: 290px;
+      height: 350px; /* 🔥 아래까지 내려오도록 확장 */
       object-fit: cover;
-    }
-
-    .upload-cover-btn {
-      position: absolute;
-      right: 20px;
-      bottom: 20px;
-      padding: 8px 14px;
-      background: white;
-      border-radius: 8px;
-      font-size: 14px;
-      cursor: pointer;
-      border: 1px solid #ddd;
-
-      input {
-        display: none;
-      }
     }
   }
 
-  // 📌 Profile Image
+  /* ⭐ 커버 이미지 바깥 업로드 버튼 */
+  .upload-cover-btn-outside {
+    display: inline-block;
+    margin-top: 12px;
+    margin-left: 4px;
+    padding: 8px 14px;
+    border-radius: 8px;
+    border: 1px solid #777;
+    cursor: pointer;
+    font-size: 14px;
+    color: #444;
+    background: #fff;
+
+    input {
+      display: none;
+    }
+
+    &:hover {
+      background: #f3f3f3;
+    }
+  }
+
+  /* 📌 Profile Section */
   .profile-section {
-    margin-top: -50px;
+    margin-top: -110px; /* 🔥 프로필 이미지 절반 겹치도록 조정 */
     text-align: center;
 
     .profile-img-wrap {
@@ -49,7 +55,7 @@
         width: 110px;
         height: 110px;
         border-radius: 50%;
-        border: 4px solid white;
+        border: 1px solid black;
         object-fit: cover;
       }
 
@@ -89,7 +95,7 @@
     }
   }
 
-  // 📌 Tab Menu
+  /* 📌 Tab Menu */
   .tab-menu {
     margin-top: 40px;
     display: flex;

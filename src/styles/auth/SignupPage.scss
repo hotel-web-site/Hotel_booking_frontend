@@ -1,5 +1,6 @@
 /* 전체 구조 */
 .page-wrapper {
+    margin-top: 30px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -10,8 +11,8 @@
 
     /* RIGHT 슬라이더 */
     .slider-container {
-        width: 320px;
-        height: 500px;
+        width: 450px;
+        height: 588.4px;
         border-radius: 20px;
         overflow: hidden;
         position: relative;
