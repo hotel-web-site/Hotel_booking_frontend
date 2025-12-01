@@ -9,9 +9,11 @@ const HomePage = () => {
   return (
     <div className="home-page top-container">
       <HeroSection />
-      <HeroSearchWrap />
-      <PopularDestinations />
-      <TravelMore />
+      <div className="homepage-container">
+        <HeroSearchWrap />
+        <PopularDestinations />
+        <TravelMore />
+      </div>
     </div>
   );
 };

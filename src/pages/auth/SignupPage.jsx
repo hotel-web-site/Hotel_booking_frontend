@@ -46,18 +46,19 @@ const SignupPage = () => {
             setMessage("비밀번호가 일치하지 않습니다.");
             return;
         }
+
         if (!form.agree) {
             setMessage("약관에 동의해야 가입이 가능합니다.");
             return;
         }
 
         try {
-            await axios.post(`${import.meta.env.VITE_API_URL}/api/user/register`, {
+            await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/register`, {
+                name: `${form.first} ${form.last}`, // User 모델 name 필드
                 email: form.email,
-                password: form.password,
-                firstName: form.first,
-                lastName: form.last,
-                phone: form.phone,
+                password: form.password,             // backend pre-save hook에서 해싱
+                phoneNumber: form.phone,
+                marketingAgree: form.agree,
             });
 
             alert("회원가입 완료!");
@@ -69,8 +70,6 @@ const SignupPage = () => {
 
     return (
         <div className="page-wrapper">
-
-            {/* LEFT → 이미지 슬라이더 */}
             <div className="slider-container">
                 <img src={imageList[current]} className="slide-image" />
                 <div className="indicator-box">
@@ -83,9 +82,10 @@ const SignupPage = () => {
                 </div>
             </div>
 
-            {/* RIGHT → 회원가입 폼 */}
             <div className="signup-container">
-                <div className="sign-up-text"><h1>Sign up</h1></div>
+                <div className="sign-up-text">
+                    <h1>Sign up</h1>
+                </div>
 
                 <form className="signup-form" onSubmit={handleSubmit}>
                     <div className="row">
@@ -97,7 +97,6 @@ const SignupPage = () => {
                             onChange={handleChange}
                             required
                         />
-
                         <input
                             type="text"
                             name="last"
@@ -117,7 +116,6 @@ const SignupPage = () => {
                             onChange={handleChange}
                             required
                         />
-
                         <input
                             type="text"
                             name="phone"
@@ -181,7 +179,9 @@ const SignupPage = () => {
 
                 {message && <p className="error-msg">{message}</p>}
 
-                <div className="divider"><span>Or Sign up with</span></div>
+                <div className="divider">
+                    <span>Or Sign up with</span>
+                </div>
 
                 <div className="social-box">
                     <button className="social-btn fb">
@@ -195,7 +195,6 @@ const SignupPage = () => {
                     </button>
                 </div>
             </div>
-
         </div>
     );
 };
