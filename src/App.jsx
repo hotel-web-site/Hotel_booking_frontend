@@ -48,8 +48,8 @@ function App() {
         <Route path="/emailauth" element={<EmailAuth />} />
         <Route path="/resetpassword" element={<ResetPasswordPage />} />
 
-      <Footer />
       </Routes>      
+      <Footer />
     </>
   );
 }

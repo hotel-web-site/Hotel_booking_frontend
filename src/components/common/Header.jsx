@@ -1,13 +1,23 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContext";
 import "../../styles/components/common/Header.scss";
 
-const Header = ({ user }) => {
+const Header = () => {
     const [openMenu, setOpenMenu] = useState(false);
-    const isLoggedIn = !!user;
+    const { user, logout } = useContext(AuthContext); // 🔹 Context에서 로그인 상태 및 로그아웃 함수 가져오기
+    const navigate = useNavigate();
+    const isLoggedIn = !!user; // 🔹 로그인 여부 확인
+
+    // 🔹 로그아웃 처리
+    const handleLogout = () => {
+        logout(); // Context 로그아웃
+        navigate("/"); // 로그아웃 후 홈으로 이동
+    };
 
     return (
         <header className="header">
+            {/* 🔹 좌측 로고 및 네비게이션 */}
             <div className="header-left">
                 <Link to="/" className="logo">HotelHub</Link>
 
@@ -17,8 +27,9 @@ const Header = ({ user }) => {
                 </nav>
             </div>
 
+            {/* 🔹 우측 로그인/회원가입 또는 사용자 메뉴 */}
             <div className="header-right">
-                {/* 🔹 로그아웃 상태 */}
+                {/* 🔹 로그아웃 상태일 때 */}
                 {!isLoggedIn && (
                     <>
                         <Link to="/login" className="btn login-btn">로그인</Link>
@@ -26,20 +37,20 @@ const Header = ({ user }) => {
                     </>
                 )}
 
-                {/* 🔹 로그인 상태 */}
+                {/* 🔹 로그인 상태일 때 */}
                 {isLoggedIn && (
                     <>
-                        {/* ❤️ 찜하기 */}
+                        {/* 🔹 찜하기 버튼 */}
                         <Link to="/wishlist" className="wish-btn">
                             <i className="fa-regular fa-heart"></i>
                             찜하기
                         </Link>
 
-                        {/* 👤 프로필 */}
+                        {/* 🔹 프로필 드롭다운 */}
                         <div className="profile-area">
                             <div
                                 className="profile"
-                                onClick={() => setOpenMenu(!openMenu)}
+                                onClick={() => setOpenMenu(!openMenu)} // 드롭다운 토글
                             >
                                 <img
                                     src={user.profileImg || "/default_profile.png"}
@@ -48,33 +59,33 @@ const Header = ({ user }) => {
                                 <span>{user.nickname}</span>
                             </div>
 
-
-
-                            {/* 🔽 드롭다운 메뉴 */}
+                            {/* 🔹 드롭다운 메뉴 표시 */}
                             {openMenu && (
                                 <div className="profile-menu">
                                     <div className="user-menu">
                                         <div className="user-info">
                                             <div className="avatar">T</div>
                                             <div className="user-details">
-                                                <span className="username">Tomhoon</span>
+                                                <span className="username">{user.nickname}</span>
                                                 <span className="status">Online</span>
                                             </div>
                                         </div>
                                         <div className="menu-items">
-                                            <Link className="item" to="/profile">계정</Link>
-                                            <Link className="item" to="/payments">결제내역</Link>
+                                            <Link className="item" to="/myaccountpage">계정</Link>
+                                            <Link className="item" to="/mypaymentpage">결제내역</Link>
                                             <Link className="item" to="/settings">설정</Link>
 
                                             <div className="divider"></div>
 
-                                            <Link className="item logout" to="/logout">
+                                            {/* 🔹 로그아웃 버튼 */}
+                                            <button
+                                                className="item logout"
+                                                onClick={handleLogout}
+                                            >
                                                 로그아웃
-                                            </Link>
+                                            </button>
                                         </div>
-
                                     </div>
-
                                 </div>
                             )}
                         </div>

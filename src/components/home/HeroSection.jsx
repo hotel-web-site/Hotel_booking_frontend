@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import HeroCard from "./HeroCard";
+import { useNavigate } from "react-router-dom";
 
 // styles
 import "swiper/css";
@@ -12,6 +13,7 @@ import "../../styles/components/home/HeroSection.scss";
 import { Pagination, Autoplay } from "swiper/modules";
 
 const HeroSection = () => {
+    const navigate = useNavigate();
     const heroSlides = [
         {
             title: "신청해보세요",
@@ -59,12 +61,22 @@ const HeroSection = () => {
                             description={slide.description}
                             backgroundImage={slide.backgroundImage}
                             className={slide.className}
-                            searchForm={index === 0}
-                        />
+                        >
+                            {/* 🔥 검색바를 HeroCard 내부에 삽입 */}
+                            <div className="search-btn-wrapper">
+                                <button
+                                    className="btn btn--blur"
+                                    onClick={() => navigate("/search")}
+                                >
+                                    호텔 예약 바로가기
+                                </button>
+                            </div>
+                        </HeroCard>
                     </SwiperSlide>
                 ))}
             </Swiper>
         </div>
+
     );
 };
 

@@ -14,12 +14,16 @@ const HotelListCards = ({ hotels = [] }) => {
 
     return (
         <div className="hotel-list-cards">
-            {hotels.map((hotel, i) => {
-                const price = hotel.basePrice ?? null;
+            {hotels.map((hotel) => {
+                // 호텔에 rooms가 없거나 비어있으면 기본값 사용
+                const mainRoom = hotel.rooms && hotel.rooms.length > 0 ? hotel.rooms[0] : {};
+                const price = mainRoom?.price ?? null;
+                const image = mainRoom?.images?.[0] || "/default_hotel.jpg"; // 기본 이미지
+                const amenitiesCount = mainRoom?.amenities?.length || 0;
 
                 return (
                     <div
-                        key={i}
+                        key={hotel.id}
                         className="hotel-card"
                         onClick={() => navigate(`/hotels/${hotel.id}`)}
                     >
