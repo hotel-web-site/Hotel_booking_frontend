@@ -2,41 +2,46 @@ import React from "react";
 import "../../styles/components/hotelpage/HotelMap.scss";
 
 const HotelMap = ({ address, location }) => {
-    // Google Maps API 키
     const GOOGLE_MAPS_API_KEY = "AIzaSyDHcx9sCPnQhwcKlC5uHDUgqOJTXqJ5234";
     const encodedAddress = encodeURIComponent(address || "서울시청");
 
     const mapUrl = `https://www.google.com/maps/embed/v1/place?key=${GOOGLE_MAPS_API_KEY}&q=${encodedAddress}&zoom=15`;
-
-    // API 키가 없으면 Google Maps 링크로 대체
     const mapsLink = `https://www.google.com/maps/search/?api=1&query=${encodedAddress}`;
 
     return (
         <div className="hotel-map">
-            <div className="map-info">
-                <h3>📍 위치</h3>
-                <p className="address">{address}</p>
-                {location && <p className="location">{location}</p>}
+            {/* 상단 제목 + 버튼 */}
+            <div className="map-header">
+                <h3 className="map-title">지도보기</h3>
                 <a
                     href={mapsLink}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="map-link"
                 >
-                    Google Maps에서 보기 →
+                    View on google maps
                 </a>
             </div>
+
+            {/* 실제 지도 */}
             <div className="map-container">
                 <iframe
                     width="100%"
-                    height="400"
-
+                    height="380"
                     style={{ border: 0 }}
+                    src={mapUrl}
                     referrerPolicy="no-referrer-when-downgrade"
-                    src={`https://www.google.com/maps?q=${encodedAddress}&output=embed`}
                     allowFullScreen
                 />
             </div>
+
+            {/* 주소 */}
+            <p className="address-text">
+                <span className="pin">📍</span>
+                {address}
+            </p>
+
+            <div className="divider"></div>
         </div>
     );
 };

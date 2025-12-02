@@ -1,0 +1,240 @@
+/* =========================================================
+   Hotel Detail Header
+========================================================= */
+.hotel-detail-header {
+    width: 100%;
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 150px 40px 40px;
+    border-bottom: 1px solid #e5e5e5;
+    box-sizing: border-box;
+    margin-bottom: 50px;
+}
+
+/* Breadcrumb */
+.header-top {
+    margin-bottom: 22px;
+
+    .breadcrumb {
+        font-size: 14px;
+        color: #777;
+
+        span:last-child {
+            font-weight: 600;
+            color: #333;
+        }
+    }
+}
+
+/* ===========================
+   LEFT TEXT + RIGHT PRICE/ACTIONS
+=========================== */
+.hotel-detail-header .hotel-info {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 40px;
+    width: 100%;
+    margin-bottom: 30px;
+}
+
+/* ===========================
+   LEFT SIDE — HOTEL TEXT INFO
+=========================== */
+.hotel-title-section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1; /* 🔥 왼쪽 영역이 자연스럽게 늘어남 */
+
+    .hotel-name {
+        font-size: 32px;
+        font-weight: 700;
+        color: #111;
+    }
+
+    .rating-section {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        .stars {
+            display: flex;
+            gap: 2px;
+        }
+
+        .star-filled {
+            color: #ffb400;
+        }
+
+        .star-empty {
+            color: #ddd;
+        }
+
+        .rating-text {
+            font-size: 14px;
+            color: #666;
+        }
+    }
+
+    .location-section {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+
+        .location-icon {
+            color: #444;
+            font-size: 15px;
+        }
+
+        .address {
+            font-size: 14px;
+            color: #444;
+        }
+    }
+
+    .review-section {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 13px;
+
+        .review-score {
+            padding: 4px 10px;
+            background: #e7eef7;
+            border-radius: 10px;
+            font-weight: 600;
+            color: #111;
+        }
+
+        .review-text {
+            color: #444;
+        }
+
+        .review-count {
+            color: #777;
+        }
+    }
+}
+
+/* ===========================
+   RIGHT SIDE — PRICE + ACTIONS
+=========================== */
+.price-actions-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end; /* 🔥 오른쪽 끝 정렬 */
+    gap: 14px;
+    min-width: 260px; /* 🔥 가격/버튼 영역이 왼쪽으로 밀리지 않도록 고정 */
+    padding-top: 30px;
+}
+
+/* 가격 */
+.price-section {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+
+    .price {
+        font-size: 24px;
+        font-weight: 700;
+        color: #ff6a6a;
+    }
+
+    .price-unit {
+        font-size: 15px;
+        color: #ff6a6a;
+    }
+}
+
+/* 버튼들 */
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    .icon-btn {
+        width: 42px;
+        height: 42px;
+        border-radius: 10px;
+        border: 1px solid #ddd;
+        background: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        svg {
+            font-size: 18px;
+            color: #444;
+        }
+    }
+
+    .book-top-btn {
+        padding: 10px 22px;
+        background: #7fd3be;
+        color: #fff;
+        font-size: 15px;
+        font-weight: 600;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+    }
+}
+
+/* ===========================
+   IMAGE GRID
+=========================== */
+.hotel-images {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 14px;
+    width: 100%;
+}
+
+.main-image {
+    width: 100%;
+    height: 420px;
+    border-radius: 12px;
+    overflow: hidden;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}
+
+.sub-images {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 14px;
+
+    .sub-image {
+        position: relative;
+        width: 100%;
+        height: 200px;
+        border-radius: 12px;
+        overflow: hidden;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .view-all-overlay {
+            position: absolute;
+            bottom: 12px;
+            right: 12px;
+            padding: 6px 14px;
+            background: rgba(0, 0, 0, 0.65);
+            border-radius: 30px;
+            color: #fff;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+    }
+}

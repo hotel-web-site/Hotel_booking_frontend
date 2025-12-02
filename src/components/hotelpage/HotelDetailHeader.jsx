@@ -1,10 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import { FaStar, FaMapMarkerAlt, FaHeart, FaShare } from "react-icons/fa";
 import "../../styles/components/hotelpage/HotelDetailHeader.scss";
 
 const HotelDetailHeader = ({ hotel }) => {
-    // console.log("HotelDetailHeader props:", hotel);
-
     if (!hotel) {
         return <div className="hotel-detail-header loading">Loading...</div>;
     }
@@ -13,14 +11,12 @@ const HotelDetailHeader = ({ hotel }) => {
         name = "호텔명 없음",
         ratingAverage = 0,
         ratingCount = 0,
-        city = "",
         address = "주소 정보 없음",
-        location = "",
-        basePrice = 0,
         images = [],
+        city = "",
+        location = "",
     } = hotel;
 
-    // 별점을 별 아이콘으로 표시
     const renderStars = (rating) => {
         const stars = [];
         const fullStars = Math.floor(rating);
@@ -36,65 +32,64 @@ const HotelDetailHeader = ({ hotel }) => {
         return stars;
     };
 
-    const handleFavorite = () => {
-        console.log("Add to favorites");
-    };
-
-    const handleShare = () => {
-        console.log("Share hotel");
-    };
-
-    const handleBookNow = () => {
-        console.log("Book now");
-    };
-
     return (
         <div className="hotel-detail-header">
+
+            {/* breadcrumb */}
             <div className="header-top">
                 <div className="breadcrumb">
-                    <span>{city || "Location"}</span> &gt;{" "}
-                    <span>{location || "Area"}</span> &gt; <span>{name}</span>
-                </div>
-                <div className="header-actions">
-                    <button className="icon-btn" onClick={handleFavorite}>
-                        <FaHeart />
-                    </button>
-                    <button className="icon-btn" onClick={handleShare}>
-                        <FaShare />
-                    </button>
-                    <span className="user-name">Tomhoon</span>
+                    <span>{city}</span> &gt; <span>{location}</span> &gt; <span>{name}</span>
                 </div>
             </div>
 
+            {/* 메인 정보 라인 */}
             <div className="hotel-info">
+                {/* 왼쪽 호텔 정보 */}
                 <div className="hotel-title-section">
                     <h1 className="hotel-name">{name}</h1>
+
                     <div className="rating-section">
                         <div className="stars">{renderStars(ratingAverage)}</div>
                         <span className="rating-text">{ratingAverage} Star Hotel</span>
                     </div>
+
                     <div className="location-section">
                         <FaMapMarkerAlt className="location-icon" />
                         <span className="address">{address}</span>
                     </div>
+
                     <div className="review-section">
                         <span className="review-score">{ratingAverage}</span>
                         <span className="review-text">Very Good</span>
                         <span className="review-count">{ratingCount} reviews</span>
                     </div>
                 </div>
-                <div className="price-section">
-                    <div className="price-wrapper">
-                        <span className="price">₩{(hotel.basePrice ?? hotel.price ?? 0).toLocaleString()}</span>
+
+                {/* 오른쪽 가격 + 버튼 */}
+                <div className="price-actions-wrap">
+                    <div className="price-section">
+                        <span className="price">
+                            ₩{(hotel.basePrice ?? hotel.price ?? 0).toLocaleString()}
+                        </span>
                         <span className="price-unit">/night</span>
                     </div>
-                    <button className="btn-book-now" onClick={handleBookNow}>
-                        Book now
-                    </button>
-                </div>
 
+                    <div className="header-actions">
+                        <button className="icon-btn">
+                            <FaHeart />
+                        </button>
+                        <button className="icon-btn">
+                            <FaShare />
+                        </button>
+
+                        <button className="book-top-btn">
+                            Book now
+                        </button>
+                    </div>
+                </div>
             </div>
 
+            {/* 이미지 */}
             <div className="hotel-images">
                 <div className="main-image">
                     <img
@@ -105,13 +100,15 @@ const HotelDetailHeader = ({ hotel }) => {
                         alt={name}
                     />
                 </div>
+
                 <div className="sub-images">
                     {images.slice(1, 5).map((img, index) => (
                         <div key={index} className="sub-image">
-                            <img src={img} alt={`${name} ${index + 2}`} />
+                            <img src={img} alt={`${name}_${index}`} />
+
                             {index === 3 && images.length > 5 && (
                                 <div className="view-all-overlay">
-                                    <span>View all photos</span>
+                                    View all photos
                                 </div>
                             )}
                         </div>
