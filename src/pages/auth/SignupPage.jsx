@@ -71,7 +71,15 @@ const SignupPage = () => {
     return (
         <div className="page-wrapper">
             <div className="slider-container">
-                <img src={imageList[current]} className="slide-image" />
+                <div
+                    className="slider-track"
+                    style={{ transform: `translateX(-${current * 100}%)` }}
+                >
+                    {imageList.map((src, i) => (
+                        <img key={i} src={src} className="slide-image" />
+                    ))}
+                </div>
+
                 <div className="indicator-box">
                     {imageList.map((_, i) => (
                         <div
@@ -81,6 +89,7 @@ const SignupPage = () => {
                     ))}
                 </div>
             </div>
+
 
             <div className="signup-container">
                 <div className="sign-up-text">
@@ -171,7 +180,7 @@ const SignupPage = () => {
                     <button
                         type="button"
                         className="back-login"
-                        onClick={() => navigate("/loginpage")}
+                        onClick={() => navigate("/login")}
                     >
                         로그인
                     </button>
