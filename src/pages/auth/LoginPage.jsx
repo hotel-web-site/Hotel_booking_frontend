@@ -122,7 +122,6 @@ const LoginPage = () => {
         </div>
       </div>
 
-      {/* RIGHT SLIDER */}
       <div className="slider-container">
         <div
           className="slider-track"
