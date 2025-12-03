@@ -1,12 +1,17 @@
-import { Navigate } from "react-router-dom";
+import { useContext } from "react";
+import { Navigate, useLocation } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContext";
 
 const ProtectedRoute = ({ children }) => {
-  const isAuthenticated = false; // TODO: 인증 로직 구현
+  const { user } = useContext(AuthContext);
+  const location = useLocation();
 
-  if (!isAuthenticated) {
-    return <Navigate to="/auth/login" replace />;
+  // 로그인 안 된 경우 → 로그인 페이지로 이동
+  if (!user) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
+  // 로그인 된 경우 → 원래 페이지 렌더링
   return children;
 };
 

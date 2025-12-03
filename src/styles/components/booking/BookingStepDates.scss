@@ -6,6 +6,38 @@
     margin: 0 auto;
     padding: $spacing-sm;
 
+    /* ⭐ 새로 추가된 호텔 상단 정보 */
+    .hotel-top-info {
+        margin-bottom: 2.5rem;
+
+        .title {
+            font-size: 2.4rem; // 더 크게
+            font-weight: 800; // 더 두껍게
+            margin-bottom: 0.75rem; // 여백 조금 증가
+            color: $color-text;
+            letter-spacing: -0.02rem; // 살짝 꽉 차 보이게
+            line-height: 1.2; // 제목 느낌 강조
+            text-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+        }
+
+
+        .meta-row {
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+
+            .rating {
+                font-weight: 600;
+                font-size: 1.1rem;
+            }
+
+            .location {
+                color: $color-text-secondary;
+                font-size: 1rem;
+            }
+        }
+    }
+
     .booking-header {
         margin-bottom: $spacing-xxl;
 
@@ -225,8 +257,6 @@
                 font-weight: 600;
                 cursor: pointer;
                 transition: background 0.2s;
-
-                &:hover {}
 
                 &:disabled {
                     background: $color-muted;

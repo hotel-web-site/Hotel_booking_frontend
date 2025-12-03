@@ -35,24 +35,18 @@ const HotelDetailHeader = ({ hotel }) => {
     };
 
     const handleBookNow = () => {
-        const params = new URLSearchParams();
-        if (startDate) params.append("checkIn", startDate.toISOString());
-        if (endDate) params.append("checkOut", endDate.toISOString());
-        params.append("guests", guests);
+    navigate(`/booking/${hotel._id || hotel.id}`);
+};
 
-        navigate(`/booking/${hotel._id || hotel.id}?${params.toString()}`);
-    };
 
     return (
         <div className="hotel-detail-header">
-
             {/* breadcrumb */}
             <div className="header-top">
                 <div className="breadcrumb">
                     <span>{city}</span> &gt; <span>{location}</span> &gt; <span>{name}</span>
                 </div>
             </div>
-
             {/* 메인 정보 라인 */}
             <div className="hotel-info">
                 {/* 왼쪽 호텔 정보 */}
@@ -100,32 +94,7 @@ const HotelDetailHeader = ({ hotel }) => {
                 </div>
             </div>
 
-            {/* 이미지 */}
-            <div className="hotel-images">
-                <div className="main-image">
-                    <img
-                        src={
-                            images[0] ||
-                            "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800"
-                        }
-                        alt={name}
-                    />
-                </div>
-
-                <div className="sub-images">
-                    {images.slice(1, 5).map((img, index) => (
-                        <div key={index} className="sub-image">
-                            <img src={img} alt={`${name}_${index}`} />
-
-                            {index === 3 && images.length > 5 && (
-                                <div className="view-all-overlay">
-                                    View all photos
-                                </div>
-                            )}
-                        </div>
-                    ))}
-                </div>
-            </div>
+            
         </div>
     );
 };

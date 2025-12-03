@@ -6,133 +6,198 @@
     margin: 0 auto;
     padding: $spacing-lg;
 
+    /* ============================================================
+       🔹 전체 레이아웃
+    ============================================================ */
     .booking-content {
         display: grid;
         grid-template-columns: 1fr 40rem;
-        gap: $spacing-lg;
+        gap: 2.2rem;
 
         @media (max-width: $breakpoint-md) {
             grid-template-columns: 1fr;
         }
     }
 
+    /* ============================================================
+       🔹 약관 영역
+    ============================================================ */
     .terms-section {
-        background: $color-bg;
-        padding: $spacing-lg;
-        border-radius: $border-radius-lg;
-        box-shadow: $shadow-lg;
+        background: #ffffff;
+        padding: 2rem;
+        border-radius: 16px;
+
+        /* 더 고급스러운 그림자 */
+        box-shadow:
+            0 12px 28px rgba(0, 0, 0, 0.1),
+            0 3px 8px rgba(0, 0, 0, 0.05);
+
+        h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 1.2rem;
+            color: #1a1a1a;
+        }
 
         .term-item {
-            margin: $spacing-sm;
             display: flex;
             align-items: center;
-            gap: $spacing-sm;
+            gap: 0.8rem;
+            padding: 0.7rem 0;
+            margin: 0.2rem 0;
 
-            // justify-content: space-between;
             input {
-                width: auto;
+                width: 18px;
+                height: 18px;
+                cursor: pointer;
+            }
+
+            label {
+                cursor: pointer;
             }
 
             &:last-child {
-                border-top: 0.1rem solid $color-border;
-                padding-top: $spacing-sm;
+                border-top: 1px solid #e5e7eb;
+                margin-top: 0.8rem;
+                padding-top: 1rem;
+            }
+
+            .term-title {
+                font-size: 1rem;
+                font-weight: 600;
+                color: #333;
             }
         }
     }
 
+    /* ============================================================
+       🔹 결제 요약 (오른쪽 고정 영역)
+    ============================================================ */
     .payment-summary {
         position: sticky;
-        top: $spacing-lg;
-        background: $color-bg;
-        padding: $spacing-lg;
-        border-radius: $border-radius-lg;
-        box-shadow: $shadow-lg;
+        top: 2rem;
+        background: #ffffff;
+        padding: 2rem;
+        border-radius: 18px;
+
+        box-shadow:
+            0 16px 32px rgba(0, 0, 0, 0.12),
+            0 4px 14px rgba(0, 0, 0, 0.06);
+
         height: fit-content;
 
         h3 {
-            font-size: 1.6rem;
-            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 1.8rem;
+            color: #222;
         }
 
+        /* -----------------------------------------
+           예약 정보 블록  
+        ------------------------------------------ */
         .booking-details {
-            margin-bottom: 1.5rem;
-            padding-bottom: 1.5rem;
-            border-bottom: 1px solid $color-border;
+            margin-bottom: 1.8rem;
+            padding-bottom: 1.8rem;
+            border-bottom: 1px solid #e6e6e6;
 
             .detail-item {
                 display: flex;
                 justify-content: space-between;
-                margin-bottom: 0.75rem;
-                // font-size: 0.95rem;
+                align-items: center;
+                margin-bottom: 0.9rem;
 
                 .label {
-                    color: $color-text-secondary;
+                    color: #777;
+                    font-size: 0.95rem;
                 }
 
                 .value {
-                    font-weight: 600;
+                    font-size: 1.05rem;
+                    font-weight: 700;
+                    color: #2b2b2b;
                 }
             }
         }
 
+        /* -----------------------------------------
+           금액 표시
+        ------------------------------------------ */
         .price-breakdown {
             .price-row {
                 display: flex;
                 justify-content: space-between;
-                padding: 0.75rem 0;
+                padding: 0.8rem 0;
+                font-size: 1rem;
 
                 &.subtotal {
                     padding-top: 1rem;
-                    border-top: 1px solid $color-border;
+                    border-top: 1px solid #e6e6e6;
                 }
 
                 &.discount {
-                    color: #10b981;
+                    color: #0ea873;
+                    font-weight: 700;
                 }
 
                 &.total {
-                    font-size: 1.3rem;
-                    font-weight: 700;
-                    padding-top: 1rem;
-                    border-top: 2px solid $color-border;
-                    margin-top: 0.5rem;
+                    margin-top: 1rem;
+                    padding-top: 1.3rem;
+                    border-top: 2px solid #dcdcdc;
+
+                    font-size: 1.4rem;
+                    font-weight: 800;
+                    color: #1a1a1a;
                 }
             }
         }
 
-        .btn-pay {
+        /* -----------------------------------------
+           결제 버튼
+        ------------------------------------------ */
+        .btn-pay,
+        .btn.btn--primary,
+        button.btn--primary {
             width: 100%;
-            padding: 1rem;
-            margin-top: 1.5rem;
+            margin-top: 2rem;
+
+            padding: 1.1rem 0;
+            font-size: 1.15rem;
+            font-weight: 700;
+
+            border: none;
+            border-radius: 12px;
             background: $color-primary;
             color: white;
-            border: none;
-            border-radius: $border-radius-md;
-            //    font-size: 1.1rem;
-            font-weight: 600;
             cursor: pointer;
-            transition: background 0.2s;
 
-            &:hover:not(:disabled) {}
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
 
-            &:disabled {
-                background: $color-muted;
-                cursor: not-allowed;
+            transition: background 0.2s ease, transform 0.2s ease;
+
+            &:hover {
+                background: darken($color-primary, 7%);
+                transform: translateY(-2px);
             }
         }
 
+        /* -----------------------------------------
+           🔒 보안 문구
+        ------------------------------------------ */
         .payment-secure {
-            text-align: center;
-            margin-top: 1rem;
-            //    font-size: 0.85rem;
-            color: $color-text-secondary;
             display: flex;
-            align-items: center;
             justify-content: center;
+            align-items: center;
             gap: 0.5rem;
+
+            margin-top: 1.2rem;
+            color: #6b7280;
+            font-size: 0.9rem;
+            font-weight: 600;
 
             .icon {
                 color: #10b981;
+                font-size: 1.1rem;
             }
         }
     }
