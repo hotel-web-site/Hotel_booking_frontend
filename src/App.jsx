@@ -15,7 +15,9 @@ import Footer from "./components/common/Footer";
 import MyAccountPage from "./pages/mypage/MyAccountPage";
 import MyBookingDetailPage from "./pages/mypage/MyBookingDetailPage";
 import MyPaymentPage from "./pages/mypage/MyPaymentPage"
-import LoginForm from "./components/auth/LoginForm";
+import Help from "./pages/support/Help";
+import ContactPage from "./pages/support/ContactPage";
+import InquiryHistoryPage from "./pages/support/InquiryHistoryPage";
 
 function App() {
   const location = useLocation();  // ← 현재 URL 가져오기
@@ -25,6 +27,9 @@ function App() {
       <Header />
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/help" element={<Help/>}/>
+        <Route path="/contact" element={<ContactPage/>}/>
+        <Route path="/inquiryhistory" element={<InquiryHistoryPage/>}/>
         <Route path="/search" element={<SearchLayout />}>
           <Route index element={<SearchPage />} />
         </Route>
