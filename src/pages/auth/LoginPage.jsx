@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import "../../styles/auth/LoginPage.scss";
+import { authenticateUser } from "../../api/mockUser";
+import { AuthContext } from "../../context/AuthContext";
 
 import img1 from "../../assets/image1.jpeg";
 import img2 from "../../assets/image2.jpeg";
@@ -16,6 +17,9 @@ const LoginPage = () => {
   const [current, setCurrent] = useState(0);
   const navigate = useNavigate();
 
+  // 🔥 AuthContext 가져오기
+  const { login } = useContext(AuthContext);
+
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrent((prev) => (prev + 1) % imageList.length);
@@ -29,30 +33,41 @@ const LoginPage = () => {
     else setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = async (e) => {
+  // ✅ mockUser.js로 로그인 처리 + AuthContext 로그인 처리
+  const handleSubmit = (e) => {
     e.preventDefault();
     setMessage("");
 
-    try {
-      const res = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/auth/login`,
-        formData,
-        { withCredentials: true }
-      );
+    // mockUser.js 인증 실행
+    const result = authenticateUser(formData.email, formData.password);
 
-      const { token } = res.data.data || {};
-      if (!token) throw new Error("토큰 없음");
-
-      localStorage.setItem("token", token);
-      navigate("/");
-    } catch (err) {
-      setMessage(err.response?.data?.message || "로그인 실패");
+    if (!result.success) {
+      setMessage(result.message);
+      return;
     }
+
+    // 🔥 Header가 원하는 구조로 userData 변환
+    const userData = {
+      id: result.user.id,
+      email: result.user.email,
+      nickname: result.user.name,               // Header에서 nickname 사용
+      profileImg: "/default_profile.png",       // Header에서 profileImg 사용
+      token: result.token,
+    };
+
+    // 🔥 AuthContext에 로그인 상태 저장 → Header 즉시 변경됨
+    login(userData);
+
+    // 🔥 localStorage에도 저장 (새로고침 유지)
+    localStorage.setItem("user", JSON.stringify(userData));
+    localStorage.setItem("token", result.token);
+
+    // 홈으로 이동
+    navigate("/");
   };
 
   return (
     <div className="page-wrapper">
-      {/* LEFT LOGIN */}
       <div className="auth-container">
         <h2 className="login-title">Login</h2>
 
@@ -122,19 +137,8 @@ const LoginPage = () => {
         </div>
       </div>
 
-      {/* RIGHT SLIDER */}
       <div className="slider-container">
-        <div
-          className="slider-track"
-          style={{
-            transform: `translateX(-${current * 100}%)`
-          }}
-        >
-          {imageList.map((src, i) => (
-            <img key={i} src={src} className="slide-image" />
-          ))}
-        </div>
-
+        <img src={imageList[current]} className="slide-image" />
         <div className="indicator-box">
           {imageList.map((_, i) => (
             <div

@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { authenticateUser } from "../../api/mockUser";
-// import "../../styles/components/auth/LoginForm.scss";
+import "../../styles/components/auth/LoginForm.scss";
 
 const LoginForm = () => {
     const [formData, setFormData] = useState({

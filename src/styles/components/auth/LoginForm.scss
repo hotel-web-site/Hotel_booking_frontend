@@ -1,0 +1,257 @@
+/* ============================================
+   LoginForm.scss  
+   LoginForm 기능 유지 + LoginPage 디자인 적용
+=============================================== */
+
+/* 기본 설정 */
+.common-form {
+  width: 420px;
+  padding: 32px 30px 40px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.08);
+  animation: fadeIn 0.45s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 제목 */
+.form-header {
+  text-align: center;
+  margin-bottom: 26px;
+
+  .form-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #242424;
+    margin-bottom: 6px;
+  }
+
+  .form-subtitle {
+    font-size: 14px;
+    color: #6d6d6d;
+  }
+}
+
+/* 입력 폼 */
+.form-content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* 입력 그룹 */
+.form-group {
+  display: flex;
+  flex-direction: column;
+
+  .form-label {
+    margin-bottom: 6px;
+    font-size: 14px;
+    color: #444;
+    font-weight: 600;
+  }
+
+  .form-input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1.5px solid #dcdcdc;
+    border-radius: 10px;
+    background: #fafafa;
+    font-size: 15px;
+    color: #333;
+    transition: 0.2s;
+
+    &:focus {
+      background: white;
+      border-color: #98c9b8;
+      box-shadow: 0 0 0 3px rgba(152,201,184,0.35);
+      outline: none;
+    }
+
+    &::placeholder {
+      color: #9c9c9c;
+    }
+  }
+}
+
+/* 비밀번호 토글 */
+.password-input-wrapper {
+  position: relative;
+
+  .form-input {
+    padding-right: 40px;
+  }
+
+  .password-toggle {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    font-size: 18px;
+    opacity: 0.5;
+    cursor: pointer;
+    transition: 0.2s;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
+
+/* 옵션 */
+.form-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .checkbox-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    input {
+      width: 16px;
+      height: 16px;
+    }
+
+    .checkbox-label {
+      font-size: 14px;
+      color: #555;
+    }
+  }
+
+  .forgot-password {
+    font-size: 13px;
+    color: #999;
+    cursor: pointer;
+    text-decoration: none;
+
+    &:hover {
+      color: #b6b6b6;
+    }
+  }
+}
+
+/* 버튼 */
+.btn {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.25s;
+  font-weight: 600;
+
+  &--primary {
+    background: #98c9b8;
+    border: none;
+    color: white;
+
+    &:hover {
+      background: #7bbda8;
+    }
+  }
+
+  &--accent {
+    background: white;
+    border: 1.5px solid #98c9b8;
+    color: #98c9b8;
+
+    &:hover {
+      background: #f5faf7;
+    }
+  }
+
+  &--block {
+    width: 100%;
+  }
+}
+
+/* 구분선 */
+.divider {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+
+  .divider-text {
+    font-size: 14px;
+    color: #777;
+    padding: 0 8px;
+    background: white;
+  }
+
+  &::before,
+  &::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: #e3e3e3;
+  }
+}
+
+/* 소셜 로그인 */
+.social-login {
+  margin-top: 10px;
+  text-align: center;
+
+  .social-login-text {
+    font-size: 14px;
+    color: #777;
+  }
+
+  .social-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    margin-top: 12px;
+
+    .btn--social {
+      width: 56px;
+      height: 56px;
+      border-radius: 12px;
+      border: 1.5px solid #98c9b8;
+      background: white;
+      cursor: pointer;
+      transition: 0.25s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .social-icon {
+        font-size: 22px;
+      }
+
+      &:hover {
+        background: #edf7f3;
+        border-color: #7bbda8;
+      }
+
+      &.facebook { color: #1877f2; }
+      &.google { color: #db4437; }
+      &.apple { color: black; }
+    }
+  }
+}
+
+/* 에러 메시지 */
+.error-message {
+  width: 100%;
+  padding: 10px;
+  text-align: center;
+  border-radius: 8px;
+  background: #ffecec;
+  border: 1px solid #ffc4c4;
+  color: #d10000;
+  font-size: 14px;
+}

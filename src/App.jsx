@@ -15,6 +15,7 @@ import Footer from "./components/common/Footer";
 import MyAccountPage from "./pages/mypage/MyAccountPage";
 import MyBookingDetailPage from "./pages/mypage/MyBookingDetailPage";
 import MyPaymentPage from "./pages/mypage/MyPaymentPage"
+import LoginForm from "./components/auth/LoginForm";
 
 function App() {
   const location = useLocation();  // ← 현재 URL 가져오기
