@@ -1,5 +1,6 @@
 /* 전체 구조 */
 .page-wrapper {
+    margin-top: 30px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -10,18 +11,29 @@
 
     /* RIGHT 슬라이더 */
     .slider-container {
-        width: 320px;
-        height: 500px;
+        width: 450px;
+        height: 588.4px;
         border-radius: 20px;
         overflow: hidden;
         position: relative;
 
-        .slide-image {
+        /* 🔥 부드러운 슬라이드 핵심: 여러 이미지가 가로로 배치되는 트랙 */
+        .slider-track {
+            display: flex;
             width: 100%;
             height: 100%;
+            transition: transform 0.6s ease-in-out; /* ← 여기로 부드러운 효과 */
+        }
+
+        /* 슬라이드 이미지 */
+        .slide-image {
+            width: 450px;        /* ← 슬라이드 크기가 정확히 고정되도록 */
+            height: 588.4px;
+            flex-shrink: 0;      /* ← 크기 강제 유지 */
             object-fit: cover;
         }
 
+        /* 인디케이터 */
         .indicator-box {
             position: absolute;
             bottom: 20px;
@@ -43,7 +55,7 @@
         }
     }
 
-    /* LEFT: SIGN UP FORM */
+    /* LEFT: SIGN UP FORM  */
     .signup-container {
         width: 500px;
         text-align: left;
@@ -65,13 +77,11 @@
             text-align: center;
         }
 
-        /* form */
         .signup-form {
             display: flex;
             flex-direction: column;
             gap: 16px;
 
-            /* 기본 input */
             input {
                 padding: 12px;
                 border: 1px solid #ccc;
@@ -79,7 +89,6 @@
                 font-size: 15px;
             }
 
-            /* 이름 + 성 같이 있는 줄 */
             .row {
                 display: flex;
                 gap: 15px;
@@ -89,12 +98,11 @@
                 }
             }
 
-            /* PW BOX */
             .pw-box {
                 position: relative;
 
                 input {
-                    width: 100%; /* 🔥 고정폭 제거해서 줄 깨짐 방지 */
+                    width: 100%;
                 }
 
                 .pw-toggle {
@@ -106,14 +114,12 @@
                 }
             }
 
-            /* 동의 체크박스 라인 */
             .agree-row {
                 display: flex;
                 gap: 8px;
                 align-items: center;
                 font-size: 14px;
 
-                /* 🔥 체크박스 이상하게 보이던 문제 해결 */
                 input[type="checkbox"] {
                     width: 16px;
                     height: 16px;
@@ -125,7 +131,6 @@
                 }
             }
 
-            /* CREATE ACCOUNT 버튼 */
             .create-btn {
                 height: 45px;
                 padding: 14px;
@@ -143,7 +148,6 @@
                 }
             }
 
-            /* Login으로 돌아가기 */
             .back-login {
                 background: none;
                 margin-top: 10px;
@@ -162,7 +166,6 @@
             margin-top: 10px;
         }
 
-        /* Divider */
         .divider {
             display: flex;
             align-items: center;
@@ -186,7 +189,6 @@
             }
         }
 
-        /* SNS LOGIN */
         .social-box {
             display: flex;
             justify-content: space-between;
@@ -206,7 +208,6 @@
                 img {
                     width: 22px;
                     height: 22px;
-                    display: block;
                 }
 
                 &:hover {

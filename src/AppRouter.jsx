@@ -48,7 +48,7 @@ const AppRouter = () => {
   return (
     <BrowserRouter>
       <Routes>
-        {/* main landing */}
+        {/* 메인 레이아웃 */}
         <Route path="/" element={<MainLayout />}>
           <Route index element={<HomePage />} />
           {/* 호텔 리스트 */}
@@ -86,59 +86,82 @@ const AppRouter = () => {
           </Route>
         </Route>
 
-        {/* 고객센터 / 공지 / FAQ / 문의 */}
-        <Route path="support">
-          <Route index element={<FaqPage />} />
-          <Route path="faq" element={<FaqPage />} />
-          <Route path="notices" element={<NoticeListPage />} />
-          <Route path="notices/:noticeId" element={<NoticeDetailPage />} />
-          <Route path="contact" element={<ContactPage />} />
+
+
+      {/* 예약 플로우 - 로그인 필요 */}
+      <Route
+        path="booking/:hotelId"
+        element={
+          <ProtectedRoute>
+            <BookingStepLayout />
+          </ProtectedRoute>
+        }
+      >
+        {/* /booking/:hotelId */}
+        <Route index element={<BookingStepDates />} />
+        {/* /booking/:hotelId/room */}
+        <Route path="room" element={<BookingStepRoom />} />
+        {/* /booking/:hotelId/extras */}
+        <Route path="extras" element={<BookingStepExtras />} />
+        {/* /booking/:hotelId/payment */}
+        <Route path="payment" element={<BookingStepPayment />} />
+        {/* /booking/:hotelId/complete */}
+        <Route path="complete" element={<BookingComplete />} />
+      </Route>
+
+      {/* 고객센터 / 공지 / FAQ / 문의 */}
+      <Route path="support">
+        <Route index element={<FaqPage />} />
+        <Route path="faq" element={<FaqPage />} />
+        <Route path="notices" element={<NoticeListPage />} />
+        <Route path="notices/:noticeId" element={<NoticeDetailPage />} />
+        <Route path="contact" element={<ContactPage />} />
+      </Route>
+
+      {/* 마이페이지 - 로그인 필요 */}
+      <Route
+        path="mypage"
+        element={
+          <ProtectedRoute>
+            <MyPageLayout />
+          </ProtectedRoute>
+        }
+      >
+        <Route index element={<MyAccountPage />} />
+        <Route path="account" element={<MyAccountPage />} />
+        <Route path="bookings">
+          <Route index element={<MyBookingsPage />} />
+          <Route path=":bookingId" element={<MyBookingDetailPage />} />
         </Route>
+        <Route path="payment" element={<MyPaymentPage />} />
 
-        {/* 마이페이지 - 로그인 필요 */}
-        <Route
-          path="mypage"
-          element={
-            <ProtectedRoute>
-              <MyPageLayout />
-            </ProtectedRoute>
-          }
-        >
-          <Route index element={<MyAccountPage />} />
-          <Route path="account" element={<MyAccountPage />} />
-          <Route path="bookings">
-            <Route index element={<MyBookingsPage />} />
-            <Route path=":bookingId" element={<MyBookingDetailPage />} />
-          </Route>
-          <Route path="payment" element={<MyPaymentPage />} />
+        {/* 기존 라우트들 (필요시 제거 가능) */}
+        <Route path="profile" element={<ProfilePage />} />
+        <Route path="reviews" element={<MyReviewsPage />} />
+        <Route path="wishlist" element={<WishlistPage />} />
+        <Route path="coupons" element={<MyCouponsPage />} />
+        <Route path="points" element={<MyPointsPage />} />
+        <Route path="inquiries" element={<MyInquiriesPage />} />
+      </Route>
 
-          {/* 기존 라우트들 (필요시 제거 가능) */}
-          <Route path="profile" element={<ProfilePage />} />
-          <Route path="reviews" element={<MyReviewsPage />} />
-          <Route path="wishlist" element={<WishlistPage />} />
-          <Route path="coupons" element={<MyCouponsPage />} />
-          <Route path="points" element={<MyPointsPage />} />
-          <Route path="inquiries" element={<MyInquiriesPage />} />
+      {/* 인증 레이아웃: 헤더 최소, 센터 정렬 등 */}
+      <Route element={<AuthLayout />}>
+        <Route path="login" element={<LoginPage />} />
+        <Route path="signup" element={<SignupPage />} />
+        <Route path="reset-password" element={<ResetPasswordPage />} />
+        <Route path="add-payment" element={<AddPaymentPage />} />
+
+        {/* 소셜 로그인 콜백 (카카오, 구글) */}
+        <Route path="oauth">
+          <Route path="kakao/callback" element={<KakaoCallbackPage />} />
+          <Route path="google/callback" element={<GoogleCallbackPage />} />
         </Route>
+      </Route>
 
-        {/* 인증 레이아웃: 헤더 최소, 센터 정렬 등 */}
-        <Route element={<AuthLayout />}>
-          <Route path="login" element={<LoginPage />} />
-          <Route path="signup" element={<SignupPage />} />
-          <Route path="reset-password" element={<ResetPasswordPage />} />
-          <Route path="add-payment" element={<AddPaymentPage />} />
-
-          {/* 소셜 로그인 콜백 (카카오, 구글) */}
-          <Route path="oauth">
-            <Route path="kakao/callback" element={<KakaoCallbackPage />} />
-            <Route path="google/callback" element={<GoogleCallbackPage />} />
-          </Route>
-        </Route>
-
-        {/* 404 */}
-        <Route path="*" element={<NotFoundPage />} />
-      </Routes>
-    </BrowserRouter>
+      {/* 404 */}
+      <Route path="*" element={<NotFoundPage />} />
+    </Routes>
+    </BrowserRouter >
   );
 };
 

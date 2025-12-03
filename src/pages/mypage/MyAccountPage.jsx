@@ -96,14 +96,18 @@ const MyAccountPage = () => {
                                     `${item.label} 수정:`,
                                     form[item.key] || ""
                                 );
-                                if (newValue !== null)
-                                    handleInputChange(item.key, newValue);
-
+                                if (newValue !== null) handleInputChange(item.key, newValue);
                                 handleSave(item.label);
                             }}
                         >
+                            <img
+                                src="https://cdn-icons-png.flaticon.com/512/1250/1250615.png"
+                                alt="edit"
+                                className="edit-icon"
+                            />
                             Change
                         </button>
+
                     </div>
                 ))}
             </div>

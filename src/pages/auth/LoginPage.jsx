@@ -68,6 +68,7 @@ const LoginPage = () => {
 
   return (
     <div className="page-wrapper">
+      {/* LEFT LOGIN */}
       <div className="auth-container">
         <h2 className="login-title">Login</h2>
 
@@ -138,7 +139,17 @@ const LoginPage = () => {
       </div>
 
       <div className="slider-container">
-        <img src={imageList[current]} className="slide-image" />
+        <div
+          className="slider-track"
+          style={{
+            transform: `translateX(-${current * 100}%)`
+          }}
+        >
+          {imageList.map((src, i) => (
+            <img key={i} src={src} className="slide-image" />
+          ))}
+        </div>
+
         <div className="indicator-box">
           {imageList.map((_, i) => (
             <div

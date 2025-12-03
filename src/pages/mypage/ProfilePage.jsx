@@ -7,7 +7,7 @@ const ProfilePage = ({
   profileImage,
   name,
   email,
-  activeTab, // "account" | "booking" | "payment"
+  activeTab,
   onCoverUpload,
   onProfileUpload,
 }) => {
@@ -25,14 +25,15 @@ const ProfilePage = ({
           }
           alt="cover"
         />
-
-        <label className="upload-cover-btn">
-          Upload new cover
-          <input type="file" accept="image/*" onChange={onCoverUpload} />
-        </label>
       </div>
 
-      {/* Profile Image, Name, Email */}
+      {/* 배경 박스 바깥으로 옮긴 COVER 업로드 버튼 */}
+      <label className="upload-cover-btn-outside">
+        Upload new cover
+        <input type="file" accept="image/*" onChange={onCoverUpload} />
+      </label>
+
+      {/* Profile Section */}
       <div className="profile-section">
         <div className="profile-img-wrap">
           <img
