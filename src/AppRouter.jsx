@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MainLayout from "./components/layouts/MainLayout";
 import AuthLayout from "./components/layouts/AuthLayout";
 import MyPageLayout from "./components/layouts/MyPageLayout";
+import SearchLayout from "./components/layouts/SearchLayout";
 import ProtectedRoute from "./components/common/ProtectedRoute";
 import AddPaymentPage from "./pages/payment/AddPaymentPage";
 
@@ -24,6 +25,7 @@ import ResetPasswordPage from "./pages/auth/ResetPasswordPage";
 import KakaoCallbackPage from "./pages/auth/KakaoCallbackPage";
 import GoogleCallbackPage from "./pages/auth/GoogleCallbackPage";
 
+import MyOverviewPage from "./pages/mypage/MyOverviewPage";
 import MyAccountPage from "./pages/mypage/MyAccountPage";
 import MyPaymentPage from "./pages/mypage/MyPaymentPage";
 import ProfilePage from "./pages/mypage/ProfilePage";
@@ -49,16 +51,39 @@ const AppRouter = () => {
         {/* 메인 레이아웃 */}
         <Route path="/" element={<MainLayout />}>
           <Route index element={<HomePage />} />
-
+          {/* 호텔 리스트 */}
           <Route path="hotels">
             <Route index element={<HotelListPage />} />
             <Route path=":hotelId" element={<HotelDetailPage />} />
           </Route>
         </Route>
 
-        {/* 검색 페이지 레이아웃 */}
-        <Route path="search" element={<SearchLayout />}>
-          <Route index element={<SearchPage />} />
+        {/* 검색 레이아웃 */}
+        <Route element={<SearchLayout />}>
+          <Route path="search" element={<SearchPage />} />
+        </Route>
+
+        {/* 예약 플로우 - 로그인 필요 */}
+        <Route path="/" element={<MainLayout />}>
+          <Route
+            path="booking/:hotelId"
+            element={
+              <ProtectedRoute>
+                <BookingStepLayout />
+              </ProtectedRoute>
+            }
+          >
+            {/* /booking/:hotelId */}
+            <Route index element={<BookingStepDates />} />
+            {/* /booking/:hotelId/room */}
+            <Route path="room" element={<BookingStepRoom />} />
+            {/* /booking/:hotelId/extras */}
+            <Route path="extras" element={<BookingStepExtras />} />
+            {/* /booking/:hotelId/payment */}
+            <Route path="payment" element={<BookingStepPayment />} />
+            {/* /booking/:hotelId/complete */}
+            <Route path="complete" element={<BookingComplete />} />
+          </Route>
         </Route>
 
 

@@ -2,12 +2,14 @@
 .search-layout {
     background: #f8f9fb;   // ✔ 연한 회색 배경
     min-height: 100vh;
+    padding-bottom: 200px;
 }
 
 /* 헤더 아래 간격 */
 .search-container {
     width: 1280px;         // ✔ 원본과 비슷한 폭
-    margin: 140px auto 60px; // ✔ 헤더와 검색바 사이 간격 확보
+    margin: 80px auto; // ✔ 헤더와 검색바 사이 간격 확보
+    padding-top: 50px;
     display: grid;
     grid-template-columns: 280px 1fr; // ✔ 사이드바 + 메인
     gap: 40px;

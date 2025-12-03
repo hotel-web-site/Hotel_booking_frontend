@@ -26,12 +26,7 @@ const SearchLayout = () => {
 
     return (
         <div className="search-layout">
-
-            {/* 헤더 */}
-            <Header />
-
             <div className="search-container">
-
                 {/* 🔍 검색바 영역 */}
                 <div className="search-top-bar">
                     <SearchFilterWrap 
@@ -39,9 +34,7 @@ const SearchLayout = () => {
                         onFilterChange={handleFilterChange} 
                     />
                 </div>
-
                 <div className="search-content">
-
                     {/* 🧭 왼쪽 필터 사이드바 */}
                     <aside className="search-sidebar">
                         <FilterSidebar 
@@ -49,7 +42,6 @@ const SearchLayout = () => {
                             onFilterChange={handleFilterChange} 
                         />
                     </aside>
-
                     {/* 🏨 오른쪽 메인 (탭 + 정렬 + 호텔 리스트) */}
                     <main className="search-main">
                         <Outlet context={{ filters }} />

@@ -1,0 +1,139 @@
+@use "../../common/variables" as *;
+@use "../../common/mixins" as *;
+
+.booking-payment {
+    max-width: $max-width-container;
+    margin: 0 auto;
+    padding: $spacing-lg;
+
+    .booking-content {
+        display: grid;
+        grid-template-columns: 1fr 40rem;
+        gap: $spacing-lg;
+
+        @media (max-width: $breakpoint-md) {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .terms-section {
+        background: $color-bg;
+        padding: $spacing-lg;
+        border-radius: $border-radius-lg;
+        box-shadow: $shadow-lg;
+
+        .term-item {
+            margin: $spacing-sm;
+            display: flex;
+            align-items: center;
+            gap: $spacing-sm;
+
+            // justify-content: space-between;
+            input {
+                width: auto;
+            }
+
+            &:last-child {
+                border-top: 0.1rem solid $color-border;
+                padding-top: $spacing-sm;
+            }
+        }
+    }
+
+    .payment-summary {
+        position: sticky;
+        top: $spacing-lg;
+        background: $color-bg;
+        padding: $spacing-lg;
+        border-radius: $border-radius-lg;
+        box-shadow: $shadow-lg;
+        height: fit-content;
+
+        h3 {
+            font-size: 1.6rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .booking-details {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid $color-border;
+
+            .detail-item {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 0.75rem;
+                // font-size: 0.95rem;
+
+                .label {
+                    color: $color-text-secondary;
+                }
+
+                .value {
+                    font-weight: 600;
+                }
+            }
+        }
+
+        .price-breakdown {
+            .price-row {
+                display: flex;
+                justify-content: space-between;
+                padding: 0.75rem 0;
+
+                &.subtotal {
+                    padding-top: 1rem;
+                    border-top: 1px solid $color-border;
+                }
+
+                &.discount {
+                    color: #10b981;
+                }
+
+                &.total {
+                    font-size: 1.3rem;
+                    font-weight: 700;
+                    padding-top: 1rem;
+                    border-top: 2px solid $color-border;
+                    margin-top: 0.5rem;
+                }
+            }
+        }
+
+        .btn-pay {
+            width: 100%;
+            padding: 1rem;
+            margin-top: 1.5rem;
+            background: $color-primary;
+            color: white;
+            border: none;
+            border-radius: $border-radius-md;
+            //    font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+
+            &:hover:not(:disabled) {}
+
+            &:disabled {
+                background: $color-muted;
+                cursor: not-allowed;
+            }
+        }
+
+        .payment-secure {
+            text-align: center;
+            margin-top: 1rem;
+            //    font-size: 0.85rem;
+            color: $color-text-secondary;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+
+            .icon {
+                color: #10b981;
+            }
+        }
+    }
+}

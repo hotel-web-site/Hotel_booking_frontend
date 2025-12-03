@@ -1,0 +1,179 @@
+@use "../../common/variables" as *;
+@use "../../common/mixins" as *;
+
+.booking-rooms {
+    max-width: $max-width-container;
+    margin: 0 auto;
+    padding: $spacing-lg;
+
+    .booking-header {
+        margin-bottom: $spacing-xxl;
+
+        h1 {
+            font-size: $font-size-xl;
+            font-weight: 700;
+            margin-bottom: $spacing-md;
+        }
+
+        .selected-dates {
+            display: flex;
+            gap: $spacing-lg;
+            padding: $spacing-md;
+            background: $color-bg-light;
+            border-radius: $border-radius-md;
+
+            .date-info {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+
+                .icon {
+                    font-size: 1.2rem;
+                }
+            }
+        }
+    }
+
+    .room-list {
+        display: grid;
+        gap: $spacing-lg;
+
+        .room-card {
+            background: $color-bg;
+            border-radius: $border-radius-lg;
+            box-shadow: $shadow-md;
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            transition: box-shadow 0.2s;
+
+            &:hover {
+                box-shadow: $shadow-lg;
+            }
+
+            @media (max-width: 768px) {
+                grid-template-columns: 1fr;
+            }
+
+            .room-image {
+                position: relative;
+                height: 250px;
+
+                img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                }
+
+                .room-badge {
+                    position: absolute;
+                    top: 1rem;
+                    left: 1rem;
+                    background: $color-primary;
+                    color: white;
+                    padding: 0.5rem 1rem;
+                    border-radius: $border-radius-sm;
+                    font-size: 0.9rem;
+                    font-weight: 600;
+                }
+            }
+
+            .room-details {
+                padding: $spacing-lg;
+                display: flex;
+                flex-direction: column;
+
+                .room-header {
+                    margin-bottom: 1rem;
+
+                    h3 {
+                        margin-bottom: 0.5rem;
+                    }
+
+                    .room-size {
+                        color: $color-text-secondary;
+                        font-size: 1.3rem;
+                    }
+                }
+
+                .room-amenities {
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 1rem;
+                    margin-bottom: 1.5rem;
+
+                    .amenity {
+                        display: flex;
+                        align-items: center;
+                        gap: 0.5rem;
+                        font-size: 1.2rem;
+                        font-weight: 600;
+                        color: $color-primary;
+
+                        .icon {
+                            font-size: 1.1rem;
+                        }
+                    }
+                }
+
+                .room-info {
+                    margin-bottom: 1.5rem;
+
+                    .info-item {
+                        display: flex;
+                        align-items: center;
+                        gap: 0.5rem;
+                        margin-bottom: 0.5rem;
+                        font-size: 1.1rem;
+
+                        .icon {
+                            color: $color-accent;
+                        }
+                    }
+                }
+
+                .room-footer {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-top: auto;
+                    padding-top: 1.5rem;
+                    border-top: 1px solid $color-border;
+
+                    .price-info {
+                        .original-price {
+                            text-decoration: line-through;
+                            color: $color-text-secondary;
+                            font-size: 0.9rem;
+                        }
+
+                        .current-price {
+                            font-size: 1.8rem;
+                            font-weight: 700;
+                            color: $color-primary;
+
+                            .unit {
+                                font-size: 1rem;
+                                font-weight: 400;
+                                color: $color-text-secondary;
+                            }
+                        }
+                    }
+
+                    .btn-select {
+                        padding: 0.75rem 2rem;
+                        background: $color-primary;
+                        color: white;
+                        border: none;
+                        border-radius: $border-radius-md;
+                        font-weight: 600;
+                        cursor: pointer;
+                        transition: background 0.2s;
+
+                        &:hover {}
+                    }
+                }
+            }
+        }
+    }
+}

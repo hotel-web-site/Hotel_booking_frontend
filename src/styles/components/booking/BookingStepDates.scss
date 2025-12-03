@@ -1,0 +1,238 @@
+@use "../../common/variables" as *;
+@use "../../common/mixins" as *;
+
+.booking-dates {
+    max-width: $max-width-container;
+    margin: 0 auto;
+    padding: $spacing-sm;
+
+    .booking-header {
+        margin-bottom: $spacing-xxl;
+
+        h1 {
+            font-size: $font-size-xl;
+            font-weight: 700;
+            margin-bottom: $spacing-sm;
+        }
+
+        .hotel-info {
+            display: flex;
+            align-items: center;
+            gap: $spacing-md;
+            color: $color-text-secondary;
+
+            .hotel-name {
+                font-weight: 600;
+                font-size: 1.5rem;
+                color: $color-text;
+            }
+        }
+    }
+
+    .booking-content {
+        display: grid;
+        grid-template-columns: 1fr 40rem;
+        gap: $spacing-lg;
+
+        @media (max-width: $breakpoint-md) {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .date-wrapper {
+        display: flex;
+        gap: $spacing-lg;
+
+        .date-selection {
+            background: $color-bg;
+            padding: $spacing-lg;
+            border-radius: $border-radius-lg;
+            box-shadow: $shadow-md;
+            flex: 3;
+
+            h2 {
+                font-size: $font-size-lg;
+                margin-bottom: $spacing-lg;
+            }
+
+            .calendar-wrapper {
+                margin-bottom: $spacing-lg;
+
+                .rdp-months {
+                    width: 100%;
+                    max-width: none;
+
+                    .rdp-nav {
+                        top: -4rem;
+                    }
+
+                    .rdp-month {
+                        flex: 1;
+                        background-color: $color-bg-light;
+                        padding: $spacing-md;
+                        border-radius: $border-radius-md;
+
+                        .rdp-month_grid {
+                            width: 100%;
+                        }
+                    }
+                }
+            }
+
+            .guests-section {
+                margin-top: $spacing-lg;
+                padding-top: $spacing-lg;
+                border-top: $border;
+
+                h3 {
+                    font-size: 1.2rem;
+                    margin-bottom: 1rem;
+                }
+
+                .guest-controls {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    padding: $spacing-md;
+                    border: 2px solid $color-border;
+                    border-radius: $border-radius-md;
+
+                    .guest-info {
+                        .guest-type {
+                            font-weight: 600;
+                            margin-bottom: 0.25rem;
+                        }
+
+                        .guest-desc {
+                            font-size: 0.9rem;
+                            color: $color-text-secondary;
+                        }
+                    }
+
+                    .counter {
+                        display: flex;
+                        align-items: center;
+                        gap: $spacing-md;
+
+                        button {
+                            width: 2.5rem;
+                            height: 2.5rem;
+                            border-radius: 50%;
+                            border: 2px solid $color-border;
+                            background: white;
+                            cursor: pointer;
+                            font-size: 1.2rem;
+                            transition: all 0.2s;
+
+                            &:hover:not(:disabled) {
+                                border-color: $color-primary;
+                            }
+
+                            &:disabled {
+                                opacity: 0.3;
+                                cursor: not-allowed;
+                            }
+                        }
+
+                        .count {
+                            font-size: 1.1rem;
+                            font-weight: 600;
+                            min-width: 2rem;
+                            text-align: center;
+                        }
+                    }
+                }
+
+                .guest-controls+.guest-controls {
+                    margin-top: 1rem;
+                }
+            }
+        }
+
+        .booking-summary {
+            position: sticky;
+            top: $spacing-lg;
+            background: $color-bg;
+            padding: $spacing-lg;
+            border-radius: $border-radius-lg;
+            box-shadow: $shadow-lg;
+            height: fit-content;
+            flex: 1;
+
+            .summary-hotel {
+                display: flex;
+                gap: $spacing-md;
+                margin-bottom: $spacing-lg;
+                padding-bottom: $spacing-lg;
+                border-bottom: $border;
+
+                img {
+                    width: 100px;
+                    height: 100px;
+                    object-fit: cover;
+                    border-radius: $border-radius-md;
+                }
+
+                .hotel-details {
+                    h3 {
+                        font-size: 1.1rem;
+                        margin-bottom: 0.5rem;
+                    }
+
+                    .rating {
+                        display: flex;
+                        align-items: center;
+                        gap: 0.5rem;
+                        font-size: 0.9rem;
+                        color: $color-text-secondary;
+                    }
+                }
+            }
+
+            .summary-details {
+                .detail-row {
+                    display: flex;
+                    justify-content: space-between;
+                    padding: 0.75rem 0;
+
+                    &.total {
+                        font-weight: 700;
+                        font-size: 1.2rem;
+                        padding-top: 1rem;
+                        border-top: 2px solid $color-border;
+                        margin-top: 1rem;
+                    }
+
+                    .label {
+                        color: $color-text-secondary;
+                    }
+
+                    .value {
+                        font-weight: 600;
+                    }
+                }
+            }
+
+            .btn-continue {
+                width: 100%;
+                padding: $spacing-md;
+                margin-top: $spacing-lg;
+                background: $color-primary;
+                color: white;
+                border: none;
+                border-radius: $border-radius-md;
+                font-size: 1.1rem;
+                font-weight: 600;
+                cursor: pointer;
+                transition: background 0.2s;
+
+                &:hover {}
+
+                &:disabled {
+                    background: $color-muted;
+                    cursor: not-allowed;
+                }
+            }
+        }
+    }
+}

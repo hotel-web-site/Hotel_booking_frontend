@@ -90,7 +90,6 @@ const SignupPage = () => {
                 </div>
             </div>
 
-
             <div className="signup-container">
                 <div className="sign-up-text">
                     <h1>Sign up</h1>
