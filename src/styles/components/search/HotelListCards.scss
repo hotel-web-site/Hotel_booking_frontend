@@ -165,3 +165,26 @@
         background: #7fc2ad;
     }
 }
+
+.load-more {
+    width: 100%;
+    padding: 14px 0;
+    margin: 20px 0 40px;
+    
+    background: #152a17;        /* 아주 진한 초록 */
+    color: #fff;
+
+    border: none;
+    border-radius: 8px;
+
+    font-size: 15px;
+    font-weight: 600;
+    text-align: center;
+
+    cursor: pointer;
+    transition: 0.2s;
+
+    &:hover {
+        background: #1c3a1d;    /* 약간 더 밝은 그린톤 */
+    }
+}

@@ -1,7 +1,10 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";   // ⭐ navigate import 추가
 
 const DestinationCard = ({ destination }) => {
-    const { name, country, image, price, description } = destination;
+    const navigate = useNavigate();               // ⭐ navigate 선언
+
+    const { id, name, country, image, price, description } = destination;
 
     return (
         <div className="destination-card">
@@ -15,10 +18,17 @@ const DestinationCard = ({ destination }) => {
 
                 <p className="desc">{description}</p>
 
-                <button className="book-btn">Book a Hotel</button>
+                <button
+                    className="book-btn"
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        navigate(`/hotels/${id}`);  // ⭐ destination.id로 이동
+                    }}
+                >
+                    Book a Hotel
+                </button>
             </div>
         </div>
-
     );
 };
 

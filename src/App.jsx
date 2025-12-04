@@ -1,64 +1,24 @@
 import React from "react";
-import { Routes, Route, useLocation } from "react-router-dom";
+import AppRouter from "./AppRouter"; // 라우트 정의 파일
 
-import LoginPage from "./pages/auth/LoginPage";
-import SignupPage from "./pages/auth/SignupPage";
-import FindPasswordPage from "./pages/auth/FindPasswordPage";
-import EmailAuth from "./pages/auth/EmailAuth";
-import ResetPasswordPage from "./pages/auth/ResetPasswordPage";
-import HomePage from "./pages/home/HomePage";
-import SearchLayout from "./components/layouts/SearchLayout";
-import SearchPage from "./pages/search/SearchPage";
-import AddPaymentPage from "./pages/payment/AddPaymentPage";
-import Header from "./components/common/Header";
-import Footer from "./components/common/Footer";
-import MyAccountPage from "./pages/mypage/MyAccountPage";
-import MyBookingDetailPage from "./pages/mypage/MyBookingDetailPage";
-import MyPaymentPage from "./pages/mypage/MyPaymentPage"
-import Help from "./pages/support/Help";
-import ContactPage from "./pages/support/ContactPage";
-import InquiryHistoryPage from "./pages/support/InquiryHistoryPage";
+const App = () => {
+  // 백엔드 연결 테스트
+  fetch("/api/hotels")
+    .then((res) => res.json())
+    .then((data) => console.log("✅ GET /api/hotels:", data))
+    .catch((err) => console.error("❌ GET /api/hotels error:", err));
 
-function App() {
-  const location = useLocation();  // ← 현재 URL 가져오기
+  fetch("/api/rooms")
+    .then((res) => res.json())
+    .then((data) => console.log("✅ GET /api/rooms:", data))
+    .catch((err) => console.error("❌ GET /api/rooms error:", err));
 
-  return (
-    <>
-      <Header />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/help" element={<Help/>}/>
-        <Route path="/contact" element={<ContactPage/>}/>
-        <Route path="/inquiryhistory" element={<InquiryHistoryPage/>}/>
-        <Route path="/search" element={<SearchLayout />}>
-          <Route index element={<SearchPage />} />
-        </Route>
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/signup" element={<SignupPage />} />
+  fetch("/api/reviews")
+    .then((res) => res.json())
+    .then((data) => console.log("✅ GET /api/reviews:", data))
+    .catch((err) => console.error("❌ GET /api/reviews error:", err));
 
-        {/* 비밀번호 찾기 (이메일 입력 화면) */}
-        <Route path="/findpassword" element={<FindPasswordPage />} />
-
-        {/* 이메일 인증 */}
-        <Route path="/emailauth" element={<EmailAuth />} />
-
-        {/* 새 비밀번호 설정 */}
-        <Route path="/resetpassword" element={<ResetPasswordPage />} />  {/* 🔥 핵심 */}
-        <Route path="/myaccountpage" element={<MyAccountPage/>}/>
-        <Route path="/mybookingdetailpage" element={<MyBookingDetailPage/>}/>
-        <Route path="/mypaymentpage" element={<MyPaymentPage/>}/>
-        <Route path="/payment" element={<AddPaymentPage />} />
-        <Route path="/findpassword" element={<FindPasswordPage />} />
-        <Route path="/emailauth" element={<EmailAuth />} />
-        <Route path="/resetpassword" element={<ResetPasswordPage />} />
-
-   
-    
-    
-      </Routes>    
-         <Footer /> 
-         </> 
-  );
-}
+  return <AppRouter />;
+};
 
 export default App;

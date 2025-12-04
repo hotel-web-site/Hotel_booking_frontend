@@ -22,7 +22,7 @@ const MalakaTour = () => {
                 시작해 보세요.
             </p>
 
-            <button className="book-btn">Book Flight</button>
+            <button className="malaka-book-btn">Book Flight</button>
         </div>
     );
 };

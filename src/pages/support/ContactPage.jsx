@@ -1,10 +1,13 @@
 import React, { useState } from "react";
-import "../../styles/support/ContactPage.scss";
+import { useNavigate } from "react-router-dom"; 
+import "../../styles/pages/support/ContactPage.scss";
 
-const Contact = () => {
+const ContactPage = () => {
   const [subject, setSubject] = useState("");
   const [summary, setSummary] = useState("");
   const [detail, setDetail] = useState("");
+
+  const navigate = useNavigate();
 
   const templates = [
     "호텔 예약이 된 건지 확인하고 싶어요.",
@@ -20,18 +23,23 @@ const Contact = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // TODO: 나중에 실제 API 연결
     const payload = {
       subject,
       summary,
       detail,
     };
+
     console.log("문의 전송 데이터:", payload);
 
     alert("문의가 등록되었습니다.");
+
+    // 입력 초기화
     setSubject("");
     setSummary("");
     setDetail("");
+
+    // 문의 완료 후 /support/help 이동
+    navigate("/support/help");
   };
 
   return (
@@ -57,10 +65,10 @@ const Contact = () => {
           />
         </div>
 
-        {/* 문의 요약 + 템플릿 선택 */}
+        {/* 문의 요약 */}
         <div className="form-group">
           <label className="form-label">
-            문의 요약 <span className="label-sub">(예시 중 선택하거나 직접 작성)</span>
+            문의 요약 <span className="label-sub">(예시 선택 가능)</span>
           </label>
           <input
             type="text"
@@ -70,6 +78,7 @@ const Contact = () => {
             onChange={(e) => setSummary(e.target.value)}
           />
 
+          {/* 템플릿 */}
           <div className="template-list">
             {templates.map((text, idx) => (
               <button
@@ -89,9 +98,7 @@ const Contact = () => {
           <label className="form-label">문의 내용 상세</label>
           <textarea
             className="form-textarea"
-            placeholder={
-              "상세한 상황, 예약일자, 예약번호, 사용하신 플랫폼(웹/모바일) 등을 적어주시면 더 빠르게 도와드릴 수 있어요."
-            }
+            placeholder="상세한 상황, 예약일자, 예약번호, 사용하신 플랫폼(웹/모바일) 등을 적어주시면 더 빠르게 도와드릴 수 있어요."
             value={detail}
             onChange={(e) => setDetail(e.target.value)}
             rows={8}
@@ -99,6 +106,7 @@ const Contact = () => {
           />
         </div>
 
+        {/* 제출 */}
         <div className="form-footer">
           <button type="submit" className="submit-btn">
             문의 보내기
@@ -109,4 +117,4 @@ const Contact = () => {
   );
 };
 
-export default Contact;
+export default ContactPage;

@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import "../../styles/support/Help.scss";
+import "../../styles/pages/support/Help.scss";
 
 const Help = () => {
     const navigate = useNavigate();
@@ -46,14 +46,14 @@ const Help = () => {
                     <button
                         type="button"
                         className="help-action-btn"
-                        onClick={() => handleGo("/contact")}
+                        onClick={() => handleGo("/support/contact")}
                     >
                         1:1 문의
                     </button>
                     <button
                         type="button"
                         className="help-action-btn"
-                        onClick={() => handleGo("/inquiryhistory")}
+                        onClick={() => handleGo("/support/inquiryhistory")}
                     >
                         내 문의 내역
                     </button>

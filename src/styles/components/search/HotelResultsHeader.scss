@@ -1,49 +1,71 @@
 .hotel-results-header {
-    width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 14px 0 20px 0;
-    padding-bottom: 12px;
-    border-bottom: 1px solid #e2e8f0;
+    padding: 20px 10px ;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #e0e0e0;
 
     .results-info {
-        font-size: 14px;
-        color: #475569;
-
-        strong {
-            color: #111;
-            font-weight: 600;
-        }
+        font-size: 15px;
 
         .total {
-            color: #ef4444; // 빨간 포인트 컬러
+            color: #ff5a5f;
+            font-weight: 600;
         }
     }
 
-    /* Sort by 박스 */
-    .sort-dropdown {
+    .sort-area {
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 10px;
 
-        label {
+        .label {
             font-size: 14px;
-            color: #64748b;
+            color: #444;
+            white-space: nowrap;
         }
 
-        select {
+        .dropdown {
+            position: relative;
             padding: 8px 14px;
+            border: 1px solid #dcdcdc;
             border-radius: 8px;
-            border: 1px solid #d1d5db;
-            background: #fff;
-            font-size: 14px;
+            background: #f8f9fb;
             cursor: pointer;
-            color: #374151;
-            transition: 0.2s;
+            font-size: 14px;
+            min-width: 150px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
 
-            &:hover {
-                border-color: #a3b3c2;
+            .arrow {
+                margin-left: 8px;
+                font-size: 12px;
+            }
+
+            .dropdown-menu {
+                position: absolute;
+                top: 42px;
+                left: 0;
+                width: 100%;
+                background: #f8f9fb;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+                z-index: 10;
+
+                li {
+                    list-style: none;
+                    padding: 10px;
+                    cursor: pointer;
+                    font-size: 14px;
+                    border-bottom: 1px solid #eee;
+
+                    &:hover {
+                        background: #f3f3f3;
+                    }
+                }
             }
         }
     }
