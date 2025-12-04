@@ -40,7 +40,9 @@ import MyInquiriesPage from "./pages/mypage/MyInquiriesPage";
 import FaqPage from "./pages/support/FaqPage";
 import NoticeListPage from "./pages/support/NoticeListPage";
 import NoticeDetailPage from "./pages/support/NoticeDetailPage";
+import Help from "./pages/support/Help";
 import ContactPage from "./pages/support/ContactPage";
+import InquiryHistoryPage from "./pages/support/InquiryHistoryPage";
 
 import NotFoundPage from "./pages/common/NotFoundPage";
 
@@ -87,12 +89,16 @@ const AppRouter = () => {
         </Route>
 
         {/* 고객센터 / 공지 / FAQ / 문의 */}
-        <Route path="support">
-          <Route index element={<FaqPage />} />
-          <Route path="faq" element={<FaqPage />} />
-          <Route path="notices" element={<NoticeListPage />} />
-          <Route path="notices/:noticeId" element={<NoticeDetailPage />} />
-          <Route path="contact" element={<ContactPage />} />
+        <Route path="/" element={<MainLayout />}>
+          <Route path="support">
+            <Route index element={<FaqPage />} />
+            <Route path="faq" element={<FaqPage />} />
+            <Route path="notices" element={<NoticeListPage />} />
+            <Route path="notices/:noticeId" element={<NoticeDetailPage />} />
+            <Route path="contact" element={<ContactPage />} />
+            <Route path="help" element={<Help />} />
+            <Route path="inquiryhistory" element={<InquiryHistoryPage />} />
+          </Route>
         </Route>
 
         {/* 마이페이지 - 로그인 필요 */}

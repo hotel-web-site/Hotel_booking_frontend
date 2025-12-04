@@ -60,7 +60,7 @@ const ProfilePage = ({
         <button
           type="button"
           className={`tab ${activeTab === "account" ? "active" : ""}`}
-          onClick={() => navigate("/myaccountpage")}
+          onClick={() => navigate("/mypage/account")}
         >
           계정
         </button>
@@ -68,7 +68,7 @@ const ProfilePage = ({
         <button
           type="button"
           className={`tab ${activeTab === "booking" ? "active" : ""}`}
-          onClick={() => navigate("/mybookingdetailpage")}
+          onClick={() => navigate("/mypage/bookings/:bookingId")}
         >
           내역
         </button>
@@ -76,7 +76,7 @@ const ProfilePage = ({
         <button
           type="button"
           className={`tab ${activeTab === "payment" ? "active" : ""}`}
-          onClick={() => navigate("/mypaymentpage")}
+          onClick={() => navigate("/mypage/payment")}
         >
           결제수단
         </button>

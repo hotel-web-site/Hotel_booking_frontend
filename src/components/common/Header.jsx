@@ -23,7 +23,7 @@ const Header = () => {
 
                 <nav className="nav">
                     <Link to="/search">호텔검색</Link>
-                    <Link to="/help">고객센터</Link>
+                    <Link to="/support/help">고객센터</Link>
                 </nav>
             </div>
 
@@ -71,9 +71,9 @@ const Header = () => {
                                             </div>
                                         </div>
                                         <div className="menu-items">
-                                            <Link className="item" to="/myaccountpage">계정</Link>
-                                            <Link className="item" to="/mypaymentpage">결제내역</Link>
-                                            <Link className="item" to="/settings">설정</Link>
+                                            <Link className="item" to="/mypage/account">계정</Link>
+                                            <Link className="item" to="/mypage/payment">결제내역</Link>
+                                            <Link className="item" to="/mypage/settings">설정</Link>
 
                                             <div className="divider"></div>
 
