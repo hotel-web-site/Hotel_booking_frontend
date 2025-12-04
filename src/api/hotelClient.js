@@ -99,68 +99,169 @@ const mockRooms = {
     "1": [
         {
             id: "101",
-            name: "Deluxe Double Room",
-            type: "Double Room · 1 Bed",
-            capacity: 2,
-            price: 150000,
+            name: "Standard Double Room",
+            size: "23㎡",
+            bedType: "더블베드 1개",
+            maxGuests: 2,
+            view: "시티뷰",
+            price: 120000,
+            originalPrice: 150000,
             images: [
-                "/images/rooms/room1-1.jpg",
-                "/images/rooms/room1-2.jpg",
+                "/images/rooms/standard1.jpg",
+                "/images/rooms/standard2.jpg",
             ],
+            amenities: ["WiFi", "에어컨", "TV", "드라이기", "샤워부스"],
+            features: ["즉시 예약", "무료 취소", "VAT 포함"],
+            breakfast: false,
+            refundable: true,
         },
         {
             id: "102",
-            name: "Executive Suite",
-            type: "Suite · 2 Beds",
-            capacity: 4,
-            price: 250000,
+            name: "Superior Twin Room",
+            size: "28㎡",
+            bedType: "싱글 2개",
+            maxGuests: 3,
+            view: "부분 오션뷰",
+            price: 160000,
+            originalPrice: 180000,
             images: [
-                "/images/rooms/room2-1.jpg",
-                "/images/rooms/room2-2.jpg",
+                "/images/rooms/superior1.jpg",
+                "/images/rooms/superior2.jpg",
             ],
+            amenities: ["WiFi", "에어컨", "옷장", "냉장고", "욕조"],
+            features: ["즉시 확정", "조식 포함"],
+            breakfast: true,
+            refundable: false,
         },
+        {
+            id: "103",
+            name: "Deluxe King Room",
+            size: "32㎡",
+            bedType: "킹베드 1개",
+            maxGuests: 3,
+            view: "풀뷰",
+            price: 190000,
+            originalPrice: 210000,
+            images: [
+                "/images/rooms/deluxe1.jpg",
+                "/images/rooms/deluxe2.jpg",
+            ],
+            amenities: ["WiFi", "무료 생수", "에어컨", "미니바", "욕조"],
+            features: ["무료 취소", "조식 포함", "넓은 객실"],
+            breakfast: true,
+            refundable: true,
+        },
+        {
+            id: "104",
+            name: "Executive Suite",
+            size: "45㎡",
+            bedType: "킹베드 1개",
+            maxGuests: 4,
+            view: "오션뷰",
+            price: 280000,
+            originalPrice: 350000,
+            images: [
+                "/images/rooms/suite1.jpg",
+                "/images/rooms/suite2.jpg",
+            ],
+            amenities: [
+                "WiFi",
+                "에어컨",
+                "거실 분리형",
+                "대형 TV",
+                "욕조",
+                "발코니"
+            ],
+            features: ["Suite Room", "바다 전망", "조식 포함", "무료 취소"],
+            breakfast: true,
+            refundable: true,
+        }
     ],
+
     "2": [
         {
             id: "201",
-            name: "Standard Room",
-            type: "Standard · 1 Bed",
-            capacity: 2,
-            price: 90000,
+            name: "Beach Standard Room",
+            size: "26㎡",
+            bedType: "더블베드",
+            maxGuests: 2,
+            view: "해변뷰",
+            price: 135000,
+            originalPrice: 160000,
             images: [
-                "/images/rooms/room3-1.jpg",
+                "/images/rooms/beach-standard1.jpg",
             ],
+            amenities: ["WiFi", "TV", "에어컨", "샤워부스"],
+            features: ["바다 근처", "즉시 예약"],
+            breakfast: false,
+            refundable: true,
         },
+        {
+            id: "202",
+            name: "Ocean Deluxe",
+            size: "34㎡",
+            bedType: "킹베드",
+            maxGuests: 3,
+            view: "오션뷰",
+            price: 210000,
+            originalPrice: 250000,
+            images: [
+                "/images/rooms/ocean-deluxe1.jpg",
+            ],
+            amenities: ["WiFi", "TV", "욕조", "냉장고"],
+            features: ["오션뷰", "조식 포함"],
+            breakfast: true,
+            refundable: false,
+        }
     ],
+
     "3": [
         {
             id: "301",
-            name: "Ocean View Room",
-            type: "Ocean View · 1 Bed",
-            capacity: 2,
-            price: 180000,
+            name: "Jeju Garden Room",
+            size: "29㎡",
+            bedType: "킹베드",
+            maxGuests: 2,
+            view: "정원뷰",
+            price: 170000,
+            originalPrice: 190000,
             images: [
-                "/images/rooms/room4-1.jpg",
-                "/images/rooms/room4-2.jpg",
+                "/images/rooms/jeju-garden1.jpg",
             ],
+            amenities: ["WiFi", "에어컨", "TV", "욕조"],
+            features: ["무료 취소", "즉시 예약"],
+            breakfast: false,
+            refundable: true,
         },
         {
             id: "302",
-            name: "Premium Suite",
-            type: "Premium Suite · 2 Beds",
-            capacity: 4,
-            price: 320000,
+            name: "Jeju Pool Villa",
+            size: "52㎡",
+            bedType: "퀸베드 2개",
+            maxGuests: 4,
+            view: "풀뷰",
+            price: 350000,
+            originalPrice: 420000,
             images: [
-                "/images/rooms/room5-1.jpg",
-                "/images/rooms/room5-2.jpg",
+                "/images/rooms/jeju-pool1.jpg",
+                "/images/rooms/jeju-pool2.jpg",
             ],
-        },
-    ],
+            amenities: ["WiFi", "프라이빗 풀", "미니바", "에어컨", "욕조"],
+            features: ["Pool Villa", "조식 포함", "무료 취소"],
+            breakfast: true,
+            refundable: true,
+        }
+    ]
 };
 
 
+
+
 export const getHotelRooms = async (hotelId) => {
-    const rooms = mockRooms[hotelId] || [];
+    const id = String(hotelId);
+    const rooms = mockRooms[id] || [];
+    console.log("💬 hotelId:", hotelId, "→ 변환된 id:", id);
+    console.log("💬 mockRooms[id]:", mockRooms[id]);
     return new Promise((resolve) => {
         setTimeout(() => resolve(rooms), 300);
     });

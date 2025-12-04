@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
 import Header from "../common/Header";
+import Footer from "../common/Footer";
 import SearchFilterWrap from "../search/SearchFilterWrap";
 import FilterSidebar from "../search/FilterSidebar";
 import './styles/SearchLayout.scss';
@@ -26,6 +27,7 @@ const SearchLayout = () => {
 
     return (
         <div className="search-layout">
+            <Header />
             <div className="search-container">
                 {/* 🔍 검색바 영역 */}
                 <div className="search-top-bar">
@@ -46,10 +48,9 @@ const SearchLayout = () => {
                     <main className="search-main">
                         <Outlet context={{ filters }} />
                     </main>
-
                 </div>
-
             </div>
+            <Footer />
         </div>
     );
 };
