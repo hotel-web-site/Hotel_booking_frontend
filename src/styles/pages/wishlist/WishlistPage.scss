@@ -1,0 +1,25 @@
+.wishlist-page {
+    width: 100%;
+    max-width: 1200px;
+    margin: 40px auto;
+    padding-top: 80px;
+    padding-bottom: 260px;
+
+    .title {
+        font-size: 28px;
+        font-weight: 600;
+        margin-bottom: 20px;
+    }
+
+    .empty {
+        margin-top: 50px;
+        text-align: center;
+        color: #777;
+    }
+
+    .wishlist-list {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+}
