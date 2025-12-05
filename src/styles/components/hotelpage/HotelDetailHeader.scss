@@ -140,9 +140,12 @@
     gap: 6px;
 
     .price {
-        font-size: 24px;
         font-weight: 700;
-        color: #ff6a6a;
+        font-size: 16px;
+        > span {
+            font-size: 24px;
+            color: #ff6a6a;
+        }
     }
 
     .price-unit {

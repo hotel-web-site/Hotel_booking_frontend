@@ -13,7 +13,7 @@ const DestinationCard = ({ destination }) => {
             <div className="card-body">
                 <div className="name-price">
                     <h3>{name}</h3>
-                    <span>₩{price.toLocaleString()}</span>
+                    <span>최저가 ₩{price.toLocaleString()}</span>
                 </div>
 
                 <p className="desc">{description}</p>

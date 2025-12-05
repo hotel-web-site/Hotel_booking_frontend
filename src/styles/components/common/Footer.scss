@@ -1,13 +1,20 @@
+/* =========================================================
+   Footer (통합 버전)
+========================================================= */
+
 .footer {
+    /* 👉 첫 번째 코드의 배경을 그대로 사용 */
     background: linear-gradient(120deg, #279c79 60%, #1e2b26 100%);
     width: 100%;
     padding: 60px 0 0 0;
     position: relative;
     font-family: 'Pretendard', 'Noto Sans KR', 'Segoe UI', Arial, sans-serif;
     letter-spacing: 0.01em;
+
     .footer-wrap {
-        background: transparent;
+        background: transparent; /* 첫 번째 코드 유지 */
     }
+
     .logo-image {
         width: 90px;
         height: 90px;
@@ -16,8 +23,8 @@
 }
 
 /* =========================================================
-   ========== Newsletter (떠 있는 카드 디자인) ==========
-   ========================================================= */
+   Newsletter (떠 있는 민트 카드)
+========================================================= */
 
 .newsletter-wrapper {
     width: 100%;
@@ -25,7 +32,6 @@
     justify-content: center;
     position: relative;
     top: -170px;
-    /* footer 위로 겹치게 */
     z-index: 10;
 }
 
@@ -38,11 +44,10 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    /* 떠 있는 카드 느낌 */
     box-shadow: 0 18px 28px rgba(0, 0, 0, 0.18);
 }
 
-/* 텍스트 */
+/* 텍스트 영역 */
 .newsletter-left {
     width: 50%;
     display: flex;
@@ -65,7 +70,6 @@
         color: #00234d;
         margin-bottom: 6px;
     }
-
     .travel-sub {
         font-size: 14px;
         color: #333;
@@ -107,105 +111,70 @@
 .newsletter-right {
     margin-left: 10px;
 }
-
 .newsletter-img {
     width: 250px;
     height: 400px;
     display: block;
 }
 
-
-
 /* =========================================================
-   ========== Footer Links ==========
-   ========================================================= */
-
-.social-links {
-    .logo {
-        font-size: 32px;
-        font-weight: 900;
-        color: #fff;
-        margin-bottom: 10px;
-        letter-spacing: 0.02em;
-        text-shadow: 0 2px 8px rgba(30,43,38,0.12);
-    }
-    .description {
-        font-size: 16px;
-        color: #e6f7f1;
-        line-height: 1.7;
-        margin-bottom: 8px;
-        font-weight: 500;
-        text-shadow: 0 1px 4px rgba(30,43,38,0.08);
-    }
-}
+   Footer Main Layout (최신 구조)
 
 .footer-links {
-    margin-top: -60px;
+    margin-top: -100px;
     display: flex;
+
     .inner {
         width: 90%;
         max-width: 1240px;
-        margin: 0 auto;
-        gap: 5rem;
+        margin: 0 auto 100px auto;
+
         display: flex;
-        flex-direction: column;
         justify-content: space-between;
-        align-items: flex-start;
+        align-items: center;
+        gap: 5rem;
     }
 }
 
-.footer-menu {
+/* 왼쪽 로고 + 텍스트 묶음 */
+.footer-left {
     display: flex;
-    gap: 120px;
+    align-items: flex-start;
+    gap: 24px;
 }
 
-/* Link Columns */
-.link-columns {
+.footer-text-group {
     display: flex;
-    gap: 60px;
-    .link-column {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-        h4 {
-            font-size: 17px;
-            font-weight: 800;
-            color: #fff;
-            margin-bottom: 10px;
-            letter-spacing: 0.01em;
-        }
-        ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            li {
-                margin-bottom: 7px;
-                a {
-                    color: #e6f7f1;
-                    font-size: 15px;
-                    font-weight: 500;
-                    transition: color 0.2s;
-                    &:hover {
-                        color: #ffd700;
-                        text-decoration: underline;
-                    }
-                }
-            }
-        }
+    flex-direction: column;
+    gap: 14px;
+
+    .description {
+        font-size: 14px;
+        color: #e6f7f1; /* ✨ 첫 번째 코드 색상 유지 */
+        line-height: 1.6;
+    }
+
+    .company-info,
+    .copyright,
+    .contact-info {
+        font-size: 14px;
+        color: #000;
+        line-height: 1.6;
     }
 }
 
+/* Follow Us */
 .follow-us {
     h4 {
         font-size: 17px;
         font-weight: 800;
         color: #fff;
         margin-bottom: 14px;
-        letter-spacing: 0.01em;
     }
     .follow-icons {
         display: flex;
         gap: 18px;
+
         .follow-link {
             width: 38px;
             height: 38px;
@@ -215,61 +184,21 @@
             align-items: center;
             justify-content: center;
             transition: background 0.2s;
-        }
-        .follow-link:hover {
-            background: #ffd700;
-        }
-        .icon-img {
-            width: 24px;
-            height: 24px;
-            filter: drop-shadow(0 1px 4px rgba(30,43,38,0.10));
+
+            &:hover {
+                background: #ffd700;
+            }
+
+            img.icon-img {
+                width: 24px;
+                height: 24px;
+            }
         }
     }
 }
 
 /* =========================================================
-   ========== Bottom ==========
-   ========================================================= */
-
-.footer-bottom {
-    margin-top: 60px;
-    background: #1e2b26;
-    padding: 32px 0 24px 0;
-    .inner {
-        width: 90%;
-        max-width: 1240px;
-        margin: 0 auto;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        font-size: 15px;
-        line-height: 1.7;
-        color: #e6f7f1;
-        font-weight: 400;
-    }
-    .company-info {
-        font-size: 14px;
-        color: #b2cfc3;
-        margin-bottom: 4px;
-        font-weight: 400;
-    }
-    .copyright {
-        font-size: 13px;
-        color: #7bbfa7;
-        font-weight: 400;
-    }
-    .footer-contact {
-        .contact-info {
-            font-size: 14px;
-            color: #b2cfc3;
-            font-weight: 400;
-        }
-    }
-}
-
-/* ============================================
-   📱 1024px 이하 (태블릿)
-   ============================================ */
+   Responsive
 @media (max-width: 1024px) {
     .newsletter {
         flex-direction: column;
@@ -283,8 +212,8 @@
     }
 
     .newsletter-input-wrapper {
-        justify-content: center;
         width: 100%;
+        justify-content: center;
     }
 
     .newsletter-right {
@@ -297,54 +226,16 @@
         height: auto;
     }
 
-    /* Footer */
     .footer-links .inner {
         flex-direction: column;
         gap: 40px;
+        align-items: center;
     }
 
-    .footer-menu {
-        gap: 100px;
-    }
-}
-
-
-
-/* ============================================
-   📱 768px 이하 (모바일)
-   ============================================ */
-@media (max-width: 768px) {
-
-    /* Newsletter */
-    .newsletter {
-        padding: 32px 20px;
-    }
-
-    .newsletter-title {
-        font-size: 32px;
-    }
-
-    .newsletter-desc .travel-title {
-        font-size: 14px;
-    }
-
-    .newsletter-desc .travel-sub {
-        font-size: 13px;
-    }
-
-    .newsletter-img {
-        width: 180px;
-    }
-
-    /* Footer */
-    .footer-menu {
+    .footer-left {
         flex-direction: column;
-        gap: 40px;
-    }
-
-    .link-columns {
-        flex-direction: column;
-        gap: 28px;
+        text-align: center;
+        align-items: center;
     }
 
     .follow-us {
@@ -354,54 +245,32 @@
             justify-content: center;
         }
     }
+}
 
-    .footer-bottom .inner {
-        flex-direction: column;
-        text-align: center;
-        gap: 16px;
+@media (max-width: 768px) {
+    .newsletter {
+        padding: 32px 20px;
+    }
+    .newsletter-title {
+        font-size: 32px;
+    }
+    .newsletter-img {
+        width: 180px;
     }
 }
 
-
-
-/* ============================================
-   📱 480px 이하 (작은 모바일)
-   ============================================ */
 @media (max-width: 480px) {
-
-    /* Newsletter */
     .newsletter {
         padding: 24px 16px;
     }
-
     .newsletter-title {
         font-size: 26px;
     }
-
-    .newsletter-input {
-        padding: 10px 12px;
-        font-size: 13px;
-    }
-
-    .newsletter-btn {
-        padding: 10px 14px;
-        font-size: 13px;
-    }
-
     .newsletter-img {
         width: 150px;
     }
 
-    /* Footer */
     .footer {
         padding: 40px 0 0 0;
-    }
-
-    .footer-menu {
-        gap: 26px;
-    }
-
-    .footer-bottom {
-        padding: 20px 0;
     }
 }

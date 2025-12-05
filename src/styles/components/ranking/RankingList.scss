@@ -1,0 +1,142 @@
+/* src/styles/components/ranking/RankingList.scss */
+
+.ranking-list {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    align-items: center; /* 가운데 정렬 */
+}
+
+/* 카드 전체 */
+.ranking-card {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+
+    width: 80%;
+    max-width: 900px;
+    background: #e3e3e4;
+    border-radius: 18px;
+    padding: 22px 26px;
+    box-shadow: 0 10px 24px rgba(6, 21, 43, 0.04);
+}
+
+/* 순위 숫자 */
+.rank-badge {
+    font-size: 24px;
+    font-weight: 700;
+    color: #06152b;
+    width: 52px;
+    text-align: center;
+}
+
+/* 호텔 이미지 – 더 크게 */
+.hotel-img {
+    width: 190px;
+    height: 130px;
+    border-radius: 14px;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+/* 오른쪽 내용 전체 (텍스트 + 버튼) */
+.hotel-content {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+/* 텍스트 영역 */
+.hotel-text {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.hotel-name {
+    font-size: 20px;
+    font-weight: 700;
+    color: #06152b;
+    margin: 0;
+}
+
+.hotel-location {
+    font-size: 13px;
+    color: #7b8594;
+    margin: 0;
+}
+
+/* 평점 + 가격 한 줄 정리 */
+.hotel-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-top: 4px;
+}
+
+.rating-box {
+    font-size: 15px;
+    font-weight: 700;
+    color: #ffb400;
+
+    .rating-count {
+        font-weight: 500;
+        font-size: 13px;
+        color: #c28b1e;
+        margin-left: 4px;
+    }
+}
+
+.price {
+    font-size: 15px;
+    font-weight: 700;
+    color: #253049;
+}
+
+/* 민트 버튼 */
+.go-book-btn {
+    padding: 10px 22px;
+    border-radius: 999px;
+    border: none;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+
+    background: #99d3c3;        /* 🔥 dm 민트 */
+    color: #053134;
+
+    box-shadow: 0 8px 18px rgba(153, 211, 195, 0.45);
+    transition: transform 0.15s ease, box-shadow 0.15s ease,
+        background 0.15s ease;
+
+    &:hover {
+        background: #7fc4b3;    /* 조금 더 진한 민트 */
+        box-shadow: 0 10px 24px rgba(127, 196, 179, 0.55);
+        transform: translateY(-1px);
+    }
+
+    &:active {
+        transform: translateY(0);
+        box-shadow: 0 6px 14px rgba(127, 196, 179, 0.4);
+    }
+}
+
+/* 간단 반응형 */
+@media (max-width: 900px) {
+    .ranking-card {
+        width: 100%;
+    }
+
+    .hotel-content {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .go-book-btn {
+        align-self: flex-start;
+    }
+}
