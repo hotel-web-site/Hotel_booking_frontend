@@ -5,9 +5,9 @@ const HotelTypesTabs = () => {
     const [activeTab, setActiveTab] = useState("hotels");
 
     const tabs = [
-        { id: "hotels", label: "Hotels", count: 257 },
-        { id: "motels", label: "Motels", count: 51 },
-        { id: "resorts", label: "Resorts", count: 72 },
+        { id: "hotels", label: "호텔", count: 257 },
+        { id: "motels", label: "모텔", count: 51 },
+        { id: "resorts", label: "리조트", count: 72 },
     ];
 
     return (
@@ -19,7 +19,7 @@ const HotelTypesTabs = () => {
                     onClick={() => setActiveTab(tab.id)}
                 >
                     <span className="tab-label">{tab.label}</span>
-                    <span className="tab-count">{tab.count} places</span>
+                    <span className="tab-count">{tab.count}개</span>
                 </button>
             ))}
         </div>

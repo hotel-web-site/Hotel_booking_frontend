@@ -73,15 +73,15 @@ const MyAccountPage = () => {
 
             {/* 🔽 아래는 기존 Account 정보 박스만 유지 */}
             <div className="account-box">
-                <h2>Account</h2>
+                <h2>계정</h2>
 
                 {[
-                    { label: "Name", key: "name" },
-                    { label: "Email", key: "email" },
-                    { label: "Password", key: "password" },
-                    { label: "Phone number", key: "phone" },
-                    { label: "Address", key: "address" },
-                    { label: "Date of birth", key: "birth" },
+                    { label: "이름", key: "name" },
+                    { label: "이메일", key: "email" },
+                    { label: "비밀번호", key: "password" },
+                    { label: "전화번호", key: "phone" },
+                    { label: "주소", key: "address" },
+                    { label: "생년월일", key: "birth" },
                 ].map((item) => (
                     <div className="account-row" key={item.key}>
                         <div className="account-left">
@@ -105,7 +105,7 @@ const MyAccountPage = () => {
                                 alt="edit"
                                 className="edit-icon"
                             />
-                            Change
+                            수정
                         </button>
 
                     </div>

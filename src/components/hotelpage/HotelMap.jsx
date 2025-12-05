@@ -19,7 +19,7 @@ const HotelMap = ({ address, location }) => {
                     rel="noopener noreferrer"
                     className="map-link"
                 >
-                    View on google maps
+                    구글 지도에서 보기
                 </a>
             </div>
 

@@ -8,7 +8,7 @@ const SearchFilterWrap = () => {
                 
                 {/* Destination */}
                 <div className="search-item">
-                    <label>Enter Destination</label>
+                    <label>호텔명 검색</label>
                     <div className="input-box">
                         <span className="icon">🏨</span>
                         <input
@@ -20,7 +20,7 @@ const SearchFilterWrap = () => {
 
                 {/* Check In */}
                 <div className="search-item">
-                    <label>Check In</label>
+                    <label>체크인</label>
                     <div className="input-box">
                         <input type="date" defaultValue="2025-12-02" />
                     </div>
@@ -28,7 +28,7 @@ const SearchFilterWrap = () => {
 
                 {/* Check Out */}
                 <div className="search-item">
-                    <label>Check Out</label>
+                    <label>체크아웃</label>
                     <div className="input-box">
                         <input type="date" defaultValue="2025-12-04" />
                     </div>
@@ -36,13 +36,13 @@ const SearchFilterWrap = () => {
 
                 {/* Rooms & Guests */}
                 <div className="search-item">
-                    <label>Rooms & Guests</label>
+                    <label>객실 및 인원</label>
                     <div className="input-box">
                         <span className="icon">👤</span>
                         <select>
-                            <option>1 room, 2 guests</option>
-                            <option>1 room, 1 guest</option>
-                            <option>2 rooms, 4 guests</option>
+                            <option>1 객실, 2명</option>
+                            <option>1 객실, 1명</option>
+                            <option>2 객실, 4명</option>
                         </select>
                     </div>
                 </div>

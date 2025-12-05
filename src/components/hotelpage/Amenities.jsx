@@ -68,7 +68,7 @@ const Amenities = ({ amenities = [] }) => {
 
             {hasMore && (
                 <button className="show-more-btn" onClick={() => setShowAll(!showAll)}>
-                    {showAll ? "접기" : `+${amenities.length - 10} more`}
+                    {showAll ? "접기" : `+${amenities.length - 10}개 더보기`}
                 </button>
             )}
         </div>

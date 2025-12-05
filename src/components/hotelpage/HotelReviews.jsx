@@ -46,9 +46,9 @@ const HotelReviews = ({
     return (
         <div className="hotel-reviews">
             <div className="header-row">
-                <h3 className="reviews-title">Reviews</h3>
+                <h3 className="reviews-title">리뷰</h3>
                 <button className="give-review-btn" onClick={openModal}>
-                    Give your review
+                    리뷰 작성하기
                 </button>
             </div>
 
@@ -57,7 +57,7 @@ const HotelReviews = ({
                 <div className="avg-score">{avgRating.toFixed(1)}</div>
                 <div className="avg-meta">
                     <div className="avg-label">{avgLabel}</div>
-                    <div className="avg-count">{verifiedCount} verified reviews</div>
+                    <div className="avg-count">{verifiedCount}개 인증 리뷰</div>
                 </div>
             </div>
 

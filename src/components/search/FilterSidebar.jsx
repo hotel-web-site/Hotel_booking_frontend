@@ -15,12 +15,12 @@ const FilterSidebar = () => {
 
     return (
         <aside className="filter-sidebar">
-            <h3 className="filter-title">Filters</h3>
+            <h3 className="filter-title">필터</h3>
 
-            {/* PRICE */}
+            {/* 가격 */}
             <div className="filter-box">
                 <div className="filter-header" onClick={() => toggle("price")}>
-                    <h4>Price</h4>
+                    <h4>가격</h4>
                     <span className={`arrow ${open.price ? "open" : ""}`}>⌃</span>
                 </div>
 
@@ -28,16 +28,16 @@ const FilterSidebar = () => {
                     <input type="range" min="50" max="1200" className="price-slider" />
 
                     <div className="price-labels">
-                        <span>$50</span>
-                        <span>$1200</span>
+                        <span>₩50,000</span>
+                        <span>₩1,200,000</span>
                     </div>
                 </div>
             </div>
 
-            {/* RATING */}
+            {/* 평점 */}
             <div className="filter-box">
                 <div className="filter-header" onClick={() => toggle("rating")}>
-                    <h4>Rating</h4>
+                    <h4>평점</h4>
                     <span className={`arrow ${open.rating ? "open" : ""}`}>⌃</span>
                 </div>
 
@@ -52,28 +52,28 @@ const FilterSidebar = () => {
                 </div>
             </div>
 
-            {/* FREEBIES */}
+            {/* 무료 혜택 */}
             <div className="filter-box">
                 <div className="filter-header" onClick={() => toggle("freebies")}>
-                    <h4>Freebies</h4>
+                    <h4>무료 혜택</h4>
                     <span className={`arrow ${open.freebies ? "open" : ""}`}>⌃</span>
                 </div>
 
                 <div className={`filter-body ${open.freebies ? "show" : ""}`}>
                     <div className="checkbox-list">
-                        <label><input type="checkbox" /> 조식포함</label>
-                        <label><input type="checkbox" /> 무료주차</label>
-                        <label><input type="checkbox" /> WIFI</label>
-                        <label><input type="checkbox" /> 공항셔틀버스</label>
-                        <label><input type="checkbox" /> 무료취소</label>
+                        <label><input type="checkbox" /> 조식 포함</label>
+                        <label><input type="checkbox" /> 무료 주차</label>
+                        <label><input type="checkbox" /> 무료 WIFI</label>
+                        <label><input type="checkbox" /> 공항 셔틀버스</label>
+                        <label><input type="checkbox" /> 무료 취소</label>
                     </div>
                 </div>
             </div>
 
-            {/* AMENITIES */}
+            {/* 편의시설 */}
             <div className="filter-box">
                 <div className="filter-header" onClick={() => toggle("amenities")}>
-                    <h4>Amenities</h4>
+                    <h4>편의시설</h4>
                     <span className={`arrow ${open.amenities ? "open" : ""}`}>⌃</span>
                 </div>
 
