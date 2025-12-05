@@ -61,7 +61,7 @@ const HotelListCards = ({ hotels = [] }) => {
                                 <div className="hotel-price">
                                     <div className="price-label">최저가</div>
                                     <div className="price-amount">
-                                        최저가{" "}
+                                        {" "}
                                         <span>
                                             {price
                                                 ? `₩${price.toLocaleString()}/night`
@@ -76,7 +76,7 @@ const HotelListCards = ({ hotels = [] }) => {
 
                             <div className="hotel-meta">
                                 <div className="hotel-stars">
-                                    {"⭐".repeat(hotel.stars || 0)} {hotel.stars}성급 호텔
+                                    {"⭐".repeat(hotel.stars || 0)} {hotel.stars}점
                                 </div>
                                 <div className="hotel-amenities">
                                     🏨 {amenitiesCount}개 편의시설
@@ -122,7 +122,7 @@ const HotelListCards = ({ hotels = [] }) => {
                     className="load-more"
                     onClick={() => setVisibleCount((prev) => prev + 6)}
                 >
-                    Show more results
+                    더보기
                 </button>
             )}
         </div>
