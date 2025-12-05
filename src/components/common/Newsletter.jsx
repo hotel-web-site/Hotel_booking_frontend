@@ -13,7 +13,7 @@ const Newsletter = () => {
                     </h2>
 
                     <div className="newsletter-desc">
-                        <p className="travel-title">The Travel</p>
+                        <p className="travel-title">DM</p>
                         <p className="travel-sub">구독하고 쿠폰, 최신 이벤트를 받아보세요</p>
                     </div>
 
