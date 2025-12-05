@@ -86,7 +86,7 @@ const HotelDetailHeader = ({ hotel }) => {
                 <div className="price-actions-wrap">
                     <div className="price-section">
                         <span className="price">
-                            ₩{(hotel.basePrice ?? hotel.price ?? 0).toLocaleString()}
+                            최저가 <span>₩{(hotel.basePrice ?? hotel.price ?? 0).toLocaleString()}</span>
                         </span>
                         <span className="price-unit">/박</span>
                     </div>

@@ -1,0 +1,100 @@
+.review-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 5000;
+}
+
+.review-modal {
+    width: 420px;
+    background: #fff;
+    border-radius: 14px;
+    padding: 28px;
+    animation: fadeIn 0.2s ease-out;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+
+.modal-title {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 16px;
+}
+
+/* ⭐ 별점 */
+.rating-selector {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+
+    .star {
+        font-size: 30px;
+        cursor: pointer;
+        color: #ccc;
+        transition: 0.15s;
+
+        &.active {
+            color: #ffb400;
+        }
+
+        &:hover {
+            transform: scale(1.15);
+        }
+    }
+}
+
+/* 리뷰 텍스트 */
+.review-textarea {
+    width: 100%;
+    height: 130px;
+    border: 1px solid #ddd;
+    padding: 12px;
+    border-radius: 10px;
+    resize: none;
+    font-size: 14px;
+    margin-bottom: 20px;
+
+    &:focus {
+        border-color: #99d3c3;
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(153, 211, 195, 0.3);
+    }
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+
+    .cancel-btn {
+        padding: 10px 16px;
+        background: #eee;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+
+        &:hover {
+            background: #ddd;
+        }
+    }
+
+    .submit-btn {
+        padding: 10px 16px;
+        background: #99d3c3;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        color: #054;
+
+        &:hover {
+            background: #87c7b7;
+        }
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}

@@ -35,7 +35,7 @@ const PopularDestinations = () => {
                         className="btn--primary"
                         onClick={() => navigate("/search")}
                     >
-                        See All
+                        더 보러가기
                     </button>
                 </div>
 
