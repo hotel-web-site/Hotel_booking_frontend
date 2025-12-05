@@ -99,16 +99,6 @@ const HotelReviews = ({
                 )}
             </ul>
 
-<<<<<<< HEAD
-            {/* 하단 페이지네이션 */}
-            <div className="review-pagination">
-                <button className="page-arrow" disabled>
-                    ◀
-                </button>
-                <span className="page-text">1 / 40</span>
-                <button className="page-arrow">▶</button>
-            </div>
-=======
             {/* 페이지네이션 */}
             {totalPages > 1 && (
                 <div className="review-pagination">
@@ -138,7 +128,6 @@ const HotelReviews = ({
             {isModalOpen && (
                 <ReviewModal closeModal={closeModal} onSubmit={handleSubmitReview} />
             )}
->>>>>>> upstream/main
         </div>
     );
 };
