@@ -29,7 +29,7 @@ const ProfilePage = ({
 
       {/* 배경 박스 바깥으로 옮긴 COVER 업로드 버튼 */}
       <label className="upload-cover-btn-outside">
-        Upload new cover
+        새 커버 이미지 업로드
         <input type="file" accept="image/*" onChange={onCoverUpload} />
       </label>
 

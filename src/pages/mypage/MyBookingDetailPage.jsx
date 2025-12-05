@@ -59,7 +59,7 @@ const MyBookingDetailPage = ({ bookings = [] }) => {
 
       <div className="filter-box">
         <div className="filter-label">객실</div>
-        <div className="filter-select">Upcoming ▼</div>
+        <div className="filter-select">예정된 예약 ▼</div>
       </div>
 
       <div className="booking-list">
@@ -77,10 +77,10 @@ const MyBookingDetailPage = ({ bookings = [] }) => {
               />
 
               <div className="date-info">
-                <p className="check-title">Check-In</p>
+                <p className="check-title">체크인</p>
                 <p className="check-date">{item.checkIn}</p>
 
-                <p className="check-title">Check Out</p>
+                <p className="check-title">체크아웃</p>
                 <p className="check-date">{item.checkOut}</p>
               </div>
             </div>
@@ -93,7 +93,7 @@ const MyBookingDetailPage = ({ bookings = [] }) => {
 
               <div className="status">{item.status}</div>
 
-              <button className="download-btn">Download Ticket</button>
+              <button className="download-btn">티켓 다운로드</button>
             </div>
           </div>
         ))}

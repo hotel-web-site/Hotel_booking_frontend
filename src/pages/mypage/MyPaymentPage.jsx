@@ -93,7 +93,7 @@ const MyPaymentPage = () => {
 
         <div className="add-card-box" onClick={() => setShowModal(true)}>
           <span className="plus">+</span>
-          Add a new card
+          새 카드 추가
         </div>
       </div>
 
@@ -109,10 +109,10 @@ const MyPaymentPage = () => {
             </div>
 
             <div className="input-wrap">
-              <label className="floating-label">Card Number</label>
+              <label className="floating-label">카드 번호</label>
               <input
                 type="text"
-                placeholder="1234 5678 9012 3456"
+                placeholder="0000 0000 0000 0000"
                 value={form.cardNumber}
                 onChange={(e) => handleInput("cardNumber", e.target.value)}
               />
@@ -120,7 +120,7 @@ const MyPaymentPage = () => {
 
             <div className="row">
               <div className="input-wrap">
-                <label className="floating-label">Exp. Date</label>
+                <label className="floating-label">만료일</label>
                 <input
                   type="text"
                   placeholder="MM/YY"
@@ -141,25 +141,25 @@ const MyPaymentPage = () => {
             </div>
 
             <div className="input-wrap">
-              <label className="floating-label">Name on Card</label>
+              <label className="floating-label">카드 명의자 이름</label>
               <input
                 type="text"
-                placeholder="John Doe"
+                placeholder="홍길동"
                 value={form.name}
                 onChange={(e) => handleInput("name", e.target.value)}
               />
             </div>
 
             <div className="input-wrap">
-              <label className="floating-label">Country or Region</label>
+              <label className="floating-label">국가 또는 지역</label>
               <select
                 value={form.country}
                 onChange={(e) => handleInput("country", e.target.value)}
               >
-                <option value="">Select country</option>
-                <option value="KR">South Korea</option>
-                <option value="US">United States</option>
-                <option value="JP">Japan</option>
+                <option value="">국가 선택</option>
+                <option value="KR">대한민국</option>
+                <option value="US">미국</option>
+                <option value="JP">일본</option>
               </select>
             </div>
 
@@ -173,7 +173,7 @@ const MyPaymentPage = () => {
             </label>
 
             <button className="submit-btn" onClick={handleAddCard}>
-              Add Card
+              카드 추가
             </button>
           </div>
         </div>
