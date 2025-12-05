@@ -19,7 +19,7 @@ const Header = () => {
         <header className="header">
             {/* 🔹 좌측 로고 및 네비게이션 */}
             <div className="header-left">
-                <Link to="/" className="logo">HotelHub</Link>
+                <Link to="/" className="logo"><img src="/logo.png" alt="HotelHub Logo" className="logo-image"/></Link>
 
                 <nav className="nav">
                     <Link to="/search">호텔검색</Link>
@@ -41,7 +41,7 @@ const Header = () => {
                 {isLoggedIn && (
                     <>
                         {/* 🔹 찜하기 버튼 */}
-                        <Link to="/wishlist" className="wish-btn">
+                        <Link to="/mypage/wishlist" className="wish-btn">
                             <i className="fa-regular fa-heart"></i>
                             찜하기
                         </Link>

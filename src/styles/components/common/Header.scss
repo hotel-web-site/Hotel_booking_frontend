@@ -17,6 +17,12 @@
             font-weight: 700;
             color: #1f2937;
             text-decoration: none;
+            display: flex;
+            align-items: center;
+            .logo-image {
+                width: 75px;
+                height: 75px;
+            }
         }
 
         .nav {

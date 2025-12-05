@@ -1,24 +1,39 @@
 import React, { useState } from "react";
-import { FaStar, FaMapMarkerAlt, FaHeart, FaShare } from "react-icons/fa";
+import { FaStar, FaMapMarkerAlt, FaShare } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { toggleWishlist, isWishlisted } from "../../util/wishlistService";
 import "../../styles/components/hotelpage/HotelDetailHeader.scss";
 
 const HotelDetailHeader = ({ hotel }) => {
+    const navigate = useNavigate();
+
     if (!hotel) {
         return <div className="hotel-detail-header loading">Loading...</div>;
     }
-    const navigate = useNavigate();
+
+    // ⭐ 호텔 데이터 기반으로 찜 여부 초기화
+    const [liked, setLiked] = useState(isWishlisted(hotel._id || hotel.id));
+
+    // ⭐ 찜 토글
+    const handleWishlist = () => {
+        const result = toggleWishlist(hotel);
+        setLiked(result);
+    };
 
     const {
         name = "호텔명 없음",
         ratingAverage = 0,
         ratingCount = 0,
         address = "주소 정보 없음",
-        images = [],
         city = "",
         location = "",
     } = hotel;
 
+    const handleBookNow = () => {
+        navigate(`/booking/${hotel._id || hotel.id}`);
+    };
+
+    // ⭐ 별점 렌더링
     const renderStars = (rating) => {
         const stars = [];
         const fullStars = Math.floor(rating);
@@ -34,11 +49,6 @@ const HotelDetailHeader = ({ hotel }) => {
         return stars;
     };
 
-    const handleBookNow = () => {
-    navigate(`/booking/${hotel._id || hotel.id}`);
-};
-
-
     return (
         <div className="hotel-detail-header">
             {/* breadcrumb */}
@@ -47,8 +57,10 @@ const HotelDetailHeader = ({ hotel }) => {
                     <span>{city}</span> &gt; <span>{location}</span> &gt; <span>{name}</span>
                 </div>
             </div>
+
             {/* 메인 정보 라인 */}
             <div className="hotel-info">
+
                 {/* 왼쪽 호텔 정보 */}
                 <div className="hotel-title-section">
                     <h1 className="hotel-name">{name}</h1>
@@ -80,21 +92,24 @@ const HotelDetailHeader = ({ hotel }) => {
                     </div>
 
                     <div className="header-actions">
-                        <button className="icon-btn">
-                            <FaHeart />
+
+                        {/* ♥ 찜 버튼 */}
+                        <button className="icon-btn heart-btn" onClick={handleWishlist}>
+                            {liked ? "♥" : "♡"}
                         </button>
+
+                        {/* 공유 버튼 */}
                         <button className="icon-btn">
                             <FaShare />
                         </button>
 
+                        {/* 예약 버튼 */}
                         <button className="book-top-btn" onClick={handleBookNow}>
                             Book now
                         </button>
                     </div>
                 </div>
             </div>
-
-            
         </div>
     );
 };

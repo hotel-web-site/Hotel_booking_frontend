@@ -206,7 +206,7 @@ const BookingComplete = () => {
       <div className="action-buttons">
         <button
           className="btn btn-primary"
-          onClick={() => navigate("/mypage/bookings")}
+          onClick={() => navigate("/mypage/bookings/:bookingId")}
         >
           예약 내역 보기
         </button>

@@ -1,25 +1,38 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../styles/components/search/HotelListCards.scss";
+import { toggleWishlist, isWishlisted } from "../../util/wishlistService";
 
 const HotelListCards = ({ hotels = [] }) => {
     const navigate = useNavigate();
-    console.log("HotelListCards received hotels:", hotels);
 
     if (!hotels || hotels.length === 0) {
         return (
-            <div className="hotel-list-cards empty">호텔을 찾을 수 없습니다.</div>
+            <div className="hotel-list-cards empty">
+                호텔을 찾을 수 없습니다.
+            </div>
         );
     }
 
     return (
         <div className="hotel-list-cards">
             {hotels.map((hotel) => {
-                // 호텔에 rooms가 없거나 비어있으면 기본값 사용
-                const mainRoom = hotel.rooms && hotel.rooms.length > 0 ? hotel.rooms[0] : {};
+                const mainRoom =
+                    hotel.rooms && hotel.rooms.length > 0 ? hotel.rooms[0] : {};
+
                 const price = mainRoom?.price ?? null;
-                const image = mainRoom?.images?.[0] || "/default_hotel.jpg"; // 기본 이미지
                 const amenitiesCount = mainRoom?.amenities?.length || 0;
+
+                // ⭐ 각 호텔 카드마다 찜 상태를 개별로 가짐
+                const [liked, setLiked] = useState(
+                    isWishlisted(hotel._id || hotel.id)
+                );
+
+                const handleWishlist = (e) => {
+                    e.stopPropagation(); // 카드 클릭과 충돌 방지
+                    const result = toggleWishlist(hotel);
+                    setLiked(result);
+                };
 
                 return (
                     <div
@@ -27,9 +40,12 @@ const HotelListCards = ({ hotels = [] }) => {
                         className="hotel-card"
                         onClick={() => navigate(`/hotels/${hotel.id}`)}
                     >
-                        {/* 이미지 */}
+                        {/* ------------ 이미지 ------------- */}
                         <div className="hotel-image">
-                            <img src={hotel.image} alt={hotel.name} />
+                            <img
+                                src={hotel.image}
+                                alt={hotel.name}
+                            />
                             {hotel.imageCount && (
                                 <div className="image-count">
                                     {hotel.imageCount} images
@@ -37,7 +53,7 @@ const HotelListCards = ({ hotels = [] }) => {
                             )}
                         </div>
 
-                        {/* 오른쪽 카드 전체 */}
+                        {/* ------------ 오른쪽 정보 전체 ------------- */}
                         <div className="hotel-info">
 
                             {/* 상단: 이름 + 가격 */}
@@ -58,13 +74,13 @@ const HotelListCards = ({ hotels = [] }) => {
                             {/* 위치 */}
                             <div className="hotel-location">{hotel.location}</div>
 
-                            {/* 별점/타입/어메니티 */}
+                            {/* 별점 / 어메니티 */}
                             <div className="hotel-meta">
                                 <div className="hotel-stars">
                                     {"⭐".repeat(hotel.stars || 0)} {hotel.stars} Star Hotel
                                 </div>
                                 <div className="hotel-amenities">
-                                    🏨 {hotel.amenities}+ Amenities
+                                    🏨 {amenitiesCount}+ Amenities
                                 </div>
                             </div>
 
@@ -77,18 +93,20 @@ const HotelListCards = ({ hotels = [] }) => {
                                 </span>
                             </div>
 
-                            {/* 구분선 */}
+                            {/* Divider */}
                             <div className="card-divider"></div>
 
-                            {/* 하단 버튼영역 */}
+                            {/* 하단 버튼 영역 */}
                             <div className="hotel-footer">
+                                {/* ♥ 찜 버튼 */}
                                 <button
                                     className="wishlist-button"
-                                    onClick={(e) => e.stopPropagation()}
+                                    onClick={handleWishlist}
                                 >
-                                    ♡
+                                    {liked ? "♥" : "♡"}
                                 </button>
 
+                                {/* 상세보기 */}
                                 <button
                                     className="view-button"
                                     onClick={(e) => {
@@ -103,6 +121,7 @@ const HotelListCards = ({ hotels = [] }) => {
                     </div>
                 );
             })}
+
             <button className="load-more">Show more results</button>
         </div>
     );

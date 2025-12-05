@@ -11,7 +11,7 @@ const Footer = () => {
                 <div className="footer-links">
                     <div className="inner">
                         <div className="social-links">
-                            <div className="logo">HotelHub</div>
+                            <div className="logo"><img src="/logo.png" alt="HotelHub Logo" className="logo-image"/></div>
                             <p className="description">
                                 혁신적 호텔 여행의 모든 순간, HotelHub과 함께하세요.
                             </p>

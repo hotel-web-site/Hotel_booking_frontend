@@ -1,0 +1,29 @@
+.wishlist-tabs {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 25px;
+
+    .tab {
+        padding: 10px 20px;
+        border-radius: 10px;
+        background: #f3f6f7;
+        color: #818b92;
+        font-size: 15px;
+        font-weight: 500;
+        border: none;
+        cursor: pointer;
+        transition: 0.2s ease;
+
+        &:hover {
+            background: #e4ebed;
+        }
+    }
+
+    .active {
+        background: #e8faf3;
+        color: #02b585;
+        font-weight: 600;
+        border: 1px solid #02b585;
+        box-shadow: 0 0 4px rgba(2, 181, 133, 0.3);
+    }
+}
