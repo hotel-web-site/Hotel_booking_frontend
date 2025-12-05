@@ -1,15 +1,17 @@
 .footer {
-    background: #279c79;
-    /* ← 더 진한 초록색으로 변경 */
+    background: linear-gradient(120deg, #279c79 60%, #1e2b26 100%);
     width: 100%;
     padding: 60px 0 0 0;
     position: relative;
+    font-family: 'Pretendard', 'Noto Sans KR', 'Segoe UI', Arial, sans-serif;
+    letter-spacing: 0.01em;
     .footer-wrap {
-        background: #279c79;
+        background: transparent;
     }
     .logo-image {
         width: 90px;
         height: 90px;
+        filter: drop-shadow(0 2px 8px rgba(0,0,0,0.08));
     }
 }
 
@@ -120,24 +122,26 @@
 
 .social-links {
     .logo {
-        font-size: 28px;
-        font-weight: 800;
-        color: #1e2b26;
-        margin-bottom: 12px;
+        font-size: 32px;
+        font-weight: 900;
+        color: #fff;
+        margin-bottom: 10px;
+        letter-spacing: 0.02em;
+        text-shadow: 0 2px 8px rgba(30,43,38,0.12);
     }
-
     .description {
-        font-size: 14px;
-        color: #555;
-        line-height: 1.6;
+        font-size: 16px;
+        color: #e6f7f1;
+        line-height: 1.7;
+        margin-bottom: 8px;
+        font-weight: 500;
+        text-shadow: 0 1px 4px rgba(30,43,38,0.08);
     }
 }
 
 .footer-links {
     margin-top: -60px;
     display: flex;
-    /* newsletter가 떠 있으므로 margin 줄임 */
-
     .inner {
         width: 90%;
         max-width: 1240px;
@@ -152,38 +156,37 @@
 
 .footer-menu {
     display: flex;
-    gap: 200px;
+    gap: 120px;
 }
 
 /* Link Columns */
 .link-columns {
     display: flex;
     gap: 60px;
-
     .link-column {
         display: flex;
         flex-direction: column;
-        gap: 10px;
-
+        gap: 12px;
         h4 {
-            font-size: 16px;
-            font-weight: 700;
-            margin-bottom: 8px;
+            font-size: 17px;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 10px;
+            letter-spacing: 0.01em;
         }
-
         ul {
             list-style: none;
             padding: 0;
             margin: 0;
-
             li {
-                margin-bottom: 6px;
-
+                margin-bottom: 7px;
                 a {
-                    color: #1e2b26;
-                    font-size: 14px;
-
+                    color: #e6f7f1;
+                    font-size: 15px;
+                    font-weight: 500;
+                    transition: color 0.2s;
                     &:hover {
+                        color: #ffd700;
                         text-decoration: underline;
                     }
                 }
@@ -194,24 +197,32 @@
 
 .follow-us {
     h4 {
-        font-size: 16px;
-        font-weight: 700;
-        margin-bottom: 12px;
+        font-size: 17px;
+        font-weight: 800;
+        color: #fff;
+        margin-bottom: 14px;
+        letter-spacing: 0.01em;
     }
-
     .follow-icons {
         display: flex;
-        gap: 16px;
-        /* 아이콘 간 간격 넓혀서 깔끔하게 */
-
+        gap: 18px;
         .follow-link {
-            width: 36px;
-            /* 기존 28 → 36px */
-            height: 36px;
-            background-size: contain;
-            /* 아이콘 비율 유지 */
-            background-position: center;
-            background-repeat: no-repeat;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+        .follow-link:hover {
+            background: #ffd700;
+        }
+        .icon-img {
+            width: 24px;
+            height: 24px;
+            filter: drop-shadow(0 1px 4px rgba(30,43,38,0.10));
         }
     }
 }
@@ -222,20 +233,37 @@
 
 .footer-bottom {
     margin-top: 60px;
-    background: #fafafa;
-    padding: 30px 0;
-
+    background: #1e2b26;
+    padding: 32px 0 24px 0;
     .inner {
         width: 90%;
         max-width: 1240px;
         margin: 0 auto;
-
         display: flex;
         justify-content: space-between;
         align-items: center;
+        font-size: 15px;
+        line-height: 1.7;
+        color: #e6f7f1;
+        font-weight: 400;
+    }
+    .company-info {
         font-size: 14px;
-        line-height: 1.6;
-        color: #666;
+        color: #b2cfc3;
+        margin-bottom: 4px;
+        font-weight: 400;
+    }
+    .copyright {
+        font-size: 13px;
+        color: #7bbfa7;
+        font-weight: 400;
+    }
+    .footer-contact {
+        .contact-info {
+            font-size: 14px;
+            color: #b2cfc3;
+            font-weight: 400;
+        }
     }
 }
 
