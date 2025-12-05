@@ -8,7 +8,7 @@ const HotelDetailHeader = ({ hotel }) => {
     const navigate = useNavigate();
 
     if (!hotel) {
-        return <div className="hotel-detail-header loading">Loading...</div>;
+        return <div className="hotel-detail-header loading">로딩 중...</div>;
     }
 
     // ⭐ 호텔 데이터 기반으로 찜 여부 초기화
@@ -67,7 +67,7 @@ const HotelDetailHeader = ({ hotel }) => {
 
                     <div className="rating-section">
                         <div className="stars">{renderStars(ratingAverage)}</div>
-                        <span className="rating-text">{ratingAverage} Star Hotel</span>
+                        <span className="rating-text">{ratingAverage}점</span>
                     </div>
 
                     <div className="location-section">
@@ -77,8 +77,8 @@ const HotelDetailHeader = ({ hotel }) => {
 
                     <div className="review-section">
                         <span className="review-score">{ratingAverage}</span>
-                        <span className="review-text">Very Good</span>
-                        <span className="review-count">{ratingCount} reviews</span>
+                        <span className="review-text">아주 좋음</span>
+                        <span className="review-count">{ratingCount}개 리뷰</span>
                     </div>
                 </div>
 
@@ -88,7 +88,7 @@ const HotelDetailHeader = ({ hotel }) => {
                         <span className="price">
                             ₩{(hotel.basePrice ?? hotel.price ?? 0).toLocaleString()}
                         </span>
-                        <span className="price-unit">/night</span>
+                        <span className="price-unit">/박</span>
                     </div>
 
                     <div className="header-actions">
@@ -105,7 +105,7 @@ const HotelDetailHeader = ({ hotel }) => {
 
                         {/* 예약 버튼 */}
                         <button className="book-top-btn" onClick={handleBookNow}>
-                            Book now
+                            예약하기
                         </button>
                     </div>
                 </div>

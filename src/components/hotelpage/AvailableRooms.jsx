@@ -26,10 +26,10 @@ const AvailableRooms = ({ rooms }) => {
                         <div className="room-actions">
                             <p className="room-price">
                                 ₩{room.price.toLocaleString()}
-                                <span className="night">/night</span>
+                                <span className="night">/박</span>
                             </p>
 
-                            <button className="book-btn">Book now</button>
+                            <button className="book-btn">예약하기</button>
                         </div>
 
                     </div>

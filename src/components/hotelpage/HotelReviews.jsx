@@ -27,8 +27,8 @@ const HotelReviews = ({
         <div className="hotel-reviews">
             {/* 상단 타이틀 + 버튼 */}
             <div className="header-row">
-                <h3 className="reviews-title">Reviews</h3>
-                <button className="give-review-btn">Give your review</button>
+                <h3 className="reviews-title">리뷰</h3>
+                <button className="give-review-btn">리뷰 작성하기</button>
             </div>
 
             {/* 평균 평점 영역 */}
@@ -37,7 +37,7 @@ const HotelReviews = ({
 
                 <div className="avg-meta">
                     <div className="avg-label">{avgLabel}</div>
-                    <div className="avg-count">{verifiedCount} verified reviews</div>
+                    <div className="avg-count">{verifiedCount}개 인증 리뷰</div>
                 </div>
             </div>
 
@@ -96,7 +96,7 @@ const HotelReviews = ({
                 <button className="page-arrow" disabled>
                     ◀
                 </button>
-                <span className="page-text">1 of 40</span>
+                <span className="page-text">1 / 40</span>
                 <button className="page-arrow">▶</button>
             </div>
         </div>

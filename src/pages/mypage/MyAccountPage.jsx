@@ -73,7 +73,7 @@ const MyAccountPage = () => {
 
             {/* 🔽 아래는 기존 Account 정보 박스만 유지 */}
             <div className="account-box">
-                <h2>Account</h2>
+                <h2>계정</h2>
 
                 {[
                     { label: "이름", key: "name" },
