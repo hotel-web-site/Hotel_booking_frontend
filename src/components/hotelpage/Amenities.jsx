@@ -55,7 +55,7 @@ const Amenities = ({ amenities = [] }) => {
 
     return (
         <div className="amenities">
-            <h3 className="amenities-title">Amenities</h3>
+            <h3 className="amenities-title">편의시설</h3>
 
             <div className="amenities-grid">
                 {displayedAmenities.map((amenity, index) => (
