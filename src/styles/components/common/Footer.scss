@@ -3,13 +3,10 @@
 ========================================================= */
 
 .footer {
-    /* 👉 첫 번째 코드의 배경을 그대로 사용 */
-    background: linear-gradient(120deg, #279c79 60%, #1e2b26 100%);
+    background: #279c79;
     width: 100%;
     padding: 60px 0 0 0;
     position: relative;
-    font-family: 'Pretendard', 'Noto Sans KR', 'Segoe UI', Arial, sans-serif;
-    letter-spacing: 0.01em;
 
     .footer-wrap {
         background: transparent; /* 첫 번째 코드 유지 */
@@ -117,6 +114,13 @@
     display: block;
 }
 
+<<<<<<< HEAD
+=======
+/* =========================================================
+   ========== Footer Links ========== 
+   ========================================================= */
+
+>>>>>>> upstream/main
 .footer-links {
     margin-top: -100px;
     display: flex;
@@ -127,19 +131,20 @@
         margin: 0 auto 100px auto;
 
         display: flex;
-        justify-content: space-between;
-        align-items: center;
+        justify-content: space-between; /* 좌우 정렬 */
+        align-items: center;           /* 🔥 텍스트 묶음과 SNS 수직 가운데 정렬 */
         gap: 5rem;
     }
 }
 
-/* 왼쪽 로고 + 텍스트 묶음 */
+/* 로고 + 텍스트를 가로로 정렬하는 컨테이너 */
 .footer-left {
     display: flex;
     align-items: flex-start;
     gap: 24px;
 }
 
+/* 텍스트 묶음 */
 .footer-text-group {
     display: flex;
     flex-direction: column;
@@ -147,7 +152,7 @@
 
     .description {
         font-size: 14px;
-        color: #e6f7f1; /* ✨ 첫 번째 코드 색상 유지 */
+        color: #555;
         line-height: 1.6;
     }
 
@@ -155,12 +160,12 @@
     .copyright,
     .contact-info {
         font-size: 14px;
-        color: #000;
+        color: #555;
         line-height: 1.6;
     }
 }
 
-/* Follow Us */
+/* FOLLOW US 섹션 */
 .follow-us {
     h4 {
         font-size: 17px;
@@ -170,15 +175,12 @@
     }
     .follow-icons {
         display: flex;
-        gap: 18px;
+        gap: 16px;
 
         .follow-link {
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.08);
+            width: 36px;
+            height: 36px;
             display: flex;
-            align-items: center;
             justify-content: center;
             transition: background 0.2s;
 
@@ -187,8 +189,8 @@
             }
 
             img.icon-img {
-                width: 24px;
-                height: 24px;
+                width: 100%;
+                height: 100%;
             }
         }
     }
@@ -230,8 +232,8 @@
 
     .footer-left {
         flex-direction: column;
-        text-align: center;
         align-items: center;
+        text-align: center;
     }
 
     .follow-us {
@@ -256,6 +258,9 @@
     }
 }
 
+/* ============================================
+   📱 480px 이하 (작은 모바일)
+   ============================================ */
 @media (max-width: 480px) {
     .newsletter {
         padding: 24px 16px;
