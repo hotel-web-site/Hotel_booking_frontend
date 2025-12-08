@@ -19,6 +19,9 @@ import BookingStepRoom from "./pages/booking/BookingStepRoom";
 import BookingStepExtras from "./pages/booking/BookingStepExtras";
 import BookingStepPayment from "./pages/booking/BookingStepPayment";
 import BookingComplete from "./pages/booking/BookingComplete";
+import MyBookingDetail from "./pages/mypage/MyBookingDetailPage";
+import MyBookingDetailItem from "./pages/mypage/MyBookingDetailItem";
+import MyBookingDetailView from "./pages/mypage/MyBookingDetailView";
 
 import LoginPage from "./pages/auth/LoginPage";
 import SignupPage from "./pages/auth/SignupPage";
@@ -117,6 +120,9 @@ const AppRouter = () => {
           <Route path="bookings">
             <Route index element={<MyBookingsPage />} />
             <Route path=":bookingId" element={<MyBookingDetailPage />} />
+            <Route path="/mypage/bookings/:bookingId" element={<MyBookingDetail />} />
+            <Route path="/mypage/bookings/:bookingId" element={<MyBookingDetailItem />} />
+            <Route path="/mypage/bookings/:bookingId" element={<MyBookingDetailView />} />
           </Route>
           <Route path="payment" element={<MyPaymentPage />} />
 
