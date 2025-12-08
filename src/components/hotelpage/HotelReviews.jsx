@@ -47,7 +47,9 @@ const HotelReviews = ({
         <div className="hotel-reviews">
             <div className="header-row">
                 <h3 className="reviews-title">리뷰</h3>
-                <button className="give-review-btn">리뷰 작성하기</button>
+                <button className="give-review-btn" onClick={openModal}>
+                    리뷰 작성하기
+                </button>
             </div>
 
             {/* 평균 평점 */}
