@@ -69,7 +69,7 @@ const HotelListCards = ({ hotels = [] }) => {
               <img src={hotel.image} alt={hotel.name} />
               {hotel.imageCount && (
                 <div className="image-count">
-                  {hotel.imageCount} images
+                  {hotel.imageCount}장 사진
                 </div>
               )}
             </div>
@@ -81,13 +81,13 @@ const HotelListCards = ({ hotels = [] }) => {
                 <h3 className="hotel-name">{hotel.name}</h3>
 
                 <div className="hotel-price">
-                  <div className="price-label">starting from</div>
+                  <div className="price-label">최저가</div>
                   <div className="price-amount">
                     {price
                       ? `₩${price.toLocaleString()}/night`
                       : "가격 정보 없음"}
                   </div>
-                  <div className="price-note">excl. tax</div>
+                  <div className="price-note">세금 별도</div>
                 </div>
               </div>
 
@@ -98,10 +98,10 @@ const HotelListCards = ({ hotels = [] }) => {
               <div className="hotel-meta">
                 <div className="hotel-stars">
                   {"⭐".repeat(hotel.stars || 0)}{" "}
-                  {hotel.stars} Star Hotel
+                  {hotel.stars} 점
                 </div>
                 <div className="hotel-amenities">
-                  🏨 {amenitiesCount}+ Amenities
+                  🏨 {amenitiesCount}개 편의시설
                 </div>
               </div>
 
@@ -112,7 +112,7 @@ const HotelListCards = ({ hotels = [] }) => {
                   {hotel.ratingLabel || ""}
                 </span>
                 <span className="rating-reviews">
-                  {ratingReviews} reviews
+                  {ratingReviews} 개 리뷰
                 </span>
               </div>
 
@@ -134,7 +134,7 @@ const HotelListCards = ({ hotels = [] }) => {
                     navigate(`/hotels/${hotel.id}`);
                   }}
                 >
-                  View Place
+                  상세보기
                 </button>
               </div>
             </div>
