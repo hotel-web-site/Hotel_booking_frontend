@@ -7,6 +7,24 @@
     flex-direction: column;
     gap: 32px;
 
+     .filter-apply-btn {
+        margin-top: 8px;
+        width: 100%;
+        padding: 10px 0;
+        border-radius: 10px;
+        border: none;
+        background: #00a884;
+        color: #fff;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s ease;
+
+        &:hover {
+            background: #008567;
+        }
+    }
+
     .filter-title {
         font-size: 18px;
         font-weight: 700;
@@ -71,6 +89,16 @@
             font-size: 13px;
             opacity: 0.7;
             margin-top: 6px;
+        }
+
+        .price-current {
+            margin-top: 8px;
+            font-size: 13px;
+            color: #333;
+
+            strong {
+                font-weight: 600;
+            }
         }
 
         /* Rating buttons */
