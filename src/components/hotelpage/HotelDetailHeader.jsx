@@ -11,10 +11,8 @@ const HotelDetailHeader = ({ hotel }) => {
         return <div className="hotel-detail-header loading">로딩 중...</div>;
     }
 
-    // ⭐ 호텔 데이터 기반으로 찜 여부 초기화
     const [liked, setLiked] = useState(isWishlisted(hotel._id || hotel.id));
 
-    // ⭐ 찜 토글
     const handleWishlist = () => {
         const result = toggleWishlist(hotel);
         setLiked(result);
@@ -33,7 +31,34 @@ const HotelDetailHeader = ({ hotel }) => {
         navigate(`/booking/${hotel._id || hotel.id}`);
     };
 
-    // ⭐ 별점 렌더링
+    // ⭐★ 현재 URL 공유 기능 추가
+    const handleShare = async () => {
+        const currentUrl = window.location.href;
+
+        // 1) 모바일/지원 브라우저 → Web Share API 사용
+        if (navigator.share) {
+            try {
+                await navigator.share({
+                    title: name,
+                    text: `${name} 호텔 상세 페이지`,
+                    url: currentUrl,
+                });
+            } catch (error) {
+                console.log("공유 취소됨 또는 오류:", error);
+            }
+            return;
+        }
+
+        // 2) 지원되지 않는 환경 → 클립보드 복사
+        try {
+            await navigator.clipboard.writeText(currentUrl);
+            alert("현재 페이지 링크가 클립보드에 복사되었습니다!");
+        } catch (error) {
+            console.error("URL 복사 실패:", error);
+            alert("URL 복사 실패. 브라우저 설정을 확인하세요.");
+        }
+    };
+
     const renderStars = (rating) => {
         const stars = [];
         const fullStars = Math.floor(rating);
@@ -60,8 +85,6 @@ const HotelDetailHeader = ({ hotel }) => {
 
             {/* 메인 정보 라인 */}
             <div className="hotel-info">
-
-                {/* 왼쪽 호텔 정보 */}
                 <div className="hotel-title-section">
                     <h1 className="hotel-name">{name}</h1>
 
@@ -93,13 +116,13 @@ const HotelDetailHeader = ({ hotel }) => {
 
                     <div className="header-actions">
 
-                        {/* ♥ 찜 버튼 */}
+                        {/* ♥ 찜 */}
                         <button className="icon-btn heart-btn" onClick={handleWishlist}>
                             {liked ? "♥" : "♡"}
                         </button>
 
-                        {/* 공유 버튼 */}
-                        <button className="icon-btn">
+                        {/* 🔗 공유 버튼 */}
+                        <button className="icon-btn" onClick={handleShare}>
                             <FaShare />
                         </button>
 

@@ -1,9 +1,9 @@
 import React from "react";
-import "../../styles/components/wishlist/WishlistCard.scss";
 import { useNavigate } from "react-router-dom";
+import "../../styles/components/wishlist/WishlistCard.scss";
 import { removeFromWishlist } from "../../util/wishlistService";
 
-const WishlistCard = ({ hotel, onRemove }) => {
+const WishlistCard = ({ hotel, index, onRemove }) => {
     const navigate = useNavigate();
 
     const handleRemove = () => {
@@ -15,23 +15,33 @@ const WishlistCard = ({ hotel, onRemove }) => {
 
     return (
         <div className="wishlist-card">
-            {/* 이미지 */}
-            <div className="image-wrap">
-                <img src={hotel.images?.[0]} alt={hotel.name} />
-                <span className="badge">{hotel.images?.length} images</span>
-            </div>
+            <img
+                src={hotel.images?.[0]}
+                alt={hotel.name}
+                className="wishlist-img"
+            />
 
-            {/* 오른쪽 정보 */}
-            <div className="content">
-                <h3 className="name">{hotel.name}</h3>
-                <p className="location">{hotel.location}</p>
+            <div className="wishlist-content">
+                <div className="text-group">
+                    <h3 className="hotel-name">{hotel.name}</h3>
+                    <p className="hotel-location">{hotel.location}</p>
 
-                {/* 별점 */}
-                <div className="rating">
-                    ⭐ {hotel.rating} · {hotel.reviewCount} 리뷰
+                    <div className="hotel-meta">
+                        <span className="rating-box">
+                            ⭐ {hotel.ratingAverage || hotel.rating}
+                            <span className="rating-count">
+                                ({hotel.reviewCount} 리뷰)
+                            </span>
+                        </span>
+
+                        {hotel.price && (
+                            <span className="price">
+                                최저가 {hotel.price.toLocaleString()}원 / 1박
+                            </span>
+                        )}
+                    </div>
                 </div>
 
-                {/* ⭐ 버튼 두 개 추가된 부분 */}
                 <div className="button-row">
                     <button
                         className="view-btn"

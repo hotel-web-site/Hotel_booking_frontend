@@ -114,10 +114,6 @@
     display: block;
 }
 
-/* =========================================================
-   ========== Footer Links ========== 
-   ========================================================= */
-
 .footer-links {
     margin-top: -100px;
     display: flex;
@@ -179,7 +175,11 @@
             height: 36px;
             display: flex;
             justify-content: center;
-            align-items: center;
+            transition: background 0.2s;
+
+            &:hover {
+                background: #378a7c;
+            }
 
             img.icon-img {
                 width: 100%;
@@ -189,8 +189,7 @@
     }
 }
 
-/* =========================================================
-   Responsive
+
 @media (max-width: 1024px) {
     .newsletter {
         flex-direction: column;
@@ -238,6 +237,7 @@
         }
     }
 }
+
 
 @media (max-width: 768px) {
     .newsletter {
