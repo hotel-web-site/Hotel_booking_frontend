@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import "../../styles/components/hotelpage/HotelReviews.scss";
+import ReviewModal from "./ReviewModal";
 
 import {
-    renderStars,
     getRatingLabel,
     calculateAverageRating,
 } from "../../util/reviewHelper";
@@ -17,46 +17,61 @@ const HotelReviews = ({
     reviews = [],
     getReviews,
 }) => {
-    // ⭐ 평균 평점 계산 (문자열 방지)
-    const rawAvg = calculateAverageRating(reviews);
-    const avgRating = Number(rawAvg) || 0;
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    // ⭐ 페이지네이션 상태
+    const reviewsPerPage = 5;
+    const [page, setPage] = useState(1);
+
+    const totalPages = Math.ceil(reviews.length / reviewsPerPage);
+
+    const start = (page - 1) * reviewsPerPage;
+    const currentReviews = reviews.slice(start, start + reviewsPerPage);
+
+    const openModal = () => setIsModalOpen(true);
+    const closeModal = () => setIsModalOpen(false);
+
+    const handleSubmitReview = async (reviewData) => {
+        await createReview(reviewData); 
+        await getReviews();             
+        setPage(1); // 최신 리뷰 보이도록 1페이지로 이동
+        closeModal();
+    };
+
+    // ⭐ 평균 평점 계산
+    const avgRating = Number(calculateAverageRating(reviews)) || 0;
     const avgLabel = getRatingLabel(avgRating);
     const verifiedCount = reviewCount || reviews.length;
 
     return (
         <div className="hotel-reviews">
-            {/* 상단 타이틀 + 버튼 */}
             <div className="header-row">
-                <h3 className="reviews-title">Reviews</h3>
-                <button className="give-review-btn">Give your review</button>
+                <h3 className="reviews-title">리뷰</h3>
+                <button className="give-review-btn">리뷰 작성하기</button>
             </div>
 
-            {/* 평균 평점 영역 */}
+            {/* 평균 평점 */}
             <div className="avg-row">
                 <div className="avg-score">{avgRating.toFixed(1)}</div>
-
                 <div className="avg-meta">
                     <div className="avg-label">{avgLabel}</div>
-                    <div className="avg-count">{verifiedCount} verified reviews</div>
+                    <div className="avg-count">{verifiedCount}개 인증 리뷰</div>
                 </div>
             </div>
 
             {/* 리뷰 리스트 */}
             <ul className="review-list">
-                {reviews && reviews.length > 0 ? (
-                    reviews.map((review) => {
+                {currentReviews.length > 0 ? (
+                    currentReviews.map((review) => {
                         const label = getRatingLabel(review.rating);
-                        const created =
-                            review.createdAt || review.date || new Date().toISOString();
 
                         return (
                             <li key={review.id} className="review-item">
-                                {/* 왼쪽: 프로필 + 내용 */}
                                 <div className="review-main">
                                     <div className="profile-image">
                                         <img
                                             src="https://via.placeholder.com/40"
-                                            alt={review.userId?.name || "익명"}
+                                            alt="profile"
                                         />
                                     </div>
 
@@ -75,14 +90,7 @@ const HotelReviews = ({
                                     </div>
                                 </div>
 
-                                {/* 오른쪽 깃발 아이콘 */}
-                                <button
-                                    type="button"
-                                    className="flag-btn"
-                                    aria-label="Report review"
-                                >
-                                    ⚑
-                                </button>
+                                <button type="button" className="flag-btn">⚑</button>
                             </li>
                         );
                     })
@@ -91,14 +99,35 @@ const HotelReviews = ({
                 )}
             </ul>
 
-            {/* 하단 페이지네이션 */}
-            <div className="review-pagination">
-                <button className="page-arrow" disabled>
-                    ◀
-                </button>
-                <span className="page-text">1 of 40</span>
-                <button className="page-arrow">▶</button>
-            </div>
+            {/* 페이지네이션 */}
+            {totalPages > 1 && (
+                <div className="review-pagination">
+                    <button
+                        className="page-arrow"
+                        disabled={page === 1}
+                        onClick={() => setPage(page - 1)}
+                    >
+                        ◀
+                    </button>
+
+                    <span className="page-text">
+                        {page} of {totalPages}
+                    </span>
+
+                    <button
+                        className="page-arrow"
+                        disabled={page === totalPages}
+                        onClick={() => setPage(page + 1)}
+                    >
+                        ▶
+                    </button>
+                </div>
+            )}
+
+            {/* 리뷰 작성 모달 */}
+            {isModalOpen && (
+                <ReviewModal closeModal={closeModal} onSubmit={handleSubmitReview} />
+            )}
         </div>
     );
 };

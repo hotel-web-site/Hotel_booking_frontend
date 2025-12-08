@@ -5,6 +5,7 @@ import MyPageLayout from "./components/layouts/MyPageLayout";
 import SearchLayout from "./components/layouts/SearchLayout";
 import ProtectedRoute from "./components/common/ProtectedRoute";
 import AddPaymentPage from "./pages/payment/AddPaymentPage";
+import RankingPage from "./pages/ranking/RankingPage";
 
 // pages
 import HomePage from "./pages/home/HomePage";
@@ -99,6 +100,7 @@ const AppRouter = () => {
             <Route path="help" element={<Help />} />
             <Route path="inquiryhistory" element={<InquiryHistoryPage />} />
           </Route>
+          <Route path="/ranking" element={<RankingPage />} />
         </Route>
 
         {/* 마이페이지 - 로그인 필요 */}

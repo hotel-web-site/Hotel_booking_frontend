@@ -11,31 +11,31 @@ const HotelListPage = () => {
             LEFT FILTERS
         -------------------------------- */}
         <aside className="filters">
-          <h3>Filters</h3>
+          <h3>필터</h3>
 
-          {/* Price */}
+          {/* 가격 */}
           <div className="filter-box">
-            <h4>Price</h4>
+            <h4>가격</h4>
             <input type="range" min="0" max="300" />
             <div className="price-range">
-              <span>$0</span>
-              <span>$300</span>
+              <span>₩0</span>
+              <span>₩300,000</span>
             </div>
           </div>
 
-          {/* Rating */}
+          {/* 평점 */}
           <div className="filter-box">
-            <h4>Rating</h4>
+            <h4>평점</h4>
             <div className="rating-options">
               {[1, 2, 3, 4, 5].map((r) => (
-                <button key={r}>{r}★</button>
+                <button key={r}>{r}점</button>
               ))}
             </div>
           </div>
 
-          {/* Amenities */}
+          {/* 편의시설 */}
           <div className="filter-box">
-            <h4>Amenities</h4>
+            <h4>편의시설</h4>
             {[
               "무료 WiFi",
               "수영장",
@@ -58,21 +58,21 @@ const HotelListPage = () => {
 
           {/* CATEGORY TABS */}
           <div className="category-tabs">
-            <button className="active">Hotels</button>
-            <button>Motels</button>
-            <button>Resorts</button>
+            <button className="active">호텔</button>
+            <button>모텔</button>
+            <button>리조트</button>
           </div>
 
           {/* HEADER + SORT */}
           <div className="results-header">
             <p>
-              Showing <strong>4</strong> of <strong>487</strong> places
+              총 <strong>487</strong>개 중 <strong>4</strong>개 표시
             </p>
 
             <select>
-              <option>Sort by Recommended</option>
-              <option>Lowest Price</option>
-              <option>Highest Rating</option>
+              <option>추천순 정렬</option>
+              <option>낮은 가격순</option>
+              <option>높은 평점순</option>
             </select>
           </div>
 
@@ -80,7 +80,7 @@ const HotelListPage = () => {
           <div className="hotel-card">
             <div className="img-box">
               <img src="/images/hotel01.jpg" alt="hotel" />
-              <span className="img-count">3 images</span>
+              <span className="img-count">사진 3장</span>
             </div>
 
             <div className="hotel-info">
@@ -90,11 +90,11 @@ const HotelListPage = () => {
               </p>
 
               <div className="hotel-meta">
-                <span>⭐ 4.8 (200 reviews)</span>
+                <span>⭐ 4.8 (리뷰 200개)</span>
                 <span>📍 서울 특별시</span>
               </div>
 
-              <button className="view-btn">View Place</button>
+              <button className="view-btn">상세보기</button>
             </div>
 
             <div className="hotel-price">
@@ -104,7 +104,7 @@ const HotelListPage = () => {
           </div>
 
           {/* MORE BUTTON */}
-          <button className="load-more">Show more results</button>
+          <button className="load-more">더 많은 결과 보기</button>
         </main>
       </div>
     </div>

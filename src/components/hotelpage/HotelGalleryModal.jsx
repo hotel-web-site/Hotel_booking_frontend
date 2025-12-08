@@ -22,7 +22,7 @@ const HotelGalleryModal = ({ images = [], name = "" }) => {
                             <img src={img} alt={`${name}_${index}`} />
 
                             {index === 3 && images.length > 5 && (
-                                <div className="view-all-overlay">View all photos</div>
+                                <div className="view-all-overlay">전체 사진 보기</div>
                             )}
                         </div>
                     ))}

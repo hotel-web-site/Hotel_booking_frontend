@@ -24,14 +24,14 @@ const WishlistPage = () => {
 
   return (
     <div className="wishlist-page">
-      <h2 className="title">Favourites</h2>
+      <h2 className="title">찜 목록</h2>
 
       {/* Tabs */}
       <WishlistTabs />
 
       <div className="wishlist-list">
         {items.length === 0 ? (
-          <p className="empty">You haven’t added any favourites yet.</p>
+          <p className="empty">아직 찜한 장소가 없습니다.</p>
         ) : (
           items.map((hotel) => (
             <WishlistCard

@@ -1,3 +1,7 @@
+/* =========================================================
+   Footer (통합 버전)
+========================================================= */
+
 .footer {
     background: #279c79;
     width: 100%;
@@ -5,18 +9,19 @@
     position: relative;
 
     .footer-wrap {
-        background: #279c79;
+        background: transparent; /* 첫 번째 코드 유지 */
     }
 
     .logo-image {
         width: 90px;
         height: 90px;
+        filter: drop-shadow(0 2px 8px rgba(0,0,0,0.08));
     }
 }
 
 /* =========================================================
-   ========== Newsletter (떠 있는 카드 디자인) ==========
-   ========================================================= */
+   Newsletter (떠 있는 민트 카드)
+========================================================= */
 
 .newsletter-wrapper {
     width: 100%;
@@ -39,7 +44,7 @@
     box-shadow: 0 18px 28px rgba(0, 0, 0, 0.18);
 }
 
-/* 텍스트 */
+/* 텍스트 영역 */
 .newsletter-left {
     width: 50%;
     display: flex;
@@ -62,7 +67,6 @@
         color: #00234d;
         margin-bottom: 6px;
     }
-
     .travel-sub {
         font-size: 14px;
         color: #333;
@@ -104,7 +108,6 @@
 .newsletter-right {
     margin-left: 10px;
 }
-
 .newsletter-img {
     width: 250px;
     height: 400px;
@@ -162,11 +165,11 @@
 /* FOLLOW US 섹션 */
 .follow-us {
     h4 {
-        font-size: 16px;
-        font-weight: 700;
-        margin-bottom: 12px;
+        font-size: 17px;
+        font-weight: 800;
+        color: #fff;
+        margin-bottom: 14px;
     }
-
     .follow-icons {
         display: flex;
         gap: 16px;
@@ -186,9 +189,8 @@
     }
 }
 
-/* ============================================
-   📱 1024px 이하 (태블릿)
-   ============================================ */
+/* =========================================================
+   Responsive
 @media (max-width: 1024px) {
     .newsletter {
         flex-direction: column;
@@ -202,8 +204,8 @@
     }
 
     .newsletter-input-wrapper {
-        justify-content: center;
         width: 100%;
+        justify-content: center;
     }
 
     .newsletter-right {
@@ -216,7 +218,6 @@
         height: auto;
     }
 
-    /* Footer */
     .footer-links .inner {
         flex-direction: column;
         gap: 40px;
@@ -238,26 +239,13 @@
     }
 }
 
-/* ============================================
-   📱 768px 이하 (모바일)
-   ============================================ */
 @media (max-width: 768px) {
     .newsletter {
         padding: 32px 20px;
     }
-
     .newsletter-title {
         font-size: 32px;
     }
-
-    .newsletter-desc .travel-title {
-        font-size: 14px;
-    }
-
-    .newsletter-desc .travel-sub {
-        font-size: 13px;
-    }
-
     .newsletter-img {
         width: 180px;
     }
@@ -270,21 +258,9 @@
     .newsletter {
         padding: 24px 16px;
     }
-
     .newsletter-title {
         font-size: 26px;
     }
-
-    .newsletter-input {
-        padding: 10px 12px;
-        font-size: 13px;
-    }
-
-    .newsletter-btn {
-        padding: 10px 14px;
-        font-size: 13px;
-    }
-
     .newsletter-img {
         width: 150px;
     }
