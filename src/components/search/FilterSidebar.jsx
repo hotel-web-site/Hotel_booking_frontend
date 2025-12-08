@@ -82,7 +82,7 @@ const FilterSidebar = ({ filters, onFilterChange }) => {
 
   return (
     <aside className="filter-sidebar">
-      <h3 className="filter-title">Filters</h3>
+      <h3 className="filter-title">필터</h3>
 
       {/* PRICE */}
       <div className="filter-box">
@@ -116,7 +116,7 @@ const FilterSidebar = ({ filters, onFilterChange }) => {
       {/* RATING */}
       <div className="filter-box">
         <div className="filter-header" onClick={() => toggle("rating")}>
-          <h4>Rating</h4>
+          <h4>평점</h4>
           <span className={`arrow ${open.rating ? "open" : ""}`}>⌃</span>
         </div>
 
@@ -139,7 +139,7 @@ const FilterSidebar = ({ filters, onFilterChange }) => {
       {/* FREEBIES */}
       <div className="filter-box">
         <div className="filter-header" onClick={() => toggle("freebies")}>
-          <h4>Freebies</h4>
+          <h4>무료 제공</h4>
           <span className={`arrow ${open.freebies ? "open" : ""}`}>⌃</span>
         </div>
 
@@ -164,7 +164,7 @@ const FilterSidebar = ({ filters, onFilterChange }) => {
       {/* AMENITIES */}
       <div className="filter-box">
         <div className="filter-header" onClick={() => toggle("amenities")}>
-          <h4>Amenities</h4>
+          <h4>편의시설</h4>
           <span className={`arrow ${open.amenities ? "open" : ""}`}>⌃</span>
         </div>
 
