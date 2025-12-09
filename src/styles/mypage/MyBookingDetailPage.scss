@@ -2,29 +2,32 @@
   width: 100%;
   max-width: 900px;
   margin: 0 auto;
-  padding-top: 80px; // 전체 화면 아래로 내리는 용도
+  padding-top: 80px;
+  padding-bottom: 150px;
   font-family: "Pretendard", sans-serif;
   color: #222;
-  padding-bottom: 150px;
 
+  /* 제목 */
   .title {
     font-size: 26px;
     font-weight: 700;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
+    color: #06152b;
   }
 
-  // 상단 필터 박스
+  /* 상단 필터 */
   .filter-box {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding-bottom: 14px;
+    margin-bottom: 26px;
     border-bottom: 1px solid #e5e5e5;
-    padding-bottom: 12px;
-    margin-bottom: 25px;
 
     .filter-label {
       font-size: 16px;
       font-weight: 600;
+      color: #333;
     }
 
     .filter-select {
@@ -32,47 +35,60 @@
       color: #555;
       cursor: pointer;
       user-select: none;
+
+      &:hover {
+        color: #000;
+      }
     }
   }
 
-  // 예약 없음 문구
+  /* 예약 없음 */
   .empty {
     text-align: center;
-    padding: 40px 0;
-    font-size: 15px;
     color: #777;
+    font-size: 15px;
+    padding: 45px 0;
   }
 
-  // 예약 리스트
+  /* 예약 카드 리스트 */
   .booking-list {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 22px;
 
     .booking-card {
-      width: 100%;
       display: flex;
       justify-content: space-between;
-      border: 1px solid #eee;
-      border-radius: 12px;
-      padding: 20px;
-      background: #fff;
+      background: #ffffff;
+      border-radius: 14px;
+      padding: 22px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+      transition: all 0.2s ease-in-out;
+      cursor: pointer;
 
+      &:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+      }
+
+      /* 왼쪽 섹션 */
       .left {
         display: flex;
-        gap: 15px;
+        gap: 18px;
+        align-items: center;
 
         .booking-img {
-          width: 70px;
-          height: 70px;
-          border-radius: 10px;
+          width: 80px;
+          height: 80px;
+          border-radius: 12px;
           object-fit: cover;
+          background: #f4f4f4;
+          flex-shrink: 0;
         }
 
         .date-info {
           display: flex;
           flex-direction: column;
-          justify-content: center;
 
           .check-title {
             font-size: 13px;
@@ -81,20 +97,23 @@
           }
 
           .check-date {
-            font-size: 15px;
-            font-weight: 600;
-            margin-bottom: 6px;
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #06152b;
           }
         }
       }
 
+      /* 오른쪽 섹션 */
       .right {
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: flex-end;
-        gap: 10px;
+        gap: 12px;
 
+        /* 시간 정보 */
         .time-info {
           text-align: right;
 
@@ -104,31 +123,65 @@
             margin-bottom: 4px;
 
             span {
-              font-weight: 600;
               margin-left: 6px;
+              font-weight: 600;
             }
           }
         }
 
+        /* 상태 (예정됨/취소됨 등) */
         .status {
           font-size: 14px;
-          color: #009f65;
-          font-weight: 600;
-        }
+          font-weight: 700;
+          padding: 4px 10px;
+          border-radius: 6px;
 
-        .download-btn {
-          padding: 8px 14px;
-          background: #d1f2e5;
-          border: 1px solid #a8e4c9;
-          border-radius: 8px;
-          cursor: pointer;
-          font-size: 14px;
-          font-weight: 600;
+          &.active {
+            background: #e8f6ef;
+            color: #009f65;
+          }
 
-          &:hover {
-            background: #bdebd7;
+          &.cancelled {
+            background: #ffecec;
+            color: #d93025;
           }
         }
+
+        /* 티켓 다운로드 버튼 */
+        .download-btn {
+          padding: 8px 14px;
+          background: #dff3ea;
+          border: 1px solid #b6e6cf;
+          border-radius: 8px;
+          font-size: 14px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: 0.15s ease;
+
+          &:hover {
+            background: #ccebdd;
+          }
+        }
+      }
+    }
+  }
+}
+
+/* 📱 반응형 */
+@media (max-width: 600px) {
+  .booking-detail-page {
+    padding: 40px 16px 100px;
+
+    .booking-card {
+      flex-direction: column;
+      gap: 16px;
+
+      .left {
+        flex-direction: row;
+      }
+
+      .right {
+        align-items: flex-start !important;
       }
     }
   }

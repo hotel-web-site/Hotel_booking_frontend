@@ -22,12 +22,12 @@ const Footer = () => {
 
                             <div className="footer-text-group">
                                 <p className="description">
-                                      Team Damin | DM | 대표: 하다민
+                                    Team Damin | DM | 대표: 하다민
                                 </p>
 
                                 <div className="company-info">
-                                     주소: 서울특별시 강남구 역삼로 123, 4층 | 사업자등록번호: 000-00-00000
-                                      <br />
+                                    주소: 서울특별시 강남구 역삼로 123, 4층 | 사업자등록번호: 000-00-00000
+                                    <br />
                                     통신판매업신고: 제2025-서울강남-0000호
                                 </div>
 
@@ -36,7 +36,7 @@ const Footer = () => {
                                 </div>
 
                                 <div className="contact-info">
-                                   고객센터: 1600-1234 (09:00 - 18:00) | 이메일: support@dm.com
+                                    고객센터: 1600-1234 (09:00 - 18:00) | 이메일: support@dm.com
                                 </div>
                             </div>
                         </div>

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "../../styles/components/search/HotelResultsHeader.scss";
 
-const HotelResultsHeader = ({ total, showing }) => {
+const HotelResultsHeader = ({ total, showing, onSort }) => {
     const [open, setOpen] = useState(false);
     const [sortBy, setSortBy] = useState("추천순");
 
@@ -10,12 +10,16 @@ const HotelResultsHeader = ({ total, showing }) => {
     const handleSelect = (option) => {
         setSortBy(option);
         setOpen(false);
+
+        // 🔥 SearchPage로 정렬 옵션 전달
+        if (onSort) onSort(option);
     };
 
     return (
         <div className="hotel-results-header">
             <div className="results-info">
-                총 <strong>{total}</strong>개 중 <strong>{showing}</strong>개 표시
+                총 <strong>{total}</strong>개 중{" "}
+                <strong>{showing}</strong>개 표시
             </div>
 
             <div className="sort-area">
