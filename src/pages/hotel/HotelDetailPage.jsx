@@ -1,3 +1,5 @@
+// src/pages/hotel/HotelDetailPage.jsx
+
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Amenities from "../../components/hotelpage/Amenities";
@@ -8,19 +10,23 @@ import HotelMap from "../../components/hotelpage/HotelMap";
 import HotelOverview from "../../components/hotelpage/HotelOverview";
 import HotelReviews from "../../components/hotelpage/HotelReviews";
 import "../../styles/pages/hotel/HotelDetailPage.scss";
+
 import {
   getHotels,
   getHotelDetail,
   getHotelRooms,
 } from "../../api/hotelClient";
+
 import {
   getReviews,
   createReview,
   updateReview,
   deleteReview,
 } from "../../api/reviewClient";
+
 const HotelDetailPage = () => {
   const { hotelId } = useParams(); // URL에서 호텔 ID 추출
+
   const [hotel, setHotel] = useState(null);
   const [rooms, setRooms] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -31,12 +37,14 @@ const HotelDetailPage = () => {
     const fetchHotelData = async () => {
       try {
         setLoading(true);
-        // 호텔 상세 정보와 객실 정보를 병렬로 가져오기
+
+        // 호텔 상세 + 객실 + 리뷰 병렬로 불러오기
         const [hotelData, roomsData, reviewsData] = await Promise.all([
           getHotelDetail(hotelId),
           getHotelRooms(hotelId),
           getReviews(hotelId),
         ]);
+
         setHotel(hotelData.hotel);
         setRooms(roomsData);
         setReviews(reviewsData);
@@ -48,44 +56,46 @@ const HotelDetailPage = () => {
       }
     };
 
-    if (hotelId) {
-      fetchHotelData();
-    }
+    if (hotelId) fetchHotelData();
   }, [hotelId]);
 
-  if (loading) {
-    return (
-      <div className="hotel-detail-container inner loading">Loading...</div>
-    );
-  }
+  if (loading)
+    return <div className="hotel-detail-container inner loading">Loading...</div>;
 
-  if (error) {
+  if (error)
     return (
-      <div className="hotel-detail-container inner error">Error: {error}</div>
+      <div className="hotel-detail-container inner error">
+        Error: {error}
+      </div>
     );
-  }
 
-  if (!hotel) {
+  if (!hotel)
     return (
       <div className="hotel-detail-container inner">
         호텔을 찾을 수 없습니다.
       </div>
     );
-  }
 
   return (
     <div className="hotel-detail-container inner">
       <HotelDetailHeader hotel={hotel} />
+
       <HotelGallery images={hotel.images} hotelName={hotel.name} />
+
       <HotelOverview
         description={hotel.description}
         rating={hotel.ratingAverage}
         reviewCount={hotel.ratingCount}
         tags={hotel.tags}
       />
+
       <Amenities amenities={hotel.amenities} />
+
+      {/* ⭐ 인원수/날짜 정보는 AvailableRooms 내부에서 useLocation으로 읽음 */}
       <AvailableRooms rooms={rooms} />
+
       <HotelMap address={hotel.address} location={hotel.location} />
+
       <HotelReviews
         hotelId={hotelId}
         rating={hotel.ratingAverage}

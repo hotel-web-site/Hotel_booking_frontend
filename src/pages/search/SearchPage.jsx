@@ -78,8 +78,7 @@ const SearchPage = () => {
 
       case "평점순":
         return sorted.sort(
-          (a, b) =>
-            (b.ratingAverage || 0) - (a.ratingAverage || 0)
+          (a, b) => (b.ratingAverage || 0) - (a.ratingAverage || 0)
         );
 
       default:
@@ -184,6 +183,17 @@ const SearchPage = () => {
       );
     }
 
+    /* ---------------------------------------------
+       ⭐ 날짜 없이 인원만 선택해도 인원 필터 적용됨
+    --------------------------------------------- */
+    if (filters.guests?.guests > 0) {
+      result = result.filter((hotel) =>
+        hotel.rooms?.some(
+          (room) => room.maxGuests >= filters.guests.guests
+        )
+      );
+    }
+
     // ⭐ 정렬 적용
     result = applySorting(result, sortType);
 
@@ -202,12 +212,12 @@ const SearchPage = () => {
       <HotelTypesTabs />
 
       <HotelResultsHeader
-        total={hotels.length}               // 🔥 props 이름 수정됨
-        showing={filteredHotels.length}      // 🔥 props 이름 수정됨
-        onSort={(type) => setSortType(type)} // 정렬 기능 연결
+        total={hotels.length}
+        showing={filteredHotels.length}
+        onSort={(type) => setSortType(type)}
       />
 
-      <HotelListCards hotels={filteredHotels} />
+      <HotelListCards hotels={filteredHotels} filters={filters} />
     </div>
   );
 };

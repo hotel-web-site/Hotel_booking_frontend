@@ -9,24 +9,21 @@ const BookingStepRoom = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
-  /* ============================================================
-      STATE
-  ============================================================ */
   const [rooms, setRooms] = useState([]);
-
-  // URL로부터 받아오는 초기 선택값
   const initialSelectedRoomId = searchParams.get("roomId");
   const [selectedRoomId, setSelectedRoomId] = useState(initialSelectedRoomId);
 
   const roomRefs = useRef({});
 
-  /* ============================================================
-      날짜 정보
-  ============================================================ */
+  /* ===========================================================
+      URL 기반 데이터
+  =========================================================== */
   const checkIn = searchParams.get("checkIn");
   const checkOut = searchParams.get("checkOut");
-  const adults = searchParams.get("adults") || 2;
-  const children = searchParams.get("children") || 0;
+
+  const adults = Number(searchParams.get("adults") || 2);
+  const children = Number(searchParams.get("children") || 0);
+  const totalGuests = adults + children;
 
   const nights =
     checkIn && checkOut
@@ -50,41 +47,44 @@ const BookingStepRoom = () => {
 
   const neededDates = getDateRange();
 
-  /* ============================================================
+  /* ===========================================================
       객실 불러오기
-  ============================================================ */
+  =========================================================== */
   useEffect(() => {
     getHotelRooms(hotelId).then((data) => {
       setRooms(data);
     });
   }, [hotelId]);
 
-  /* ============================================================
-      예약 가능 여부
-  ============================================================ */
+  /* ===========================================================
+      예약 가능 여부 (엔진)
+  =========================================================== */
   const isRoomAvailable = (room) => {
+    if (!room) return false; // 안전 장치
+
+    // 1) 인원 제한 체크
+    const fitsGuests = Number(room.maxGuests) >= Number(totalGuests);
+    if (!fitsGuests) return false;
+
+    // 2) 날짜 체크
     if (!Array.isArray(room.availableDates)) return true;
+
     return neededDates.every((d) => room.availableDates.includes(d));
   };
 
-  /* ============================================================
-      URL에 지정된 roomId가 예약 불가인 경우 자동 선택 해제
-  ============================================================ */
+  /* URL roomId가 불가한 방이면 선택 해제 */
   useEffect(() => {
     if (!rooms.length || !selectedRoomId) return;
 
-    const target = rooms.find((r) => String(r.id) === String(selectedRoomId));
-    if (!target) return;
+    const selected = rooms.find((r) => String(r.id) === String(selectedRoomId));
+    if (!selected) return;
 
-    if (!isRoomAvailable(target)) {
+    if (!isRoomAvailable(selected)) {
       setSelectedRoomId(null);
     }
   }, [rooms, selectedRoomId]);
 
-
-  /* ============================================================
-      선택된 객실 자동 스크롤
-  ============================================================ */
+  /* 선택된 객실 자동 스크롤 */
   useEffect(() => {
     if (selectedRoomId && roomRefs.current[selectedRoomId]) {
       roomRefs.current[selectedRoomId].scrollIntoView({
@@ -94,27 +94,21 @@ const BookingStepRoom = () => {
     }
   }, [rooms, selectedRoomId]);
 
-  /* ============================================================
-      객실 선택
-  ============================================================ */
   const handleSelectRoom = (room) => {
     if (!isRoomAvailable(room)) return;
-
     setSelectedRoomId(room.id);
   };
 
-  /* ============================================================
-      결제 단계로 이동 (여기서 예약 불가인 경우 완전 차단)
-  ============================================================ */
+  /* ===========================================================
+      결제 단계 이동
+  =========================================================== */
   const goToPayment = () => {
-    if (!selectedRoomId) return;
-
     const selectedRoom = rooms.find(
       (r) => String(r.id) === String(selectedRoomId)
     );
 
     if (!selectedRoom || !isRoomAvailable(selectedRoom)) {
-      alert("선택한 객실은 예약이 불가합니다.");
+      alert("해당 객실은 예약할 수 없습니다.");
       return;
     }
 
@@ -124,9 +118,6 @@ const BookingStepRoom = () => {
     navigate(`/booking/${hotelId}/payment?${params.toString()}`);
   };
 
-  /* ============================================================
-      렌더링
-  ============================================================ */
   return (
     <div className="booking-rooms">
       <div className="booking-header">
@@ -134,8 +125,7 @@ const BookingStepRoom = () => {
 
         <div className="selected-dates">
           <span>
-            {checkIn ? new Date(checkIn).toLocaleDateString("ko-KR") : "-"}
-            {" ~ "}
+            {checkIn ? new Date(checkIn).toLocaleDateString("ko-KR") : "-"} ~{" "}
             {checkOut ? new Date(checkOut).toLocaleDateString("ko-KR") : "-"}
           </span>
 
@@ -145,9 +135,7 @@ const BookingStepRoom = () => {
         </div>
       </div>
 
-      {/* ------------------------------------------------------------ */}
-      {/* 객실 리스트 */}
-      {/* ------------------------------------------------------------ */}
+      {/* 객실 목록 */}
       <div className="room-list">
         {rooms.map((room) => {
           const available = isRoomAvailable(room);
@@ -156,14 +144,13 @@ const BookingStepRoom = () => {
           return (
             <div
               key={room.id}
-              className={`room-card 
-                  ${isSelected ? "selected" : ""} 
-                  ${!available ? "disabled" : ""}
-              `}
               ref={(el) => (roomRefs.current[room.id] = el)}
+              className={`room-card 
+                ${isSelected ? "selected" : ""}
+                ${!available ? "disabled" : ""}
+              `}
               onClick={() => handleSelectRoom(room)}
             >
-              {/* 이미지 */}
               <div className="room-image">
                 <img src={room.images[0]} alt={room.name} />
 
@@ -171,10 +158,11 @@ const BookingStepRoom = () => {
                   <div className="room-badge">할인</div>
                 )}
 
-                {!available && <div className="room-badge soldout">예약 불가</div>}
+                {!available && (
+                  <div className="room-badge soldout">예약 불가</div>
+                )}
               </div>
 
-              {/* 텍스트 */}
               <div className="room-details">
                 <h3>{room.name}</h3>
                 <p className="room-size">
@@ -213,9 +201,7 @@ const BookingStepRoom = () => {
         })}
       </div>
 
-      {/* ------------------------------------------------------------ */}
       {/* 하단 결제 버튼 */}
-      {/* ------------------------------------------------------------ */}
       <div className="bottom-action">
         <button
           className="btn-go-payment"
@@ -228,7 +214,7 @@ const BookingStepRoom = () => {
             )
           }
         >
-          {selectedRoomId ? "결제 단계로 이동" : "해당 날짜에 예약 가능한 객실이 없습니다"}
+          {selectedRoomId ? "결제 단계로 이동" : "예약 가능한 객실이 없습니다"}
         </button>
       </div>
     </div>
