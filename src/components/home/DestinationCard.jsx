@@ -25,7 +25,7 @@ const DestinationCard = ({ destination }) => {
                         navigate(`/hotels/${id}`);  // ⭐ destination.id로 이동
                     }}
                 >
-                    Book a Hotel
+                    호텔 예약하기
                 </button>
             </div>
         </div>
