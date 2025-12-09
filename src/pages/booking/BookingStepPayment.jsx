@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import "../../styles/components/booking/BookingStepPayment.scss";
 
-// Mock API
 import { getHotelDetail, getHotelRooms } from "../../api/hotelClient";
 import PaymentContent from "../../components/payment/PaymentContent";
 
@@ -12,7 +11,7 @@ const BookingStepPayment = () => {
   const [searchParams] = useSearchParams();
 
   /* ---------------------------------------
-      결제카드 
+      결제 카드 상태
   --------------------------------------- */
   const [addCard, setAddCard] = useState(false);
   const [cards, setCards] = useState([
@@ -27,27 +26,39 @@ const BookingStepPayment = () => {
   };
 
   /* ---------------------------------------
-      데이터 (호텔 + 객실)
+      호텔 + 객실 정보 로딩
   --------------------------------------- */
   const [hotel, setHotel] = useState(null);
   const [room, setRoom] = useState(null);
 
+  const roomId = searchParams.get("roomId");
+
   useEffect(() => {
+    // roomId 없는 경우 → 객실 선택 페이지로 이동 (안전 처리)
+    if (!roomId) {
+      navigate(`/booking/${hotelId}/room?${searchParams.toString()}`);
+      return;
+    }
+
+    // 호텔 정보
     getHotelDetail(hotelId).then((res) => {
       if (res?.hotel) setHotel(res.hotel);
     });
 
-    const roomId = searchParams.get("roomId");
-    if (!roomId) return;
-
+    // 객실 정보
     getHotelRooms(hotelId).then((list) => {
       const found = list.find((r) => String(r.id) === String(roomId));
-      setRoom(found || null);
+      if (!found) {
+        alert("선택한 객실 정보를 찾을 수 없습니다.");
+        navigate(`/booking/${hotelId}/room?${searchParams.toString()}`);
+        return;
+      }
+      setRoom(found);
     });
-  }, [hotelId, searchParams]);
+  }, [hotelId, roomId, navigate, searchParams]);
 
   /* ---------------------------------------
-      예약 정보 계산
+      예약 정보
   --------------------------------------- */
   const checkIn = searchParams.get("checkIn");
   const checkOut = searchParams.get("checkOut");
@@ -62,7 +73,10 @@ const BookingStepPayment = () => {
 
   const nights = calcNights();
 
-  const priceRoom = room?.price || 0;
+  /* ---------------------------------------
+      금액 계산 (안전 처리)
+  --------------------------------------- */
+  const priceRoom = room?.price ?? 0;
   const totalPrice = priceRoom * nights;
   const serviceFee = Math.floor(totalPrice * 0.1);
   const tax = Math.floor(totalPrice * 0.1);
@@ -72,7 +86,7 @@ const BookingStepPayment = () => {
     new Intl.NumberFormat("ko-KR").format(Number(p || 0));
 
   /* ---------------------------------------
-      약관 동의
+      약관 동의 상태
   --------------------------------------- */
   const [formData, setFormData] = useState({
     agree: false,
@@ -85,11 +99,11 @@ const BookingStepPayment = () => {
   };
 
   /* ---------------------------------------
-      결제 버튼 처리
+      결제 버튼 클릭
   --------------------------------------- */
   const handleSubmit = () => {
-    if (cards.length === 0) {
-      alert("결제 수단을 추가해주세요.");
+    if (!cards.length) {
+      alert("결제 수단을 등록해주세요.");
       return;
     }
     if (!formData.agree) {
@@ -106,7 +120,7 @@ const BookingStepPayment = () => {
   return (
     <div className="booking-payment">
       <div className="booking-content">
-        {/* LEFT: 카드 선택 */}
+        {/* LEFT: 카드를 선택하는 영역 */}
         <PaymentContent
           cards={cards}
           handleAddCard={handleAddCard}
@@ -154,7 +168,7 @@ const BookingStepPayment = () => {
         <div className="payment-summary">
           <h3>예약 요약</h3>
 
-          {/* 호텔 */}
+          {/* 호텔 정보 */}
           {hotel && (
             <div className="booking-details">
               <div className="detail-item">
@@ -168,28 +182,27 @@ const BookingStepPayment = () => {
             </div>
           )}
 
-          {/* 날짜 */}
+          {/* 날짜 정보 */}
           <div className="booking-details">
             <div className="detail-item">
               <span className="label">체크인</span>
               <span className="value">
-                {checkIn
-                  ? new Date(checkIn).toLocaleDateString("ko-KR")
-                  : "-"}
+                {checkIn ? new Date(checkIn).toLocaleDateString("ko-KR") : "-"}
               </span>
             </div>
+
             <div className="detail-item">
               <span className="label">체크아웃</span>
               <span className="value">
-                {checkOut
-                  ? new Date(checkOut).toLocaleDateString("ko-KR")
-                  : "-"}
+                {checkOut ? new Date(checkOut).toLocaleDateString("ko-KR") : "-"}
               </span>
             </div>
+
             <div className="detail-item">
               <span className="label">숙박 기간</span>
               <span className="value">{nights}박</span>
             </div>
+
             <div className="detail-item">
               <span className="label">투숙객</span>
               <span className="value">
@@ -199,7 +212,7 @@ const BookingStepPayment = () => {
             </div>
           </div>
 
-          {/* 객실 */}
+          {/* 객실 정보 */}
           {room && (
             <div className="booking-details">
               <div className="detail-item">
@@ -211,7 +224,7 @@ const BookingStepPayment = () => {
             </div>
           )}
 
-          {/* 가격 breakdown */}
+          {/* 가격 상세 */}
           <div className="price-breakdown">
             <div className="price-row">
               <span className="label">

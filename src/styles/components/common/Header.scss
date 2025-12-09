@@ -19,6 +19,7 @@
             text-decoration: none;
             display: flex;
             align-items: center;
+
             .logo-image {
                 width: 75px;
                 height: 75px;
@@ -63,143 +64,130 @@
             color: #2563eb;
         }
 
-        /* ❤️ 찜하기 버튼 */
-        .wish-btn {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 14px;
-            color: #333;
-            text-decoration: none;
+    }
+}
 
-            i {
-                font-size: 17px;
+/* 👤 프로필 영역 */
+.profile-area {
+    position: relative;
+
+    .profile {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+
+        img {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+        }
+
+        span {
+            font-size: 14px;
+        }
+    }
+
+    /* ▼ 드롭다운 메뉴 */
+    .profile-menu {
+        position: absolute;
+        top: 48px;
+        right: 0;
+        width: 240px;
+        padding: 12px 0;
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+        display: flex;
+        flex-direction: column;
+        z-index: 20;
+
+        /* 🔥 상단: 왼쪽 유저 정보 + 오른쪽 메뉴 */
+        .user-menu-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            padding: 10px 14px;
+            gap: 8px;
+
+            /* ◀ 왼쪽 유저 정보 */
+            .left-info {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 15px;
+
+                .avatar {
+                    width: 42px;
+                    height: 42px;
+                    border-radius: 50%;
+                    background: #ddd;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-weight: 600;
+                    font-size: 18px;
+                    color: #333;
+                }
+
+                .user-details {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 2px;
+
+                    .username {
+                        font-size: 14px;
+                        font-weight: 600;
+                        color: #333;
+                    }
+
+                    .status {
+                        font-size: 12px;
+                        color: #16a34a;
+                    }
+                }
+            }
+
+            /* ▶ 오른쪽 메뉴 */
+            .right-menu {
+                display: flex;
+                flex-direction: column;
+                gap: 6px;
+
+                .item {
+                    padding: 6px 8px;
+                    font-size: 14px;
+                    color: #333;
+                    text-decoration: none;
+                    border-radius: 6px;
+
+                    &:hover {
+                        background: #f2f2f2;
+                    }
+                }
             }
         }
 
-        /* 👤 프로필 영역 */
-        .profile-area {
-            position: relative;
+        .divider {
+            height: 1px;
+            background: #eee;
+            margin: 8px 0;
+        }
 
-            .profile {
-                display: flex;
-                align-items: center;
-                gap: 8px;
-                cursor: pointer;
+        /* 🔻 로그아웃 버튼 */
+        .logout {
+            padding: 10px 16px;
+            font-size: 14px;
+            color: #d33;
+            font-weight: 500;
+            text-align: left;
+            width: 100%;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            text-align: center;
 
-                img {
-                    width: 36px;
-                    height: 36px;
-                    border-radius: 50%;
-                }
-
-                span {
-                    font-size: 14px;
-                }
-            }
-
-            /* ▼ 드롭다운 메뉴 */
-            .profile-menu {
-                position: absolute;
-                top: 48px;
-                right: 0;
-                width: 240px;
-                padding: 12px 0;
-                background: #fff;
-                border-radius: 10px;
-                box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
-                display: flex;
-                flex-direction: column;
-                z-index: 20;
-
-                /* 🔥 상단: 왼쪽 유저 정보 + 오른쪽 메뉴 */
-                .user-menu-layout {
-                    display: grid;
-                    grid-template-columns: 1fr 1fr;
-                    padding: 10px 14px;
-                    gap: 8px;
-
-                    /* ◀ 왼쪽 유저 정보 */
-                    .left-info {
-                        display: flex;
-                        flex-direction: column;
-                        align-items: center;
-                        gap: 15px;
-
-                        .avatar {
-                            width: 42px;
-                            height: 42px;
-                            border-radius: 50%;
-                            background: #ddd;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            font-weight: 600;
-                            font-size: 18px;
-                            color: #333;
-                        }
-
-                        .user-details {
-                            display: flex;
-                            flex-direction: column;
-                            gap: 2px;
-
-                            .username {
-                                font-size: 14px;
-                                font-weight: 600;
-                                color: #333;
-                            }
-
-                            .status {
-                                font-size: 12px;
-                                color: #16a34a;
-                            }
-                        }
-                    }
-
-                    /* ▶ 오른쪽 메뉴 */
-                    .right-menu {
-                        display: flex;
-                        flex-direction: column;
-                        gap: 6px;
-
-                        .item {
-                            padding: 6px 8px;
-                            font-size: 14px;
-                            color: #333;
-                            text-decoration: none;
-                            border-radius: 6px;
-
-                            &:hover {
-                                background: #f2f2f2;
-                            }
-                        }
-                    }
-                }
-
-                .divider {
-                    height: 1px;
-                    background: #eee;
-                    margin: 8px 0;
-                }
-
-                /* 🔻 로그아웃 버튼 */
-                .logout {
-                    padding: 10px 16px;
-                    font-size: 14px;
-                    color: #d33;
-                    font-weight: 500;
-                    text-align: left;
-                    width: 100%;
-                    background: transparent;
-                    border: none;
-                    cursor: pointer;
-                    text-align: center;
-
-                    &:hover {
-                        background: #fde8e8;
-                    }
-                }
+            &:hover {
+                background: #fde8e8;
             }
         }
     }

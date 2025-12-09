@@ -7,45 +7,46 @@ import HotelListCards from "../../components/search/HotelListCards";
 import "../../styles/pages/search/SearchPage.scss";
 import { getHotels, getHotelRooms } from "../../api/hotelClient";
 
-// 문자열 정규화: 소문자 + 공백/하이픈 제거
-const normalize = (s) =>
-  (s || "").toLowerCase().replace(/\s|-/g, "");
+// 문자열 정규화
+const normalize = (s) => (s || "").toLowerCase().replace(/\s|-/g, "");
 
 const SearchPage = () => {
-  // 🔗 SearchLayout 에서 내려준 filters
-  const outletContext = useOutletContext();
-  const filters = outletContext?.filters || {
+  const { filters } = useOutletContext() || {
     destination: "",
     priceRange: null,
     rating: 0,
     freebies: [],
     amenities: [],
+    guests: { rooms: 1, guests: 2 },
   };
 
-  const [hotels, setHotels] = useState([]);          // 전체 호텔
-  const [filteredHotels, setFilteredHotels] = useState([]); // 필터 적용 호텔
+  const [hotels, setHotels] = useState([]);
+  const [filteredHotels, setFilteredHotels] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // ⭐ 정렬 상태
+  const [sortType, setSortType] = useState("추천순");
+
   /* ----------------------------------------------------
-     1) mock 호텔 + 객실 정보 불러오기
+     1) 호텔 + 객실 정보 불러오기
   ---------------------------------------------------- */
   useEffect(() => {
     const fetchHotels = async () => {
       try {
         setLoading(true);
-        const baseHotels = await getHotels(); // mockHotels
+        const baseHotels = await getHotels();
 
         const hotelsWithRooms = await Promise.all(
           baseHotels.map(async (hotel) => {
-            const rooms = await getHotelRooms(hotel.id); // mockRooms[hotel.id]
+            const rooms = await getHotelRooms(hotel.id);
             return { ...hotel, rooms };
           })
         );
 
         setHotels(hotelsWithRooms);
-        setFilteredHotels(hotelsWithRooms); // 처음엔 전체 노출
+        setFilteredHotels(hotelsWithRooms);
       } catch (err) {
-        console.error("호텔 목록 불러오기 실패:", err);
+        console.error("호텔 불러오기 실패:", err);
       } finally {
         setLoading(false);
       }
@@ -55,111 +56,139 @@ const SearchPage = () => {
   }, []);
 
   /* ----------------------------------------------------
-     2) filters / hotels 변경될 때마다 리스트 필터링
+     ⭐ 정렬 함수
+  ---------------------------------------------------- */
+  const applySorting = (list, sortType) => {
+    const sorted = [...list];
+
+    switch (sortType) {
+      case "가격 낮은순":
+        return sorted.sort(
+          (a, b) =>
+            (a.price || a.rooms?.[0]?.price || 0) -
+            (b.price || b.rooms?.[0]?.price || 0)
+        );
+
+      case "가격 높은순":
+        return sorted.sort(
+          (a, b) =>
+            (b.price || b.rooms?.[0]?.price || 0) -
+            (a.price || a.rooms?.[0]?.price || 0)
+        );
+
+      case "평점순":
+        return sorted.sort(
+          (a, b) =>
+            (b.ratingAverage || 0) - (a.ratingAverage || 0)
+        );
+
+      default:
+        return sorted; // 추천순 = 기본
+    }
+  };
+
+  /* ----------------------------------------------------
+     2) 필터 적용
   ---------------------------------------------------- */
   useEffect(() => {
     let result = [...hotels];
 
     if (!filters) {
-      setFilteredHotels(result);
+      setFilteredHotels(applySorting(result, sortType));
       return;
     }
 
-    /* -------- 🧭 목적지 (이름/위치에 포함) -------- */
-    if (filters.destination && filters.destination.trim() !== "") {
-      const dest = filters.destination.trim();
-      result = result.filter(
-        (hotel) =>
-          hotel.name?.includes(dest) || hotel.location?.includes(dest)
-      );
-    }
+    /* ---- 목적지 ---- */
+    if (filters.destination?.trim() !== "") {
+      const dest = normalize(filters.destination.trim());
 
-    /* -------- 💰 가격 범위 [min, max] -------- */
-    if (Array.isArray(filters.priceRange) && filters.priceRange.length === 2) {
-      const [minPrice, maxPrice] = filters.priceRange;
       result = result.filter((hotel) => {
-        // 호텔 price 우선, 없으면 첫 번째 객실 price 사용
-        const price =
-          hotel.price ??
-          (hotel.rooms && hotel.rooms[0] && hotel.rooms[0].price) ??
-          0;
-        return price >= minPrice && price <= maxPrice;
+        const name = normalize(hotel.name);
+        const loc = normalize(hotel.location);
+        return name.includes(dest) || loc.includes(dest);
       });
     }
 
-    /* -------- ⭐ 최소 평점 (ratingAverage 기준) -------- */
-    let ratingMin = 0;
-    if (typeof filters.rating === "number") ratingMin = filters.rating;
+    /* ---- 가격 ---- */
+    if (Array.isArray(filters.priceRange)) {
+      const [min, max] = filters.priceRange;
 
-    if (ratingMin > 0) {
+      result = result.filter((hotel) => {
+        const price = hotel.price || hotel.rooms?.[0]?.price || 0;
+        return price >= min && price <= max;
+      });
+    }
+
+    /* ---- 평점 ---- */
+    if (filters.rating > 0) {
       result = result.filter(
-        (hotel) =>
-          (hotel.ratingAverage || hotel.rating || 0) >= ratingMin
+        (hotel) => (hotel.ratingAverage || hotel.rating || 0) >= filters.rating
       );
     }
 
-    /* -------- 🎁 Freebies (조식/무료주차/WiFi/공항셔틀/무료취소) -------- */
-    if (filters.freebies && filters.freebies.length > 0) {
-      const freebieKeys = Array.isArray(filters.freebies)
-        ? filters.freebies
-        : [filters.freebies];
+    /* ---- freebies ---- */
+    if (filters.freebies?.length > 0) {
+      const keys = filters.freebies.map((f) => normalize(f));
 
       result = result.filter((hotel) =>
-        freebieKeys.every((freebieKey) => {
-          const key = freebieKey.toLowerCase(); // "조식포함", "wifi", ...
-
-          const inTags = hotel.tags?.some((tag) =>
-            normalize(tag).includes(key)
-          );
-
-          const inAmenities = hotel.amenities?.some((a) =>
-            normalize(a).includes(key)
-          );
-
+        keys.every((key) => {
+          const inTags = hotel.tags?.some((t) => normalize(t).includes(key));
+          const inAmenities = hotel.amenities?.some((a) => normalize(a).includes(key));
           const inRooms = hotel.rooms?.some((room) =>
             room.features?.some((f) => normalize(f).includes(key))
           );
-
           return inTags || inAmenities || inRooms;
         })
       );
     }
 
-    /* -------- 🏊 Amenities (에어컨 / Gym / Pool 등) -------- */
-    if (filters.amenities && filters.amenities.length > 0) {
-      const amenityKeysRaw = filters.amenities;
-      const amenityKeys = Array.isArray(amenityKeysRaw)
-        ? amenityKeysRaw
-        : [amenityKeysRaw];
+    /* ---- amenities ---- */
+    if (filters.amenities?.length > 0) {
+      const keys = filters.amenities.map((a) => normalize(a));
 
       result = result.filter((hotel) =>
-        amenityKeys.every((amenity) => {
-          if (!amenity) return true;
-
-          const key = normalize(amenity); // "Pool" -> "pool", "에어컨" 그대로
-
-          // 호텔 레벨 amenities (예: "Pool", "Free Wi-Fi", "Gym"...)
-          const inHotelAmenities = hotel.amenities?.some((a) =>
-            normalize(a).includes(key)
-          );
-
-          // 객실 레벨 amenities (예: "에어컨", "WiFi"...)
-          const inRoomAmenities = hotel.rooms?.some((room) =>
+        keys.every((key) => {
+          const inHotel = hotel.amenities?.some((a) => normalize(a).includes(key));
+          const inRooms = hotel.rooms?.some((room) =>
             room.amenities?.some((a) => normalize(a).includes(key))
           );
-
-          // 혹시 태그에도 있을 수 있으니 한 번 더 체크
-          const inTags = hotel.tags?.some((tag) =>
-            normalize(tag).includes(key)
-          );
-
-          return inHotelAmenities || inRoomAmenities || inTags;
+          const inTags = hotel.tags?.some((t) => normalize(t).includes(key));
+          return inHotel || inRooms || inTags;
         })
       );
     }
 
+    /* ---------------------------------------------
+       📅 날짜 + 인원 기반 예약 가능 필터
+    --------------------------------------------- */
+    if (filters.checkIn && filters.checkOut) {
+      const start = new Date(filters.checkIn);
+      const end = new Date(filters.checkOut);
+
+      const days = [];
+      let cur = new Date(start);
+      while (cur <= end) {
+        days.push(cur.toISOString().split("T")[0]);
+        cur.setDate(cur.getDate() + 1);
+      }
+
+      result = result.filter((hotel) =>
+        hotel.rooms?.some((room) => {
+          const fitsGuest = room.maxGuests >= (filters.guests?.guests || 1);
+
+          if (!Array.isArray(room.availableDates)) return fitsGuest;
+
+          const dateOK = days.every((d) => room.availableDates.includes(d));
+          return fitsGuest && dateOK;
+        })
+      );
+    }
+
+    // ⭐ 정렬 적용
+    result = applySorting(result, sortType);
+
     setFilteredHotels(result);
-  }, [hotels, filters]);
+  }, [hotels, filters, sortType]);
 
   /* ----------------------------------------------------
      3) 렌더
@@ -171,10 +200,13 @@ const SearchPage = () => {
   return (
     <div className="search-page">
       <HotelTypesTabs />
+
       <HotelResultsHeader
-        totalCount={hotels.length}          // 전체 개수
-        showingCount={filteredHotels.length} // 필터 후 개수
+        total={hotels.length}               // 🔥 props 이름 수정됨
+        showing={filteredHotels.length}      // 🔥 props 이름 수정됨
+        onSort={(type) => setSortType(type)} // 정렬 기능 연결
       />
+
       <HotelListCards hotels={filteredHotels} />
     </div>
   );

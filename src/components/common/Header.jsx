@@ -40,11 +40,7 @@ const Header = () => {
                 {/* 🔹 로그인 상태일 때 */}
                 {isLoggedIn && (
                     <>
-                        {/* 🔹 찜하기 버튼 */}
-                        <Link to="/mypage/wishlist" className="wish-btn">
-                            <i className="fa-regular fa-heart"></i>
-                            찜하기
-                        </Link>
+                        
 
                         {/* 🔹 프로필 드롭다운 */}
                         <div className="profile-area">
@@ -78,7 +74,7 @@ const Header = () => {
                                         <div className="right-menu">
                                             <Link className="item" to="/mypage/account">계정</Link>
                                             <Link className="item" to="/mypage/bookings/:bookingId">결제내역</Link>
-                                            <Link className="item" to="/mypage/settings">설정</Link>
+                                            <Link className="item" to="/mypage/wishlist">찜 목록</Link>
                                         </div>
                                     </div>
 

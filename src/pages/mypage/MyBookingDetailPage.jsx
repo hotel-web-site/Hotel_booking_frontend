@@ -1,36 +1,48 @@
 import "../../styles/mypage/MyBookingDetailPage.scss";
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import ProfilePage from "./ProfilePage";
 
-const MyBookingDetailPage = ({ bookings = [] }) => {
-  // ⭐ 프로필/커버 이미지
+const MyBookingDetailPage = () => {
+  const navigate = useNavigate();
+
   const [coverImage, setCoverImage] = useState(null);
   const [profileImage, setProfileImage] = useState(null);
 
-  // ⭐ form (이름 / 이메일 표시용)
   const [form, setForm] = useState({
     name: "",
     email: "",
   });
 
-  // ⭐ 마운트 시 user 정보 불러오기 (MyAccountPage와 동일한 로직)
+  // ⭐ 전체 예약 목록
+  const [bookings, setBookings] = useState([]);
+
+  // ⭐ 상태 필터
+  const [filterStatus, setFilterStatus] = useState("예정됨");
+
+  /* ----------------------------------------------------
+     유저 정보 + 예약 목록 불러오기
+  ---------------------------------------------------- */
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
+    const storedBookings = localStorage.getItem("bookings");
 
     if (storedUser) {
       const user = JSON.parse(storedUser);
-
-      setForm({
-        name: user.name || "",
-        email: user.email || "",
-      });
+      setForm({ name: user.name || "", email: user.email || "" });
 
       if (user.profileImage) setProfileImage(user.profileImage);
       if (user.coverImage) setCoverImage(user.coverImage);
     }
+
+    if (storedBookings) {
+      setBookings(JSON.parse(storedBookings));
+    }
   }, []);
 
-  // ⭐ 이미지 업로드 핸들러
+  /* ----------------------------------------------------
+     이미지 업로드
+  ---------------------------------------------------- */
   const handleCoverUpload = (e) => {
     const file = e.target.files[0];
     if (file) setCoverImage(URL.createObjectURL(file));
@@ -41,9 +53,15 @@ const MyBookingDetailPage = ({ bookings = [] }) => {
     if (file) setProfileImage(URL.createObjectURL(file));
   };
 
+  /* ----------------------------------------------------
+     필터링된 예약 목록
+  ---------------------------------------------------- */
+  const filteredBookings = bookings.filter(
+    (item) => item.status === filterStatus
+  );
+
   return (
     <div className="booking-detail-page">
-
       {/* ⭐ 공통 프로필 헤더 */}
       <ProfilePage
         coverImage={coverImage}
@@ -55,45 +73,80 @@ const MyBookingDetailPage = ({ bookings = [] }) => {
         onProfileUpload={handleProfileUpload}
       />
 
-      <h2 className="title">예약내역</h2>
+      <h2 className="title">예약 내역</h2>
 
+      {/* ⭐ 상태 필터 */}
       <div className="filter-box">
-        <div className="filter-label">객실</div>
-        <div className="filter-select">예정된 예약 ▼</div>
+        <div className="filter-label">상태</div>
+
+        <select
+          className="filter-select"
+          value={filterStatus}
+          onChange={(e) => setFilterStatus(e.target.value)}
+        >
+          <option value="예정됨">예정된 예약</option>
+          <option value="취소됨">취소된 예약</option>
+          <option value="완료됨">이용 완료</option>
+        </select>
       </div>
 
+      {/* ⭐ 예약 목록 */}
       <div className="booking-list">
-        {bookings.length === 0 && (
-          <p className="empty">예약 내역이 없습니다.</p>
+        {filteredBookings.length === 0 && (
+          <p className="empty">해당 상태의 예약이 없습니다.</p>
         )}
 
-        {bookings.map((item, index) => (
-          <div className="booking-card" key={index}>
+        {filteredBookings.map((item) => (
+          <div
+            className="booking-card"
+            key={item.id}
+            onClick={() => navigate(`/mypage/bookings/${item.id}`)}
+          >
+            {/* LEFT */}
             <div className="left">
               <img
-                src={item.image}
-                alt="room"
+                src={item.hotel.images?.[0] || item.hotel.image}
+                alt="hotel"
                 className="booking-img"
               />
 
               <div className="date-info">
                 <p className="check-title">체크인</p>
-                <p className="check-date">{item.checkIn}</p>
+                <p className="check-date">
+                  {new Date(item.checkIn).toLocaleDateString("ko-KR")}
+                </p>
 
                 <p className="check-title">체크아웃</p>
-                <p className="check-date">{item.checkOut}</p>
+                <p className="check-date">
+                  {new Date(item.checkOut).toLocaleDateString("ko-KR")}
+                </p>
               </div>
             </div>
 
+            {/* RIGHT */}
             <div className="right">
               <div className="time-info">
-                <p>체크인 <span>{item.checkInTime}</span></p>
-                <p>체크아웃 <span>{item.checkOutTime}</span></p>
+                <p>
+                  체크인 <span>15:00 이후</span>
+                </p>
+                <p>
+                  체크아웃 <span>11:00 이전</span>
+                </p>
               </div>
 
-              <div className="status">{item.status}</div>
+              <div className={`status ${item.status}`}>
+                {item.status}
+              </div>
 
-              <button className="download-btn">티켓 다운로드</button>
+              <button
+                className="download-btn"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  alert("티켓 다운로드 기능 준비중입니다.");
+                }}
+              >
+                티켓 다운로드
+              </button>
             </div>
           </div>
         ))}
