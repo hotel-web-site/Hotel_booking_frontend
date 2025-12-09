@@ -139,7 +139,6 @@ const MyPaymentPage = () => {
                 />
               </div>
             </div>
-
             <div className="input-wrap">
               <label className="floating-label">카드 명의자 이름</label>
               <input
