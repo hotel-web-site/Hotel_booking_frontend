@@ -45,28 +45,28 @@ const Footer = () => {
                         <div className="follow-us">
                             <h4 className="follow-title">Follow Us</h4>
                             <div className="follow-icons">
-                                <a href="#" className="follow-link" aria-label="Facebook">
+                                <a href="https://www.facebook.com/" className="follow-link" aria-label="Facebook">
                                     <img
                                         src="https://cdn-icons-png.flaticon.com/512/733/733547.png"
                                         alt="facebook"
                                         className="icon-img"
                                     />
                                 </a>
-                                <a href="#" className="follow-link" aria-label="Twitter">
+                                <a href="https://x.com" className="follow-link" aria-label="Twitter">
                                     <img
                                         src="https://cdn-icons-png.flaticon.com/512/733/733579.png"
                                         alt="twitter"
                                         className="icon-img"
                                     />
                                 </a>
-                                <a href="#" className="follow-link" aria-label="YouTube">
+                                <a href="https://youtube.com" className="follow-link" aria-label="YouTube">
                                     <img
                                         src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png"
                                         alt="youtube"
                                         className="icon-img"
                                     />
                                 </a>
-                                <a href="#" className="follow-link" aria-label="Instagram">
+                                <a href="https://www.instagram.com" className="follow-link" aria-label="Instagram">
                                     <img
                                         src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png"
                                         alt="instagram"

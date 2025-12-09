@@ -22,7 +22,7 @@ const ReviewModal = ({ closeModal, onSubmit }) => {
                 className="review-modal"
                 onClick={(e) => e.stopPropagation()}
             >
-                <h2 className="modal-title">Write a Review</h2>
+                <h2 className="modal-title">리뷰 작성하기</h2>
 
                 {/* ⭐ 별점 */}
                 <div className="rating-selector">
@@ -48,10 +48,10 @@ const ReviewModal = ({ closeModal, onSubmit }) => {
                 {/* 버튼 영역 */}
                 <div className="modal-buttons">
                     <button className="cancel-btn" onClick={closeModal}>
-                        Cancel
+                        취소
                     </button>
                     <button className="submit-btn" onClick={submitReview}>
-                        Submit Review
+                        리뷰 등록
                     </button>
                 </div>
             </div>
