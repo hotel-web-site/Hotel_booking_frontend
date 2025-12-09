@@ -101,7 +101,6 @@ const HotelListCards = ({ hotels = [], filters = {} }) => {
         <div className="hotel-list-cards">
             {visibleHotels.map((hotel) => {
                 const id = hotel._id || hotel.id;
-
                 const mainRoom =
                     hotel.rooms && hotel.rooms.length > 0 ? hotel.rooms[0] : {};
 
@@ -125,6 +124,7 @@ const HotelListCards = ({ hotels = [], filters = {} }) => {
                             )}
                         </div>
 
+                        {/* 호텔 정보 */}
                         <div className="hotel-info">
                             <div className="hotel-header">
                                 <h3 className="hotel-name">{hotel.name}</h3>
@@ -150,12 +150,8 @@ const HotelListCards = ({ hotels = [], filters = {} }) => {
 
                             <div className="hotel-rating">
                                 <span className="rating-score">{ratingScore}</span>
-                                <span className="rating-label">
-                                    {hotel.ratingLabel || ""}
-                                </span>
-                                <span className="rating-reviews">
-                                    {ratingReviews}개 리뷰
-                                </span>
+                                <span className="rating-label">{hotel.ratingLabel || ""}</span>
+                                <span className="rating-reviews">{ratingReviews}개 리뷰</span>
                             </div>
 
                             <div className="card-divider"></div>
@@ -164,6 +160,7 @@ const HotelListCards = ({ hotels = [], filters = {} }) => {
                                 <button
                                     className="wishlist-button"
                                     onClick={(e) => handleWishlist(e, hotel)}
+                                    disabled={!available}
                                 >
                                     {liked ? "♥" : "♡"}
                                 </button>
@@ -172,10 +169,11 @@ const HotelListCards = ({ hotels = [], filters = {} }) => {
                                     className="view-button"
                                     onClick={(e) => {
                                         e.stopPropagation();
-                                        navigate(`/hotels/${hotel.id}${query}`);
+                                        available && navigate(`/hotels/${hotel.id}`);
                                     }}
+                                    disabled={!available}
                                 >
-                                    상세보기
+                                    {available ? "상세보기" : "예약불가"}
                                 </button>
                             </div>
                         </div>
@@ -183,7 +181,7 @@ const HotelListCards = ({ hotels = [], filters = {} }) => {
                 );
             })}
 
-            {visibleCount < filteredHotels.length && (
+            {visibleCount < hotels.length && (
                 <button
                     className="load-more"
                     onClick={() => setVisibleCount((prev) => prev + 6)}
