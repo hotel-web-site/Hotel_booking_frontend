@@ -1,7 +1,16 @@
 import React from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import "../../styles/components/hotelpage/AvailableRooms.scss";
 
 const AvailableRooms = ({ rooms }) => {
+    const navigate = useNavigate();
+    const { hotelId } = useParams();
+
+    const handleBook = (roomId) => {
+        // 날짜 선택 페이지로 이동 + 선택한 객실(roomId) 전달
+        navigate(`/booking/${hotelId}?roomId=${roomId}`);
+    };
+
     return (
         <div className="available-rooms">
             <h3 className="rooms-title">잔여 객실</h3>
@@ -29,7 +38,12 @@ const AvailableRooms = ({ rooms }) => {
                                 <span className="night">/박</span>
                             </p>
 
-                            <button className="book-btn">예약하기</button>
+                            <button
+                                className="book-btn"
+                                onClick={() => handleBook(room.id)}
+                            >
+                                예약하기
+                            </button>
                         </div>
 
                     </div>

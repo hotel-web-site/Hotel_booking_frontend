@@ -112,6 +112,12 @@ export const getHotelDetail = async (hotelId) => {
 /* ------------------------------------------------------------
    4) DetailPage — 객실 정보 (Enhanced Mock Rooms)
 ------------------------------------------------------------ */
+const defaultAvailableDates = [
+  "2025-12-01", "2025-12-02", "2025-12-03", "2025-12-04", "2025-12-05",
+  "2025-12-06", "2025-12-07", "2025-12-08", "2025-12-09", "2025-12-10",
+  "2025-12-11", "2025-12-12", "2025-12-13", "2025-12-14", "2025-12-15"
+];
+
 const mockRooms = {
   "1": [
     {
@@ -123,15 +129,12 @@ const mockRooms = {
       view: "시티뷰",
       price: 120000,
       originalPrice: 150000,
-      images: [
-        "/images/rooms/standard1.jpg",
-        "/images/rooms/standard2.jpg",
-      ],
+      images: ["/images/rooms/standard1.jpg", "/images/rooms/standard2.jpg"],
       amenities: ["WiFi", "에어컨", "TV", "드라이기", "샤워부스"],
-      // 👉 무료취소 / 조식 없음
       features: ["즉시 예약", "무료 취소", "VAT 포함"],
       breakfast: false,
       refundable: true,
+      availableDates: defaultAvailableDates,
     },
     {
       id: "102",
@@ -142,14 +145,12 @@ const mockRooms = {
       view: "부분 오션뷰",
       price: 160000,
       originalPrice: 180000,
-      images: [
-        "/images/rooms/superior1.jpg",
-        "/images/rooms/superior2.jpg",
-      ],
+      images: ["/images/rooms/superior1.jpg", "/images/rooms/superior2.jpg"],
       amenities: ["WiFi", "에어컨", "옷장", "냉장고", "욕조"],
-      features: ["즉시 확정", "조식 포함"], // 조식
+      features: ["즉시 확정", "조식 포함"],
       breakfast: true,
       refundable: false,
+      availableDates: defaultAvailableDates,
     },
     {
       id: "103",
@@ -160,14 +161,12 @@ const mockRooms = {
       view: "풀뷰",
       price: 190000,
       originalPrice: 210000,
-      images: [
-        "/images/rooms/deluxe1.jpg",
-        "/images/rooms/deluxe2.jpg",
-      ],
+      images: ["/images/rooms/deluxe1.jpg", "/images/rooms/deluxe2.jpg"],
       amenities: ["WiFi", "무료 생수", "에어컨", "미니바", "욕조"],
-      features: ["무료 취소", "조식 포함", "넓은 객실"], // 조식 + 무료취소
+      features: ["무료 취소", "조식 포함", "넓은 객실"],
       breakfast: true,
       refundable: true,
+      availableDates: defaultAvailableDates,
     },
     {
       id: "104",
@@ -178,26 +177,12 @@ const mockRooms = {
       view: "오션뷰",
       price: 280000,
       originalPrice: 350000,
-      images: [
-        "/images/rooms/suite1.jpg",
-        "/images/rooms/suite2.jpg",
-      ],
-      amenities: [
-        "WiFi",
-        "에어컨",
-        "거실 분리형",
-        "대형 TV",
-        "욕조",
-        "발코니",
-      ],
-      features: [
-        "Suite Room",
-        "바다 전망",
-        "조식 포함",
-        "무료 취소",
-      ], // 조식 + 무료취소
+      images: ["/images/rooms/suite1.jpg", "/images/rooms/suite2.jpg"],
+      amenities: ["WiFi", "에어컨", "거실 분리형", "대형 TV", "욕조", "발코니"],
+      features: ["Suite Room", "바다 전망", "조식 포함", "무료 취소"],
       breakfast: true,
       refundable: true,
+      availableDates: defaultAvailableDates,
     },
   ],
 
@@ -209,13 +194,14 @@ const mockRooms = {
       bedType: "더블베드",
       maxGuests: 2,
       view: "해변뷰",
-      price: 135000,
+      price: 95000,
       originalPrice: 160000,
       images: ["/images/rooms/beach-standard1.jpg"],
       amenities: ["WiFi", "TV", "에어컨", "샤워부스"],
-      features: ["바다 근처", "즉시 예약"], // 무료취소/조식 없음
+      features: ["바다 근처", "즉시 예약"],
       breakfast: false,
       refundable: true,
+      availableDates: defaultAvailableDates,
     },
     {
       id: "202",
@@ -228,9 +214,10 @@ const mockRooms = {
       originalPrice: 250000,
       images: ["/images/rooms/ocean-deluxe1.jpg"],
       amenities: ["WiFi", "TV", "욕조", "냉장고"],
-      features: ["오션뷰", "조식 포함"], // 조식
+      features: ["오션뷰", "조식 포함"],
       breakfast: true,
       refundable: false,
+      availableDates: defaultAvailableDates,
     },
   ],
 
@@ -242,13 +229,14 @@ const mockRooms = {
       bedType: "킹베드",
       maxGuests: 2,
       view: "정원뷰",
-      price: 170000,
+      price: 150000,
       originalPrice: 190000,
       images: ["/images/rooms/jeju-garden1.jpg"],
       amenities: ["WiFi", "에어컨", "TV", "욕조"],
-      features: ["무료 취소", "즉시 예약"], // 무료취소
+      features: ["무료 취소", "즉시 예약"],
       breakfast: false,
       refundable: true,
+      availableDates: defaultAvailableDates,
     },
     {
       id: "302",
@@ -259,20 +247,12 @@ const mockRooms = {
       view: "풀뷰",
       price: 350000,
       originalPrice: 420000,
-      images: [
-        "/images/rooms/jeju-pool1.jpg",
-        "/images/rooms/jeju-pool2.jpg",
-      ],
-      amenities: [
-        "WiFi",
-        "프라이빗 풀",
-        "미니바",
-        "에어컨",
-        "욕조",
-      ],
-      features: ["Pool Villa", "조식 포함", "무료 취소"], // 조식 + 무료취소
+      images: ["/images/rooms/jeju-pool1.jpg", "/images/rooms/jeju-pool2.jpg"],
+      amenities: ["WiFi", "프라이빗 풀", "미니바", "에어컨", "욕조"],
+      features: ["Pool Villa", "조식 포함", "무료 취소"],
       breakfast: true,
       refundable: true,
+      availableDates: defaultAvailableDates,
     },
   ],
 };
@@ -280,8 +260,6 @@ const mockRooms = {
 export const getHotelRooms = async (hotelId) => {
   const id = String(hotelId);
   const rooms = mockRooms[id] || [];
-  console.log("💬 hotelId:", hotelId, "→ 변환된 id:", id);
-  console.log("💬 mockRooms[id]:", mockRooms[id]);
   return new Promise((resolve) => {
     setTimeout(() => resolve(rooms), 300);
   });
