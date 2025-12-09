@@ -1,3 +1,52 @@
+    /* 예약 취소 버튼 */
+    .cancel-btn {
+      padding: 8px 18px;
+      
+      background: #f9efef;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #d93025;
+      cursor: pointer;
+      margin-left: 6px;
+      transition: background 0.18s, color 0.18s, border 0.18s, transform 0.18s;
+
+      &:hover {
+        background: #f8d2d2;
+        color: #a81c1c;
+        border-color: #a81c1c;
+        
+      }
+      &:active {
+        background: #ffd6d6;
+        color: #fff;
+        border-color: #a81c1c;
+      }
+    }
+
+    /* 다시 예약하기 버튼 */
+    .rebook-btn {
+      padding: 8px 18px;
+      background: #2563eb;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+      cursor: pointer;
+      margin-left: 6px;
+      transition: background 0.18s, color 0.18s, transform 0.18s;
+
+      &:hover {
+        background: #1742a0;
+        color: #fff;
+        transform: translateY(-2px);
+      }
+      &:active {
+        background: #0e265c;
+        color: #fff;
+      }
+    }
 .booking-detail-page {
   width: 100%;
   max-width: 900px;
