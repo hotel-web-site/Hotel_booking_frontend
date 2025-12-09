@@ -50,9 +50,12 @@ import InquiryHistoryPage from "./pages/support/InquiryHistoryPage";
 
 import NotFoundPage from "./pages/common/NotFoundPage";
 
+import ScrollToTop from "./components/common/ScrollToTop";
+
 const AppRouter = () => {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Routes>
         {/* main landing */}
         <Route path="/" element={<MainLayout />}>
@@ -156,3 +159,4 @@ const AppRouter = () => {
 };
 
 export default AppRouter;
+
