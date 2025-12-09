@@ -28,7 +28,6 @@ let mockReviews = [
     },
 ];
 
-
 /* ============================================================
    📌 1. 특정 호텔 리뷰 가져오기 (현재 구조에 맞춘 getReviews)
 ============================================================ */
@@ -41,7 +40,6 @@ export const getReviews = async (hotelId) => {
     // reviewsData가 반드시 "배열"이어야 하기 때문에:
     return filtered;
 };
-
 
 /* ============================================================
    📌 2. 리뷰 통계 (평균 + 분포)
@@ -70,20 +68,38 @@ export const getReviewStats = async (hotelId) => {
     };
 };
 
-
 /* ============================================================
    📌 3. 리뷰 작성 (CREATE)
+      - 현재 로그인 유저 정보를 localStorage에서 읽어와 userId에 저장
 ============================================================ */
 export const createReview = async (
     hotelId,
     rating,
     comment,
-    userName = "익명"
+    userName // 선택 파라미터
 ) => {
+    let finalName = userName;
+    let finalUserId = null;
+
+    try {
+        const storedUser = localStorage.getItem("user");
+        if (storedUser) {
+            const u = JSON.parse(storedUser);
+            if (!finalName) {
+                finalName = u.nickname || u.name || "익명";
+            }
+            finalUserId = u._id || u.id || null;
+        }
+    } catch (e) {
+        console.error("createReview user 파싱 오류:", e);
+    }
+
+    if (!finalName) finalName = "익명";
+
     const newReview = {
         id: Date.now(),
         hotelId: Number(hotelId),
-        userId: { name: userName },
+        userId: { name: finalName, id: finalUserId },
         rating,
         comment,
         date: new Date().toISOString(),
@@ -93,7 +109,6 @@ export const createReview = async (
 
     return newReview;
 };
-
 
 /* ============================================================
    📌 4. 기존 리뷰 수정 (UPDATE)
@@ -106,7 +121,6 @@ export const updateReview = async (reviewId, payload) => {
     return mockReviews.find((r) => r.id === reviewId);
 };
 
-
 /* ============================================================
    📌 5. 리뷰 삭제 (DELETE)
 ============================================================ */
@@ -115,24 +129,27 @@ export const deleteReview = async (reviewId) => {
     return true;
 };
 
-
 /* ============================================================
    📌 6. 호환용 (postReview 그대로 유지)
 ============================================================ */
 export const postReview = createReview;
 
-
 /* ============================================================
    📌 7. 내 리뷰 가져오기 (MyReviewsPage 용)
-      - 현재는 userId.name(유저 이름) 기준으로 필터
-      - 나중에 백엔드 붙이면 userId(고유 ID) 기준으로 교체
+      - userId가 있으면 id 기준으로,
+      - 없으면 이름 기준으로 필터
 ============================================================ */
-export const getMyReviews = async (userName) => {
-    if (!userName) return [];
+export const getMyReviews = async (userName, userId) => {
+    if (!userName && !userId) return [];
 
-    const filtered = mockReviews.filter(
-        (r) => r.userId?.name === userName
-    );
+    const filtered = mockReviews.filter((r) => {
+        const matchById =
+            userId && r.userId && r.userId.id && r.userId.id === userId;
+        const matchByName =
+            userName && r.userId && r.userId.name === userName;
+
+        return matchById || matchByName;
+    });
 
     return filtered;
 };
