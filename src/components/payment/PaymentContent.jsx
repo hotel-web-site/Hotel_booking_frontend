@@ -1,64 +1,219 @@
+// src/components/payment/PaymentContent.jsx
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import PaymentForm from "./PaymentForm";
 import "../../styles/components/payment/PaymentContent.scss";
-const PaymentContent = ({
-    cards,
-    handleAddCard,
-    handleDeleteCard,
-    addCard,
-    handleBackdropClick,
-}) => {
-    //  const [addCard, setAddCard] = useState(false);
 
-    return (
-        <div className="payment-content">
-            <div className="payment-header">
-                <h2 className="payment-title">결제수단</h2>
-                <div className="filter-dropdown">
-                    <select>
-                        <option value="upcoming">Upcoming</option>
-                    </select>
-                </div>
-            </div>
+const PaymentContent = () => {
+  const [cards, setCards] = useState([]);
 
-            <div className="cards-container">
-                {cards.map((card) => (
-                    <div key={card.id} className="card-item">
-                        <div className="card-visual">
-                            <div className="card-number">**** **** ****</div>
-                            <div className="card-last4">{card.last4}</div>
-                            <div className="card-footer">
-                                <div className="card-expiry">
-                                    <div className="expiry-label">Valid Thru</div>
-                                    <div className="expiry-date">{card.expiry}</div>
-                                </div>
-                                <div className="card-logo">{card.type.toUpperCase()}</div>
-                            </div>
-                        </div>
-                        <button
-                            className="delete-button"
-                            onClick={() => handleDeleteCard(card.id)}
-                        >
-                            🗑️
-                        </button>
-                    </div>
-                ))}
+  const [form, setForm] = useState({
+    cardNumber: "",
+    exp: "",
+    cvc: "",
+    name: "",
+    country: "",
+    saveInfo: false,
+  });
 
-                <div className="add-card-item" onClick={handleAddCard}>
-                    <div className="add-card-circle">
-                        <span className="add-icon">+</span>
-                    </div>
-                    <div className="add-card-text">Add a new card</div>
-                </div>
-                {addCard && (
-                    <div className="add-card-modal" onClick={handleBackdropClick}>
-                        <PaymentForm />
-                    </div>
-                )}
-            </div>
+  const [showModal, setShowModal] = useState(false);
+
+  const handleInput = (key, value) => {
+    setForm((prev) => ({ ...prev, [key]: value }));
+  };
+
+  // Luhn 알고리즘으로 카드 번호 유효성 검사
+  const validateCardNumber = (number) => {
+    const digits = number.replace(/\s+/g, "");
+    let sum = 0;
+    let dbl = false;
+
+    for (let i = digits.length - 1; i >= 0; i--) {
+      let n = parseInt(digits[i], 10);
+      if (Number.isNaN(n)) return false;
+
+      if (dbl) {
+        n = n * 2;
+        if (n > 9) n -= 9;
+      }
+      sum += n;
+      dbl = !dbl;
+    }
+    return sum % 10 === 0;
+  };
+
+  const handleSubmitCard = () => {
+    if (!validateCardNumber(form.cardNumber)) {
+      alert("유효하지 않은 카드번호입니다.");
+      return;
+    }
+
+    setCards((prev) => [
+      ...prev,
+      {
+        id: Date.now(), // 간단한 고유 id
+        last4: form.cardNumber.slice(-4),
+        exp: form.exp,
+        brand: "VISA",
+      },
+    ]);
+
+    // 폼 리셋
+    setForm({
+      cardNumber: "",
+      exp: "",
+      cvc: "",
+      name: "",
+      country: "",
+      saveInfo: false,
+    });
+
+    setShowModal(false);
+  };
+
+  const handleDeleteCard = (id) => {
+    setCards((prev) => prev.filter((card) => card.id !== id));
+  };
+
+  const openModal = () => setShowModal(true);
+  const closeModal = () => setShowModal(false);
+
+  return (
+    <div className="payment-content">
+      {/* 상단 헤더 */}
+      <div className="payment-header">
+        <h2 className="payment-title">결제수단</h2>
+        <div className="filter-dropdown">
+          <select>
+            <option value="upcoming">Upcoming</option>
+          </select>
         </div>
-    );
+      </div>
+
+      {/* 카드 리스트 */}
+      <div className="cards-container">
+        {cards.map((card) => (
+          <div key={card.id} className="card-item">
+            <div className="card-visual">
+              <div className="card-number">**** **** ****</div>
+              <div className="card-last4">{card.last4}</div>
+              <div className="card-footer">
+                <div className="card-expiry">
+                  <div className="expiry-label">Valid Thru</div>
+                  <div className="expiry-date">{card.exp}</div>
+                </div>
+                <div className="card-logo">
+                  {(card.brand || "").toUpperCase()}
+                </div>
+              </div>
+            </div>
+            <button
+              className="delete-button"
+              onClick={() => handleDeleteCard(card.id)}
+              type="button"
+            >
+              🗑️
+            </button>
+          </div>
+        ))}
+
+        {/* 새 카드 추가 카드 */}
+        <div className="add-card-item" onClick={openModal}>
+          <div className="add-card-circle">
+            <span className="add-icon">+</span>
+          </div>
+          <div className="add-card-text">Add a new card</div>
+        </div>
+      </div>
+
+      {/* 모달 */}
+      {showModal && (
+        <div className="modal-overlay" onClick={closeModal}>
+          <div
+            className="modal"
+            onClick={(e) => e.stopPropagation()} // 모달 안 클릭 시 닫힘 방지
+          >
+            <div className="modal-header">
+              <h2>카드추가</h2>
+              <button className="close" onClick={closeModal} type="button">
+                ✕
+              </button>
+            </div>
+
+            <div className="input-wrap">
+              <label className="floating-label">카드 번호</label>
+              <input
+                type="text"
+                placeholder="0000 0000 0000 0000"
+                value={form.cardNumber}
+                onChange={(e) => handleInput("cardNumber", e.target.value)}
+              />
+            </div>
+
+            <div className="row">
+              <div className="input-wrap">
+                <label className="floating-label">만료일</label>
+                <input
+                  type="text"
+                  placeholder="MM/YY"
+                  value={form.exp}
+                  onChange={(e) => handleInput("exp", e.target.value)}
+                />
+              </div>
+
+              <div className="input-wrap">
+                <label className="floating-label">CVC</label>
+                <input
+                  type="text"
+                  placeholder="123"
+                  value={form.cvc}
+                  onChange={(e) => handleInput("cvc", e.target.value)}
+                />
+              </div>
+            </div>
+
+            <div className="input-wrap">
+              <label className="floating-label">카드 명의자 이름</label>
+              <input
+                type="text"
+                placeholder="홍길동"
+                value={form.name}
+                onChange={(e) => handleInput("name", e.target.value)}
+              />
+            </div>
+
+            <div className="input-wrap">
+              <label className="floating-label">국가 또는 지역</label>
+              <select
+                value={form.country}
+                onChange={(e) => handleInput("country", e.target.value)}
+              >
+                <option value="">국가 선택</option>
+                <option value="KR">대한민국</option>
+                <option value="US">미국</option>
+                <option value="JP">일본</option>
+              </select>
+            </div>
+
+            <label className="checkbox">
+              <input
+                type="checkbox"
+                checked={form.saveInfo}
+                onChange={(e) => handleInput("saveInfo", e.target.checked)}
+              />
+              정보 저장하기
+            </label>
+
+            <button
+              className="submit-btn"
+              onClick={handleSubmitCard}
+              type="button"
+            >
+              카드 추가
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 };
 
 export default PaymentContent;

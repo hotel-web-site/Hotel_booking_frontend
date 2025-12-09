@@ -34,7 +34,7 @@ let mockReviews = [
 ============================================================ */
 export const getReviews = async (hotelId) => {
     const filtered = mockReviews.filter(
-        r => r.hotelId === Number(hotelId)
+        (r) => r.hotelId === Number(hotelId)
     );
 
     // HotelDetailPage.jsx의 setReviews(reviewsData)에서
@@ -48,7 +48,7 @@ export const getReviews = async (hotelId) => {
 ============================================================ */
 export const getReviewStats = async (hotelId) => {
     const filtered = mockReviews.filter(
-        r => r.hotelId === Number(hotelId)
+        (r) => r.hotelId === Number(hotelId)
     );
 
     const average =
@@ -103,7 +103,7 @@ export const updateReview = async (reviewId, payload) => {
         review.id === reviewId ? { ...review, ...payload } : review
     );
 
-    return mockReviews.find(r => r.id === reviewId);
+    return mockReviews.find((r) => r.id === reviewId);
 };
 
 
@@ -111,7 +111,7 @@ export const updateReview = async (reviewId, payload) => {
    📌 5. 리뷰 삭제 (DELETE)
 ============================================================ */
 export const deleteReview = async (reviewId) => {
-    mockReviews = mockReviews.filter(r => r.id !== reviewId);
+    mockReviews = mockReviews.filter((r) => r.id !== reviewId);
     return true;
 };
 
@@ -120,3 +120,19 @@ export const deleteReview = async (reviewId) => {
    📌 6. 호환용 (postReview 그대로 유지)
 ============================================================ */
 export const postReview = createReview;
+
+
+/* ============================================================
+   📌 7. 내 리뷰 가져오기 (MyReviewsPage 용)
+      - 현재는 userId.name(유저 이름) 기준으로 필터
+      - 나중에 백엔드 붙이면 userId(고유 ID) 기준으로 교체
+============================================================ */
+export const getMyReviews = async (userName) => {
+    if (!userName) return [];
+
+    const filtered = mockReviews.filter(
+        (r) => r.userId?.name === userName
+    );
+
+    return filtered;
+};
