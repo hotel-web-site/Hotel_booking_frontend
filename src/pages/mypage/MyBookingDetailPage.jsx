@@ -138,15 +138,51 @@ const MyBookingDetailPage = () => {
                 {item.status}
               </div>
 
-              <button
-                className="download-btn"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  alert("티켓 다운로드 기능 준비중입니다.");
-                }}
-              >
-                티켓 다운로드
-              </button>
+              {item.status !== "취소됨" && (
+                <button
+                  className="download-btn"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    alert("티켓 다운로드 기능 준비중입니다.");
+                  }}
+                >
+                  티켓 다운로드
+                </button>
+              )}
+              {item.status === "예정됨" && (
+                <button
+                  className="cancel-btn"
+                  style={{ marginTop: "10px" }}
+                  onClick={e => {
+                    e.stopPropagation();
+                    if (!window.confirm("정말 예약을 취소하시겠습니까?")) return;
+                    const updated = bookings.map(b =>
+                      b.id === item.id ? { ...b, status: "취소됨" } : b
+                    );
+                    localStorage.setItem("bookings", JSON.stringify(updated));
+                    setBookings(updated);
+                  }}
+                >
+                  예약 취소
+                </button>
+              )}
+              {item.status === "취소됨" && (
+                <button
+                  className="rebook-btn"
+                  style={{ marginTop: "10px" }}
+                  onClick={e => {
+                    e.stopPropagation();
+                    // 호텔 상세 페이지로 이동 (호텔 id 필요)
+                    if (item.hotel && item.hotel.id) {
+                      navigate(`/hotels/${item.hotel.id}`);
+                    } else {
+                      alert("호텔 정보를 찾을 수 없습니다.");
+                    }
+                  }}
+                >
+                  다시 예약하기
+                </button>
+              )}
             </div>
           </div>
         ))}

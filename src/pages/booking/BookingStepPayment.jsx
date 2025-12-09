@@ -162,6 +162,18 @@ const BookingStepPayment = () => {
               </label>
             </div>
           </div>
+          {/* 약관 동의 밑 빈 공간에 이전 단계로 버튼 */}
+          <div style={{ width: "100%", display: "flex", justifyContent: "flex-end", marginTop: "32px" }}>
+            <button
+              className="btn-back"
+              onClick={() => {
+                const params = new URLSearchParams(searchParams);
+                navigate(`/booking/${hotelId}/room?${params.toString()}`);
+              }}
+            >
+              이전 단계로
+            </button>
+          </div>
         </div>
 
         {/* RIGHT: 결제 요약 */}
