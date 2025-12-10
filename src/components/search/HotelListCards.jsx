@@ -9,7 +9,30 @@ const HotelListCards = ({ hotels = [], filters = {} }) => {
 
     const [likes, setLikes] = useState({});
     const [visibleCount, setVisibleCount] = useState(6);
-    const visibleHotels = hotels.slice(0, visibleCount);
+
+    /** 🔥 guests 구조 준비 */
+    const guests = filters.guests || {
+        adults: 2,
+        children: 0,
+        total: 2,
+    };
+
+    /** 🔥 URL 파라미터 생성 함수 */
+    const buildQuery = () => {
+        const params = new URLSearchParams();
+
+        if (filters.destination) params.set("destination", filters.destination);
+        if (filters.checkIn) params.set("checkIn", filters.checkIn);
+        if (filters.checkOut) params.set("checkOut", filters.checkOut);
+
+        params.set("adults", guests.adults);
+        params.set("children", guests.children);
+        params.set("guests", guests.total);
+
+        return `?${params.toString()}`;
+    };
+
+    const query = buildQuery();
 
     // ⭐ 찜 상태 업데이트
     useEffect(() => {
@@ -46,16 +69,31 @@ const HotelListCards = ({ hotels = [], filters = {} }) => {
 
     const neededDates = getDateRange();
 
-    // ⭐ 호텔이 예약 가능한지 체크
-    const isHotelAvailable = (hotel) => {
-        if (!neededDates.length) return true; // 날짜를 선택하지 않았으면 모두 가능
+    // ⭐ 호텔 필터링 (인원 + 날짜 모두 만족하는 호텔만 리스트에 표시)
+    const filteredHotels = hotels.filter((hotel) => {
+        const totalGuests = Number(filters?.guests?.total) || 1;
 
-        return hotel.rooms?.some((room) =>
-            neededDates.every((d) => room.availableDates?.includes(d))
+        // 1) 인원 제한 체크
+        const hasRoomForGuests = hotel.rooms?.some(
+            (room) => room.maxGuests >= totalGuests
         );
-    };
+        if (!hasRoomForGuests) return false;
 
-    if (hotels.length === 0) {
+        // 2) 날짜 체크
+        if (neededDates.length > 0) {
+            const dateMatch = hotel.rooms?.some((room) =>
+                neededDates.every((d) => room.availableDates?.includes(d))
+            );
+            if (!dateMatch) return false;
+        }
+
+        return true;
+    });
+
+    // ⭐ 최종 출력할 호텔 리스트
+    const visibleHotels = filteredHotels.slice(0, visibleCount);
+
+    if (filteredHotels.length === 0) {
         return <div className="hotel-list-cards no-data">검색 결과가 없습니다.</div>;
     }
 
@@ -73,19 +111,12 @@ const HotelListCards = ({ hotels = [], filters = {} }) => {
                 const ratingScore = hotel.ratingAverage ?? hotel.rating ?? "-";
                 const ratingReviews = hotel.ratingCount ?? hotel.reviews ?? 0;
 
-                // ⭐ 예약 가능 여부 체크
-                const available = isHotelAvailable(hotel);
-
                 return (
                     <div
                         key={id}
-                        className={`hotel-card ${!available ? "sold-out" : ""}`}
-                        onClick={() => available && navigate(`/hotels/${hotel.id}`)}
+                        className="hotel-card"
+                        onClick={() => navigate(`/hotels/${hotel.id}${query}`)}
                     >
-                        {/* SOLD OUT 배지 */}
-                        {!available && <div className="sold-out-tag">예약 마감</div>}
-
-                        {/* 호텔 이미지 */}
                         <div className="hotel-image">
                             <img src={hotel.image} alt={hotel.name} />
                             {hotel.imageCount && (
@@ -113,7 +144,7 @@ const HotelListCards = ({ hotels = [], filters = {} }) => {
 
                             <div className="hotel-meta">
                                 <div className="hotel-amenities">
-                                    🏨 {amenitiesCount}개 편의시설
+                                    {amenitiesCount}개 편의시설
                                 </div>
                             </div>
 
