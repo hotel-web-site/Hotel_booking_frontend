@@ -203,7 +203,6 @@ const BookingStepRoom = () => {
 
       {/* 하단 결제 버튼 */}
       <div className="bottom-action">
-<<<<<<< HEAD
         <button
           className="btn-go-payment"
           onClick={goToPayment}
@@ -217,25 +216,6 @@ const BookingStepRoom = () => {
         >
           {selectedRoomId ? "결제 단계로 이동" : "예약 가능한 객실이 없습니다"}
         </button>
-=======
-          <button
-            className="btn-back"
-            onClick={() => {
-              const params = new URLSearchParams(searchParams);
-              navigate(`/booking/${hotelId}?${params.toString()}`);
-            }}
-            style={{ marginRight: "12px" }}
-          >
-            이전 단계로
-          </button>
-          <button
-            className="btn-go-payment"
-            onClick={goToPayment}
-            disabled={!selectedRoomId}
-          >
-            {selectedRoomId ? "결제 단계로 이동" : "객실을 선택해주세요"}
-          </button>
->>>>>>> upstream/main
       </div>
     </div>
   );

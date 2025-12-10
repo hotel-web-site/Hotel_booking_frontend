@@ -15,10 +15,8 @@ const mockHotels = [
     price: 120000,
     image: "/images/hotels/hotel1.jpg",
 
-    // 상세 페이지 전용 필드
     description:
       "도심 속 최고급 호텔로 넓은 객실과 편의시설을 제공합니다.",
-    // 👉 Freebies 필터용 키워드들 추가
     tags: ["바다 전망", "무료 주차", "조식 포함", "공항셔틀버스"],
     images: [
       "/images/hotels/detail/hotel1-1.jpg",
@@ -26,11 +24,11 @@ const mockHotels = [
       "/images/hotels/detail/hotel1-3.jpg",
     ],
     amenities: [
-      "Free Wi-Fi", // wifi
-      "Parking", // 무료주차
+      "Free Wi-Fi",
+      "Parking",
       "Pool",
-      "Breakfast", // 조식
-      "Airport shuttle", // 공항셔틀버스
+      "Breakfast",
+      "Airport shuttle",
     ],
     address: "서울특별시 강남구 테헤란로 123",
     locationMap: { lat: 37.5023, lng: 127.0247 },
@@ -45,18 +43,12 @@ const mockHotels = [
     image: "/images/hotels/hotel2.jpg",
 
     description: "바다와 가장 가까운 리조트형 호텔입니다.",
-    // 👉 조식/무료주차/무료취소 일부만 제공
     tags: ["해변 근처", "인피니티 풀", "조식 포함"],
     images: [
       "/images/hotels/detail/hotel2-1.jpg",
       "/images/hotels/detail/hotel2-2.jpg",
     ],
-    amenities: [
-      "Free Wi-Fi", // wifi
-      "Gym",
-      "Restaurant",
-      "Parking", // 무료주차
-    ],
+    amenities: ["Free Wi-Fi", "Gym", "Restaurant", "Parking"],
     address: "부산광역시 해운대구 해변로 45",
     locationMap: { lat: 35.1633, lng: 129.1635 },
   },
@@ -70,18 +62,12 @@ const mockHotels = [
     image: "/images/hotels/hotel3.jpg",
 
     description: "제주 자연 속 힐링을 즐길 수 있는 프리미엄 호텔입니다.",
-    // 👉 조식/무료주차는 있지만 공항셔틀은 없음(필터 테스트용)
     tags: ["풀빌라", "자연 전망", "조식 포함", "무료 주차"],
     images: [
       "/images/hotels/detail/hotel3-1.jpg",
       "/images/hotels/detail/hotel3-2.jpg",
     ],
-    amenities: [
-      "Parking", // 무료주차
-      "Spa",
-      "Pool",
-      "Free Wi-Fi", // wifi
-    ],
+    amenities: ["Parking", "Spa", "Pool", "Free Wi-Fi"],
     address: "제주 서귀포시 중문관광로 123",
     locationMap: { lat: 33.2541, lng: 126.4089 },
   },
@@ -92,7 +78,7 @@ const mockHotels = [
 ------------------------------------------------------------ */
 export const getHotels = async () => {
   return new Promise((resolve) => {
-    setTimeout(() => resolve(mockHotels), 300);
+    setTimeout(() => resolve(mockHotels), 200);
   });
 };
 
@@ -100,23 +86,30 @@ export const getHotels = async () => {
    3) DetailPage — 특정 호텔 상세 정보 API
 ------------------------------------------------------------ */
 export const getHotelDetail = async (hotelId) => {
-  const hotel = mockHotels.find(
-    (h) => String(h.id) === String(hotelId)
-  );
+  const hotel = mockHotels.find((h) => String(h.id) === String(hotelId));
 
   return new Promise((resolve) => {
-    setTimeout(() => resolve({ hotel }), 300);
+    setTimeout(() => resolve({ hotel }), 200);
   });
 };
 
 /* ------------------------------------------------------------
-   4) DetailPage — 객실 정보 (Enhanced Mock Rooms)
+   4) DetailPage — 객실 정보 (Mock)
 ------------------------------------------------------------ */
-const defaultAvailableDates = [
-  "2025-12-01", "2025-12-02", "2025-12-03", "2025-12-04", "2025-12-05",
-  "2025-12-06", "2025-12-07", "2025-12-08", "2025-12-09", "2025-12-10",
-  "2025-12-11", "2025-12-12", "2025-12-13", "2025-12-14", "2025-12-15"
-];
+// 🔥 오늘 날짜 기준 ~ 31일 뒤까지 자동 생성
+const defaultAvailableDates = (() => {
+  const today = new Date();
+  const dates = [];
+
+  for (let i = 0; i < 31; i++) {
+    const d = new Date(today);
+    d.setDate(today.getDate() + i);
+    dates.push(d.toISOString().split("T")[0]);
+  }
+
+  return dates;
+})();
+
 
 const mockRooms = {
   "1": [
@@ -257,10 +250,14 @@ const mockRooms = {
   ],
 };
 
+/* ------------------------------------------------------------
+   5) 호텔 객실 가져오기
+------------------------------------------------------------ */
 export const getHotelRooms = async (hotelId) => {
   const id = String(hotelId);
   const rooms = mockRooms[id] || [];
+
   return new Promise((resolve) => {
-    setTimeout(() => resolve(rooms), 300);
+    setTimeout(() => resolve(rooms), 200);
   });
 };
