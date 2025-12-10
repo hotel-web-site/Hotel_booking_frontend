@@ -34,7 +34,7 @@ const HotelListCards = ({ hotels = [], filters = {} }) => {
 
     const query = buildQuery();
 
-    // ⭐ 찜 상태 업데이트
+    /** 🔥 초기 찜 로딩 */
     useEffect(() => {
         const initialLikes = {};
         hotels.forEach((hotel) => {
@@ -44,6 +44,7 @@ const HotelListCards = ({ hotels = [], filters = {} }) => {
         setLikes(initialLikes);
     }, [hotels]);
 
+    /** 찜 토글 */
     const handleWishlist = (e, hotel) => {
         e.stopPropagation();
         const id = hotel._id || hotel.id;
@@ -51,7 +52,7 @@ const HotelListCards = ({ hotels = [], filters = {} }) => {
         setLikes((prev) => ({ ...prev, [id]: result }));
     };
 
-    // ⭐ 체크인~체크아웃 날짜 배열 생성
+    /** 체크인~체크아웃 날짜 배열 생성 */
     const getDateRange = () => {
         if (!filters.checkIn || !filters.checkOut) return [];
 
@@ -69,17 +70,17 @@ const HotelListCards = ({ hotels = [], filters = {} }) => {
 
     const neededDates = getDateRange();
 
-    // ⭐ 호텔 필터링 (인원 + 날짜 모두 만족하는 호텔만 리스트에 표시)
+    /** 🔥 호텔 필터링 (인원수 + 날짜) */
     const filteredHotels = hotels.filter((hotel) => {
         const totalGuests = Number(filters?.guests?.total) || 1;
 
-        // 1) 인원 제한 체크
+        // 1) 인원 제한 체크 → rooms 중 하나라도 maxGuests 만족해야 함
         const hasRoomForGuests = hotel.rooms?.some(
             (room) => room.maxGuests >= totalGuests
         );
         if (!hasRoomForGuests) return false;
 
-        // 2) 날짜 체크
+        // 2) 날짜 체크 → rooms 중 하나라도 모든 날짜 포함해야 함
         if (neededDates.length > 0) {
             const dateMatch = hotel.rooms?.some((room) =>
                 neededDates.every((d) => room.availableDates?.includes(d))
@@ -90,19 +91,26 @@ const HotelListCards = ({ hotels = [], filters = {} }) => {
         return true;
     });
 
-    // ⭐ 최종 출력할 호텔 리스트
+    /** 실제 출력될 호텔 */
     const visibleHotels = filteredHotels.slice(0, visibleCount);
 
     if (filteredHotels.length === 0) {
-        return <div className="hotel-list-cards no-data">검색 결과가 없습니다.</div>;
+        return (
+            <div className="hotel-list-cards no-data">
+                검색 결과가 없습니다.
+            </div>
+        );
     }
 
     return (
         <div className="hotel-list-cards">
             {visibleHotels.map((hotel) => {
                 const id = hotel._id || hotel.id;
+
                 const mainRoom =
-                    hotel.rooms && hotel.rooms.length > 0 ? hotel.rooms[0] : {};
+                    hotel.rooms && hotel.rooms.length > 0
+                        ? hotel.rooms[0]
+                        : {};
 
                 const price = mainRoom?.price ?? null;
                 const amenitiesCount = mainRoom?.amenities?.length || 0;
@@ -119,9 +127,6 @@ const HotelListCards = ({ hotels = [], filters = {} }) => {
                     >
                         <div className="hotel-image">
                             <img src={hotel.image} alt={hotel.name} />
-                            {hotel.imageCount && (
-                                <div className="image-count">{hotel.imageCount} 장 사진</div>
-                            )}
                         </div>
 
                         {/* 호텔 정보 */}
@@ -140,7 +145,9 @@ const HotelListCards = ({ hotels = [], filters = {} }) => {
                                 </div>
                             </div>
 
-                            <div className="hotel-location">{hotel.location}</div>
+                            <div className="hotel-location">
+                                {hotel.location}
+                            </div>
 
                             <div className="hotel-meta">
                                 <div className="hotel-amenities">
@@ -149,9 +156,12 @@ const HotelListCards = ({ hotels = [], filters = {} }) => {
                             </div>
 
                             <div className="hotel-rating">
-                                <span className="rating-score">{ratingScore}</span>
-                                <span className="rating-label">{hotel.ratingLabel || ""}</span>
-                                <span className="rating-reviews">{ratingReviews}개 리뷰</span>
+                                <span className="rating-score">
+                                    {ratingScore}
+                                </span>
+                                <span className="rating-reviews">
+                                    {ratingReviews}개 리뷰
+                                </span>
                             </div>
 
                             <div className="card-divider"></div>
@@ -160,7 +170,6 @@ const HotelListCards = ({ hotels = [], filters = {} }) => {
                                 <button
                                     className="wishlist-button"
                                     onClick={(e) => handleWishlist(e, hotel)}
-                                    disabled={!available}
                                 >
                                     {liked ? "♥" : "♡"}
                                 </button>
@@ -169,11 +178,10 @@ const HotelListCards = ({ hotels = [], filters = {} }) => {
                                     className="view-button"
                                     onClick={(e) => {
                                         e.stopPropagation();
-                                        available && navigate(`/hotels/${hotel.id}`);
+                                        navigate(`/hotels/${hotel.id}${query}`);
                                     }}
-                                    disabled={!available}
                                 >
-                                    {available ? "상세보기" : "예약불가"}
+                                    상세보기
                                 </button>
                             </div>
                         </div>
@@ -181,7 +189,7 @@ const HotelListCards = ({ hotels = [], filters = {} }) => {
                 );
             })}
 
-            {visibleCount < hotels.length && (
+            {visibleCount < filteredHotels.length && (
                 <button
                     className="load-more"
                     onClick={() => setVisibleCount((prev) => prev + 6)}
