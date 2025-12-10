@@ -2,59 +2,100 @@
 import React, { useState, useEffect } from "react";
 import "../../styles/components/search/SearchFilterWrap.scss";
 
-const normalize = (s) =>
-    (s || "").toLowerCase().replace(/\s+/g, "");
+const normalize = (s) => (s || "").toLowerCase().replace(/\s+/g, "");
 
-const SearchFilterWrap = ({ filters, onFilterChange, onSearch, hotels = [] }) => {
+const DEFAULT_GUESTS = { adults: 2, children: 0, total: 2 };
+
+const SearchFilterWrap = ({ filters = {}, onFilterChange, onSearch, hotels = [] }) => {
+    // 🔥 기본값 안전하게 세팅
     const [keyword, setKeyword] = useState(filters.destination || "");
     const [checkIn, setCheckIn] = useState(filters.checkIn || "");
     const [checkOut, setCheckOut] = useState(filters.checkOut || "");
-    const [guestOption, setGuestOption] = useState(filters.guests || { rooms: 1, guests: 2 });
 
-    // ⭐ 자동완성 상태
+    const initialGuests = filters.guests
+        ? {
+              adults: Number(filters.guests.adults) || 2,
+              children: Number(filters.guests.children) || 0,
+              total:
+                  (Number(filters.guests.adults) || 2) +
+                  (Number(filters.guests.children) || 0),
+          }
+        : DEFAULT_GUESTS;
+
+    const [guests, setGuests] = useState(initialGuests);
+
+    // ------------------------------------------
+    // 🔥 guests.total 자동 계산 (NaN 절대 방지)
+    // ------------------------------------------
+    useEffect(() => {
+        setGuests((prev) => ({
+            ...prev,
+            total: Number(prev.adults) + Number(prev.children),
+        }));
+    }, [guests.adults, guests.children]);
+
+    // ------------------------------------------
+    // filters 변경 시 동기화 (URL 반영 등)
+    // ------------------------------------------
+    useEffect(() => {
+        setKeyword(filters.destination || "");
+        setCheckIn(filters.checkIn || "");
+        setCheckOut(filters.checkOut || "");
+
+        if (filters.guests) {
+            setGuests({
+                adults: Number(filters.guests.adults) || 2,
+                children: Number(filters.guests.children) || 0,
+                total:
+                    (Number(filters.guests.adults) || 2) +
+                    (Number(filters.guests.children) || 0),
+            });
+        }
+    }, [filters]);
+
+    // ------------------------------------------
+    // 🔍 검색 실행
+    // ------------------------------------------
+    const handleSearch = () => {
+        const payload = {
+            destination: keyword,
+            checkIn,
+            checkOut,
+            guests,
+        };
+
+        onSearch?.(payload);
+
+        // URL 파라미터 생성
+        const params = new URLSearchParams();
+        if (keyword) params.set("destination", keyword);
+        if (checkIn) params.set("checkIn", checkIn);
+        if (checkOut) params.set("checkOut", checkOut);
+
+        params.set("adults", guests.adults);
+        params.set("children", guests.children);
+        params.set("guests", guests.total);
+
+        window.history.replaceState(null, "", `?${params.toString()}`);
+    };
+
+    // ------------------------------------------
+    // 자동완성
+    // ------------------------------------------
     const [suggestions, setSuggestions] = useState([]);
     const [activeIndex, setActiveIndex] = useState(-1);
 
-    // 날짜 변경 시 상위 필터 반영
-    useEffect(() => {
-        if (onFilterChange) onFilterChange("checkIn", checkIn);
-    }, [checkIn]);
-
-    useEffect(() => {
-        if (onFilterChange) onFilterChange("checkOut", checkOut);
-    }, [checkOut]);
-
-    // 🔍 검색 실행
-    const handleSearch = () => {
-        if (onSearch) {
-            onSearch({
-                destination: keyword,
-                checkIn,
-                checkOut,
-                guests: guestOption,
-            });
-        }
-        setSuggestions([]);
-    };
-
-    // 자동완성 업데이트
     useEffect(() => {
         const term = normalize(keyword);
-
-        if (!term) {
-            setSuggestions([]);
-            return;
-        }
+        if (!term) return setSuggestions([]);
 
         const matches = hotels
             .filter((hotel) => normalize(hotel.name).includes(term))
             .slice(0, 5);
 
         setSuggestions(matches);
-        setActiveIndex(-1);
     }, [keyword, hotels]);
 
-    // ⌨ Enter / Arrow navigation
     const handleKeyDown = (e) => {
         if (e.key === "Enter") {
             if (activeIndex >= 0 && suggestions[activeIndex]) {
@@ -82,14 +123,10 @@ const SearchFilterWrap = ({ filters, onFilterChange, onSearch, hotels = [] }) =>
     return (
         <div className="search-bar-wrapper">
             <div className="search-bar inner">
-
                 {/* Destination */}
                 <div className="search-item">
                     <label>호텔명 검색</label>
-
                     <div className="input-box autocomplete-wrapper">
-                        <span className="icon">🏨</span>
-
                         <input
                             type="text"
                             placeholder="신라스테이 플러스, 서울"
@@ -101,7 +138,6 @@ const SearchFilterWrap = ({ filters, onFilterChange, onSearch, hotels = [] }) =>
                             onKeyDown={handleKeyDown}
                         />
 
-                        {/* 🔥 자동완성 리스트 */}
                         {suggestions.length > 0 && (
                             <ul className="autocomplete-list">
                                 {suggestions.map((hotel, idx) => (
@@ -131,7 +167,6 @@ const SearchFilterWrap = ({ filters, onFilterChange, onSearch, hotels = [] }) =>
                             type="date"
                             value={checkIn}
                             onChange={(e) => setCheckIn(e.target.value)}
-                            onKeyDown={handleKeyDown}
                         />
                     </div>
                 </div>
@@ -144,40 +179,77 @@ const SearchFilterWrap = ({ filters, onFilterChange, onSearch, hotels = [] }) =>
                             type="date"
                             value={checkOut}
                             onChange={(e) => {
-                                // 체크아웃이 체크인보다 빠를 경우 자동 교정
                                 if (checkIn && e.target.value < checkIn) return;
                                 setCheckOut(e.target.value);
                             }}
-                            onKeyDown={handleKeyDown}
                         />
                     </div>
                 </div>
 
-                {/* Guests */}
+                {/* 🔥 Guests - 성인/어린이 카운터 */}
                 <div className="search-item">
-                    <label>객실 및 인원</label>
-                    <div className="input-box">
-                        <span className="icon">👤</span>
-                        <select
-                            value={`${guestOption.rooms}-${guestOption.guests}`}
-                            onChange={(e) => {
-                                const [rooms, guests] = e.target.value.split("-");
-                                const newValue = {
-                                    rooms: Number(rooms),
-                                    guests: Number(guests),
-                                };
-                                setGuestOption(newValue);
-                                onFilterChange?.("guests", newValue);
-                            }}
-                        >
-                            <option value="1-2">1 객실, 2명</option>
-                            <option value="1-1">1 객실, 1명</option>
-                            <option value="2-4">2 객실, 4명</option>
-                        </select>
+                    <label>투숙객</label>
+
+                    <div className="guest-counter">
+                        {/* Adults */}
+                        <div className="guest-row">
+                            <span>성인</span>
+                            <div className="counter">
+                                <button
+                                    onClick={() =>
+                                        setGuests((prev) => ({
+                                            ...prev,
+                                            adults: Math.max(1, prev.adults - 1),
+                                        }))
+                                    }
+                                >
+                                    -
+                                </button>
+                                <span>{guests.adults}</span>
+                                <button
+                                    onClick={() =>
+                                        setGuests((prev) => ({
+                                            ...prev,
+                                            adults: prev.adults + 1,
+                                        }))
+                                    }
+                                >
+                                    +
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Children */}
+                        <div className="guest-row">
+                            <span>어린이</span>
+                            <div className="counter">
+                                <button
+                                    onClick={() =>
+                                        setGuests((prev) => ({
+                                            ...prev,
+                                            children: Math.max(0, prev.children - 1),
+                                        }))
+                                    }
+                                >
+                                    -
+                                </button>
+                                <span>{guests.children}</span>
+                                <button
+                                    onClick={() =>
+                                        setGuests((prev) => ({
+                                            ...prev,
+                                            children: prev.children + 1,
+                                        }))
+                                    }
+                                >
+                                    +
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                {/* Search Button */}
+                {/* 검색 버튼 */}
                 <button className="search-button" onClick={handleSearch}>
                     🔍
                 </button>

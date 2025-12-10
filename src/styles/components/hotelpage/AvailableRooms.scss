@@ -41,11 +41,25 @@
             height: 70px;
             border-radius: 6px;
             overflow: hidden;
+            position: relative;
 
             img {
                 width: 100%;
                 height: 100%;
                 object-fit: cover;
+            }
+
+            /* 예약 불가 뱃지 */
+            .room-badge {
+                position: absolute;
+                bottom: 4px;
+                left: 4px;
+                padding: 3px 6px;
+                background: #fa6975;
+                color: #fff;
+                font-size: 10px;
+                font-weight: 600;
+                border-radius: 4px;
             }
         }
 
@@ -63,6 +77,11 @@
             .room-type {
                 font-size: 13px;
                 color: #555;
+            }
+
+            .room-max {
+                font-size: 12px;
+                color: #777;
             }
         }
     }
@@ -105,7 +124,17 @@
             &:hover {
                 background: #6ac6b0;
             }
+
+            /* 🔥 예약 불가 버튼 */
+            &.disabled {
+                background: #fa6975 !important; /* 분홍색 */
+                cursor: not-allowed;
+                opacity: 0.9;
+
+                &:hover {
+                    background: #fa6975 !important;
+                }
+            }
         }
     }
-
 }
