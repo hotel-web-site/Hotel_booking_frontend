@@ -4,6 +4,49 @@ import "./styles/Newsletter.scss";
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || "";
 
+// 🔹 구독 서비스 쿠폰을 localStorage("myCoupons")에 추가하는 함수
+const grantSubscriptionCoupon = () => {
+    const STORAGE_KEY = "myCoupons";
+    const COUPON_ID = "SUBSCRIBE_10000";
+
+    let coupons = [];
+
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) {
+        try {
+            coupons = JSON.parse(stored);
+        } catch (e) {
+            console.error("쿠폰 파싱 오류:", e);
+        }
+    }
+
+    // 이미 같은 ID의 쿠폰이 있다면 중복 지급하지 않음
+    const alreadyHas = coupons.some((c) => c.id === COUPON_ID);
+    if (alreadyHas) return;
+
+    // 🔹 예시: 구독 전용 쿠폰 정의
+    const now = new Date();
+    const expires = new Date();
+    expires.setMonth(expires.getMonth() + 3); // 3개월 유효
+
+    const newCoupon = {
+        id: COUPON_ID,
+        title: "구독 서비스 전용 10,000원 쿠폰",
+        description: "구독 유저에게 제공되는 정액 할인 쿠폰",
+        type: "amount",             // amount | percent
+        discountValue: 10000,       // 10,000원
+        minAmount: 80000,           // 최소 80,000원 이상 결제 시
+        maxDiscount: 10000,         // 최대 할인 10,000원
+        createdAt: now.toISOString(),
+        expiresAt: expires.toISOString(),
+        source: "구독서비스",
+        status: "unused",           // unused | used | expired
+    };
+
+    const updated = [...coupons, newCoupon];
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+};
+
 const Newsletter = () => {
     const navigate = useNavigate();
 
@@ -58,7 +101,7 @@ const Newsletter = () => {
                 body: JSON.stringify({
                     email,
                     userId: user._id || user.id, // 둘 중 있는 값 사용
-                    name: user.name || "",       // 선택적으로 이름도 보냄
+                    name: user.name || user.nickname || "", // 선택적으로 이름도 보냄
                 }),
             });
 
@@ -66,7 +109,10 @@ const Newsletter = () => {
                 throw new Error("구독 요청 실패");
             }
 
-            alert("구독이 완료되었습니다.");
+            // ✅ 구독 성공 시: 구독 전용 쿠폰 지급
+            grantSubscriptionCoupon();
+
+            alert("구독이 완료되었습니다.\n구독 전용 쿠폰이 지급되었습니다.");
             setSubscribed(true);
         } catch (error) {
             console.error("구독 에러:", error);
@@ -79,7 +125,6 @@ const Newsletter = () => {
     return (
         <section className="newsletter-wrapper">
             <div className="newsletter">
-
                 {/* 왼쪽 텍스트 */}
                 <div className="newsletter-left">
                     <h2 className="newsletter-title">
@@ -88,7 +133,9 @@ const Newsletter = () => {
 
                     <div className="newsletter-desc">
                         <p className="travel-title">DM</p>
-                        <p className="travel-sub">구독하고 쿠폰, 최신 이벤트를 받아보세요</p>
+                        <p className="travel-sub">
+                            구독하고 쿠폰, 최신 이벤트를 받아보세요
+                        </p>
                     </div>
 
                     {/* 🎉 구독 여부에 따라 UI 전환 */}
@@ -124,7 +171,9 @@ const Newsletter = () => {
                         <div className="newsletter-benefits">
                             <h3>구독 혜택</h3>
                             <ul>
-                                <li>업데이트 예정입니다.</li>
+                                <li>구독 전용 10,000원 할인 쿠폰 지급</li>
+                                <li>시즌별 한정 프로모션 안내</li>
+                                <li>베스트 특가 호텔 소식 제공</li>
                             </ul>
                         </div>
                     )}
@@ -138,7 +187,6 @@ const Newsletter = () => {
                         className="newsletter-img"
                     />
                 </div>
-
             </div>
         </section>
     );

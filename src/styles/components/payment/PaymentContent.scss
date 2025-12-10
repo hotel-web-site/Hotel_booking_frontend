@@ -1,0 +1,246 @@
+.payment-content {
+  margin-top: 30px;
+  font-family: "Pretendard", sans-serif;
+
+  /* 상단 헤더 영역 */
+  .payment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+
+    .payment-title {
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .filter-dropdown {
+      select {
+        padding: 8px 12px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        font-size: 14px;
+        background: #fff;
+        outline: none;
+        cursor: pointer;
+      }
+    }
+  }
+
+  /* 카드 리스트 영역 (예전 .card-list 대응) */
+  .cards-container {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+
+    /* 실제 카드 아이템 */
+    .card-item {
+      position: relative;
+
+      .card-visual {
+        width: 260px;
+        background: #b6dbc6;
+        padding: 20px;
+        border-radius: 12px;
+        position: relative;
+        box-sizing: border-box;
+
+        .card-number {
+          font-size: 18px;
+          font-weight: 500;
+        }
+
+        .card-last4 {
+          margin-top: 4px;
+          font-size: 22px;
+          font-weight: 600;
+          letter-spacing: 0.16em;
+        }
+
+        .card-footer {
+          margin-top: 10px;
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-end;
+
+          .card-expiry {
+            .expiry-label {
+              font-size: 12px;
+              color: #555;
+            }
+
+            .expiry-date {
+              font-size: 14px;
+              font-weight: 500;
+              margin-top: 2px;
+            }
+          }
+
+          .card-logo {
+            font-weight: 700;
+            font-size: 16px;
+          }
+        }
+      }
+
+      .delete-button {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 18px;
+        line-height: 1;
+      }
+    }
+
+    /* 새 카드 추가 카드 (예전 .add-card-box 대응) */
+    .add-card-item {
+      width: 260px;
+      height: 160px;
+      border: 2px dashed #90b6a4;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #444;
+      box-sizing: border-box;
+      text-align: center;
+
+      .add-card-circle {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: 2px solid #90b6a4;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 6px;
+
+        .add-icon {
+          font-size: 24px;
+          line-height: 1;
+        }
+      }
+
+      .add-card-text {
+        font-size: 14px;
+      }
+    }
+  }
+
+  /* -------- Modal (예전 modal 스타일 그대로 이쪽으로) -------- */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+
+    .modal {
+      background: white;
+      width: 480px;
+      padding: 30px 32px;
+      border-radius: 12px;
+      animation: fadeIn 0.2s ease;
+      box-sizing: border-box;
+
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        h2 {
+          font-size: 24px;
+          font-weight: 700;
+        }
+
+        .close {
+          background: none;
+          border: none;
+          font-size: 22px;
+          cursor: pointer;
+        }
+      }
+
+      .row {
+        display: flex;
+        gap: 16px;
+      }
+
+      .input-wrap {
+        display: flex;
+        flex-direction: column;
+        margin-top: 18px;
+
+        .floating-label {
+          font-size: 14px;
+          color: #555;
+          margin-bottom: 6px;
+          font-weight: 500;
+        }
+
+        input,
+        select {
+          width: 100%;
+          padding: 14px 12px;
+          border: 1px solid #ccc;
+          border-radius: 10px;
+          font-size: 16px;
+          outline: none;
+          box-sizing: border-box;
+
+          &::placeholder {
+            color: #bbb;
+            font-size: 14px;
+          }
+        }
+      }
+
+      .checkbox {
+        display: flex;
+        align-items: center;
+        margin-top: 18px;
+        gap: 8px;
+
+        input {
+          width: 16px;
+          height: 16px;
+        }
+      }
+
+      .submit-btn {
+        width: 100%;
+        margin-top: 22px;
+        padding: 15px;
+        background: #9cc8a5;
+        border: none;
+        border-radius: 10px;
+        font-size: 17px;
+        font-weight: 600;
+        cursor: pointer;
+
+        &:hover {
+          background: #8fbc98;
+        }
+      }
+    }
+  }
+}
+
+/* 모달 등장 애니메이션 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

@@ -86,6 +86,48 @@ const BookingStepPayment = () => {
     new Intl.NumberFormat("ko-KR").format(Number(p || 0));
 
   /* ---------------------------------------
+      포인트 상태 (localStorage 기반)
+      - 추후 백엔드 연결 시 API로 교체
+  --------------------------------------- */
+  const [points, setPoints] = useState(0); // 보유 포인트
+  const [usedPoints, setUsedPoints] = useState(0); // 이번 결제에 사용할 포인트
+
+  // 최초 로딩 시 localStorage에서 포인트 불러오기
+  useEffect(() => {
+    const stored = localStorage.getItem("userPoints");
+    if (stored) {
+      const num = Number(stored);
+      if (!Number.isNaN(num)) setPoints(num);
+    }
+  }, []);
+
+  // 포인트 사용/취소 버튼
+  const handleUsePoints = () => {
+    if (usedPoints > 0) {
+      // 이미 사용 중이면 취소
+      setUsedPoints(0);
+      return;
+    }
+
+    if (points <= 0) {
+      alert("사용 가능한 포인트가 없습니다.");
+      return;
+    }
+
+    if (finalTotal <= 0) {
+      alert("결제 금액이 없습니다.");
+      return;
+    }
+
+    // 결제 금액을 넘지 않도록 제한
+    const use = Math.min(points, finalTotal);
+    setUsedPoints(use);
+  };
+
+  // 실제 결제 예정 금액 (포인트 차감 후)
+  const payableAmount = Math.max(finalTotal - usedPoints, 0);
+
+  /* ---------------------------------------
       약관 동의 상태
   --------------------------------------- */
   const [formData, setFormData] = useState({
@@ -110,6 +152,19 @@ const BookingStepPayment = () => {
       alert("약관에 동의해야 결제가 가능합니다.");
       return;
     }
+
+    // ✅ 포인트 정산 로직 (백엔드 연결 전: localStorage 사용)
+    const remainingPoints = points - usedPoints; // 이번 결제에서 사용한 포인트 차감
+    // 실제 결제 금액 기준 0.1% 적립
+    const earnedPoints = Math.floor(payableAmount * 0.001);
+    const updatedPoints = remainingPoints + earnedPoints;
+
+    setPoints(updatedPoints);
+    localStorage.setItem("userPoints", String(updatedPoints));
+
+    // TODO: 백엔드 연결 후 아래처럼 교체
+    // await api.post("/points/use", { usedPoints });
+    // await api.post("/points/earn", { amount: payableAmount });
 
     navigate(`/booking/${hotelId}/complete?${searchParams.toString()}`);
   };
@@ -255,10 +310,45 @@ const BookingStepPayment = () => {
               <span className="value">₩{formatPrice(tax)}</span>
             </div>
 
+            {/* 기본 총합 (포인트 적용 전) */}
             <div className="price-row total">
               <span className="label">총 합계</span>
               <span className="value">₩{formatPrice(finalTotal)}</span>
             </div>
+
+            {/* 포인트 사용 시 차감 표시 */}
+            {usedPoints > 0 && (
+              <div className="price-row">
+                <span className="label">포인트 사용</span>
+                <span className="value">- ₩{formatPrice(usedPoints)}P</span>
+              </div>
+            )}
+
+            {/* 실제 결제 예정 금액 */}
+            <div className="price-row total payable">
+              <span className="label">결제 예정 금액</span>
+              <span className="value">₩{formatPrice(payableAmount)}</span>
+            </div>
+          </div>
+
+          {/* 포인트 영역 */}
+          <div className="points-section">
+            <div className="points-info">
+              보유 포인트: <strong>{formatPrice(points)}</strong>P
+            </div>
+            <button
+              type="button"
+              className="btn btn--outline"
+              onClick={handleUsePoints}
+              disabled={points === 0 && usedPoints === 0}
+            >
+              {usedPoints > 0 ? "포인트 사용 취소" : "포인트 사용"}
+            </button>
+            {usedPoints > 0 && (
+              <div className="points-used">
+                사용 포인트: {formatPrice(usedPoints)}P (결제 금액에서 차감)
+              </div>
+            )}
           </div>
 
           {/* 결제 버튼 */}
@@ -267,7 +357,7 @@ const BookingStepPayment = () => {
             onClick={handleSubmit}
             className="btn btn--primary btn--lg"
           >
-            ₩{formatPrice(finalTotal)} 결제하기
+            ₩{formatPrice(payableAmount)} 결제하기
           </button>
 
           <div className="payment-secure">안전한 결제 환경 제공</div>
