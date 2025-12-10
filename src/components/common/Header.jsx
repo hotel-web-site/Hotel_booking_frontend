@@ -109,7 +109,7 @@ const Header = () => {
                                         >
                                             결제내역
                                         </Link>
-                                        <Link className="item" to="/payment">
+                                        <Link className="item" to="/mypage/payment">
                                             결제수단
                                         </Link>
                                         <Link
