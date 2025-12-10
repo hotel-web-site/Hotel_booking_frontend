@@ -1,21 +1,10 @@
+// src/pages/mypage/MyPaymentPage.jsx
 import React, { useState, useEffect } from "react";
 import "../../styles/mypage/MyPaymentPage.scss";
 import ProfilePage from "./ProfilePage";
+import PaymentContent from "../../components/payment/PaymentContent";
 
 const MyPaymentPage = () => {
-  const [showModal, setShowModal] = useState(false);
-
-  const [cards, setCards] = useState([]);
-
-  const [form, setForm] = useState({
-    cardNumber: "",
-    exp: "",
-    cvc: "",
-    name: "",
-    country: "",
-    saveInfo: false,
-  });
-
   // 유저 정보 불러오기
   const [user, setUser] = useState({ name: "", email: "" });
   const [profileImage, setProfileImage] = useState(null);
@@ -31,45 +20,6 @@ const MyPaymentPage = () => {
     }
   }, []);
 
-  const handleInput = (key, value) => {
-    setForm((prev) => ({ ...prev, [key]: value }));
-  };
-
-  const validateCardNumber = (number) => {
-    const digits = number.replace(/\s+/g, "");
-    let sum = 0;
-    let dbl = false;
-
-    for (let i = digits.length - 1; i >= 0; i--) {
-      let n = parseInt(digits[i]);
-      if (dbl) {
-        n = n * 2;
-        if (n > 9) n -= 9;
-      }
-      sum += n;
-      dbl = !dbl;
-    }
-    return sum % 10 === 0;
-  };
-
-  const handleAddCard = () => {
-    if (!validateCardNumber(form.cardNumber)) {
-      alert("유효하지 않은 카드번호입니다.");
-      return;
-    }
-
-    setCards((prev) => [
-      ...prev,
-      {
-        last4: form.cardNumber.slice(-4),
-        exp: form.exp,
-        brand: "VISA",
-      },
-    ]);
-
-    setShowModal(false);
-  };
-
   return (
     <div className="payment-page">
       <ProfilePage
@@ -80,6 +30,7 @@ const MyPaymentPage = () => {
         email={user.email}
       />
 
+<<<<<<< HEAD
       <h2 className="payment-title">결제수단</h2>
 
       <div className="card-list">
@@ -177,6 +128,10 @@ const MyPaymentPage = () => {
           </div>
         </div>
       )}
+=======
+      {/* 결제수단 공통 컴포넌트 */}
+      <PaymentContent />
+>>>>>>> upstream/main
     </div>
   );
 };

@@ -1,3 +1,4 @@
+// src/pages/mypage/ProfilePage.jsx
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "../../styles/mypage/ProfilePage.scss";
@@ -79,6 +80,23 @@ const ProfilePage = ({
           onClick={() => navigate("/mypage/payment")}
         >
           결제수단
+        </button>
+
+        <button
+          type="button"
+          className={`tab ${activeTab === "coupons" ? "active" : ""}`}
+          onClick={() => navigate("/mypage/coupons")}
+        >
+          쿠폰
+        </button>
+
+        {/* 🔹 새로 추가되는 "내 리뷰" 탭 */}
+        <button
+          type="button"
+          className={`tab ${activeTab === "reviews" ? "active" : ""}`}
+          onClick={() => navigate("/mypage/reviews")}
+        >
+          내 리뷰
         </button>
       </div>
     </div>

@@ -2,7 +2,7 @@ import React from "react";
 import "../../styles/components/hotelpage/HotelMap.scss";
 
 const HotelMap = ({ address, location }) => {
-    const GOOGLE_MAPS_API_KEY = "AIzaSyDHcx9sCPnQhwcKlC5uHDUgqOJTXqJ5234";
+    const GOOGLE_MAPS_API_KEY = "AIzaSyCDJk7d3qcLlS5PwwwViEM5IEtGAOYpQJA";
     const encodedAddress = encodeURIComponent(address || "서울시청");
 
     const mapUrl = `https://www.google.com/maps/embed/v1/place?key=${GOOGLE_MAPS_API_KEY}&q=${encodedAddress}&zoom=15`;

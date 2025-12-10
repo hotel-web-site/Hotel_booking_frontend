@@ -71,93 +71,126 @@
             }
         }
 
-        .booking-info {
-            .info-section {
-                margin-bottom: 2rem;
+        .info-section {
+            margin-bottom: 2.2rem;
+            background: #f8fafc;
+            border-radius: 16px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+            padding: 2rem 2.2rem 1.5rem 2.2rem;
+            @media (max-width: 600px) {
+                padding: 1.2rem 0.7rem 1.2rem 0.7rem;
+            }
 
-                h3 {
-                    font-size: $font-size-base;
-                    margin-bottom: $spacing-md;
-                    color: $color-text;
-                    display: flex;
-                    align-items: center;
-                    gap: $spacing-sm;
+            h3 {
+                font-size: 1.18rem;
+                margin-bottom: 1.2rem;
+                color: #222;
+                font-weight: 800;
+                display: flex;
+                align-items: center;
+                gap: 0.6rem;
+                letter-spacing: -0.5px;
+                .icon {
+                    color: #2563eb;
+                    font-size: 1.2em;
+                }
+            }
 
-                    .icon {
-                        color: $color-primary;
+            .hotel-summary {
+                display: flex;
+                gap: 1.5rem;
+                align-items: center;
+                background: #fff;
+                border-radius: 12px;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+                padding: 1.2rem 1.5rem;
+                margin-bottom: 0.5rem;
+                img {
+                    width: 70px;
+                    height: 70px;
+                    object-fit: cover;
+                    border-radius: 10px;
+                    background: #f4f4f4;
+                }
+                .hotel-details {
+                    flex: 1;
+                    .hotel-name {
+                        font-size: 1.15rem;
+                        font-weight: 700;
+                        margin-bottom: 0.3rem;
+                        color: #222;
+                    }
+                    .hotel-address {
+                        font-size: 0.97rem;
+                        color: #666;
+                        margin-bottom: 0.2rem;
+                    }
+                    .hotel-phone {
+                        font-size: 0.95rem;
+                        color: #a0a0a0;
                     }
                 }
+            }
 
-                .info-grid {
-                    display: grid;
-                    grid-template-columns: repeat(2, 1fr);
-                    gap: 1rem;
-
-                    @media (max-width: 768px) {
-                        grid-template-columns: 1fr;
-                    }
-
-                    .info-item {
-                        .label {
-                            font-size: $font-size-sm;
-                            color: $color-text-secondary;
-                            margin-bottom: $spacing-xs;
-                        }
-
-                        .value {
-                            font-weight: 600;
-                            color: $color-text;
-                        }
-                    }
+            .info-grid {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1.1rem 2.2rem;
+                @media (max-width: 768px) {
+                    grid-template-columns: 1fr;
                 }
-
-                .hotel-summary {
+                .info-item {
                     display: flex;
-                    gap: $spacing-md;
-                    padding: $spacing-md;
-                    background: $color-bg-light;
-                    border-radius: $border-radius-md;
-
-                    img {
-                        width: 100px;
-                        height: 100px;
-                        object-fit: cover;
-                        border-radius: $border-radius-md;
+                    flex-direction: column;
+                    gap: 0.2rem;
+                    .label {
+                        font-size: 0.98rem;
+                        color: #888;
+                        margin-bottom: 0.1rem;
+                        font-weight: 600;
                     }
-
-                    .hotel-details {
-                        flex: 1;
-
-                        .hotel-name {
-                            font-weight: 700;
-                            margin-bottom: 0.5rem;
-                        }
-
-                        .hotel-address {
-                            font-size: 0.9rem;
-                            color: $color-text-secondary;
-                        }
+                    .value {
+                        font-size: 1.08rem;
+                        font-weight: 700;
+                        color: #222;
                     }
                 }
             }
         }
 
         .price-summary {
-            padding-top: 1.5rem;
-            border-top: 2px solid $color-border;
+            margin-top: 2.2rem;
+            padding: 1.5rem 1.2rem 0.7rem 1.2rem;
+            border-top: 2px solid #e6e6e6;
+            background: #fff;
+            border-radius: 0 0 16px 16px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.03);
 
             .price-row {
                 display: flex;
                 justify-content: space-between;
-                padding: 0.5rem 0;
+                padding: 0.8rem 0;
+                font-size: 1rem;
+                color: #222;
+                font-weight: 500;
+
+                &.subtotal {
+                    padding-top: 1rem;
+                    border-top: 1px solid #e6e6e6;
+                }
+
+                &.discount {
+                    color: #0ea873;
+                    font-weight: 700;
+                }
 
                 &.total {
-                    font-size: 1.3rem;
-                    font-weight: 700;
-                    color: $color-primary;
-                    padding-top: 1rem;
-                    border-top: 1px solid $color-border;
-                    margin-top: 0.5rem;
+                    margin-top: 1rem;
+                    padding-top: 1.3rem;
+                    border-top: 2px solid #dcdcdc;
+                    font-size: 1.4rem;
+                    font-weight: 800;
+                    color: #2563eb;
                 }
             }
         }
@@ -168,6 +201,7 @@
         gap: $spacing-md;
         justify-content: center;
         flex-wrap: wrap;
+        margin-top: 2.5rem;
 
         .btn {
             padding: $spacing-md $spacing-lg;
