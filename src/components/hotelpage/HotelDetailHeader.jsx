@@ -8,6 +8,10 @@ const HotelDetailHeader = ({ hotel }) => {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
 
+    // ⭐ 비회원 여부 확인
+    const isGuest = searchParams.get("guest") === "1";
+    const basePath = isGuest ? "/booking-guest" : "/booking";
+
     if (!hotel) {
         return <div className="hotel-detail-header loading">로딩 중...</div>;
     }
@@ -29,7 +33,7 @@ const HotelDetailHeader = ({ hotel }) => {
     } = hotel;
 
     /* ===========================================================
-       🔥 예약 버튼 → URL 파라미터 유지해서 이동하도록 수정
+       🔥 예약 버튼 → guest 모드 유지해서 이동
     =========================================================== */
     const handleBookNow = () => {
         const params = new URLSearchParams();
@@ -45,7 +49,11 @@ const HotelDetailHeader = ({ hotel }) => {
         params.set("adults", adults);
         params.set("children", children);
 
-        navigate(`/booking/${hotel._id || hotel.id}?${params.toString()}`);
+        // ⭐ guest=1 유지
+        if (isGuest) params.set("guest", "1");
+
+        // ⭐ 회원/비회원에 따라 booking path 자동 선택
+        navigate(`${basePath}/${hotel._id || hotel.id}?${params.toString()}`);
     };
 
     const handleShare = async () => {
@@ -116,7 +124,6 @@ const HotelDetailHeader = ({ hotel }) => {
                     </div>
                 </div>
 
-                {/* 오른쪽 가격 + 버튼 */}
                 <div className="price-actions-wrap">
                     <div className="price-section">
                         <span className="price">
@@ -126,17 +133,14 @@ const HotelDetailHeader = ({ hotel }) => {
                     </div>
 
                     <div className="header-actions">
-                        {/* ♥ 찜 */}
                         <button className="icon-btn heart-btn" onClick={handleWishlist}>
                             {liked ? "♥" : "♡"}
                         </button>
 
-                        {/* 공유 */}
                         <button className="icon-btn" onClick={handleShare}>
                             <FaShare />
                         </button>
 
-                        {/* 예약 */}
                         <button className="book-top-btn" onClick={handleBookNow}>
                             예약하기
                         </button>

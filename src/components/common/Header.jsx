@@ -39,10 +39,11 @@ const Header = () => {
                         className="logo-image"
                     />
                 </Link>
-
                 <nav className="nav">
                     <Link to="/search">호텔검색</Link>
                     <Link to="/support/help">고객센터</Link>
+                    <Link to="/search?guest=1">비회원 예약</Link>
+                    <Link to="/search?guest=1">비회원 예약조회</Link>
                 </nav>
             </div>
 

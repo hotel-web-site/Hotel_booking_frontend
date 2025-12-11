@@ -1,3 +1,4 @@
+// src/components/booking/BookingStepRoom.jsx
 import React, { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import "../../styles/components/booking/BookingStepRoom.scss";
@@ -8,6 +9,12 @@ const BookingStepRoom = () => {
   const { hotelId } = useParams();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+
+  /* ===========================================================
+      ⭐ 비회원 모드 감지
+  =========================================================== */
+  const isGuest = searchParams.get("guest") === "1";
+  const basePath = isGuest ? "/booking-guest" : "/booking";
 
   const [rooms, setRooms] = useState([]);
   const initialSelectedRoomId = searchParams.get("roomId");
@@ -60,13 +67,11 @@ const BookingStepRoom = () => {
       예약 가능 여부 (엔진)
   =========================================================== */
   const isRoomAvailable = (room) => {
-    if (!room) return false; // 안전 장치
+    if (!room) return false;
 
-    // 1) 인원 제한 체크
     const fitsGuests = Number(room.maxGuests) >= Number(totalGuests);
     if (!fitsGuests) return false;
 
-    // 2) 날짜 체크
     if (!Array.isArray(room.availableDates)) return true;
 
     return neededDates.every((d) => room.availableDates.includes(d));
@@ -100,7 +105,7 @@ const BookingStepRoom = () => {
   };
 
   /* ===========================================================
-      결제 단계 이동
+      ⭐ 결제 단계로 이동 — guest 모드 적용
   =========================================================== */
   const goToPayment = () => {
     const selectedRoom = rooms.find(
@@ -115,7 +120,10 @@ const BookingStepRoom = () => {
     const params = new URLSearchParams(searchParams);
     params.set("roomId", selectedRoomId);
 
-    navigate(`/booking/${hotelId}/payment?${params.toString()}`);
+    // guest=1 상태 유지
+    if (isGuest) params.set("guest", "1");
+
+    navigate(`${basePath}/${hotelId}/payment?${params.toString()}`);
   };
 
   return (

@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate, useSearchParams } from "react-router-dom";
+import {
+  useParams,
+  useNavigate,
+  useSearchParams,
+  useLocation,
+} from "react-router-dom";
 import "../../styles/components/booking/BookingComplete.scss";
 
 import { getHotelDetail, getHotelRooms } from "../../api/hotelClient";
@@ -8,13 +13,26 @@ const BookingComplete = () => {
   const { hotelId } = useParams();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const location = useLocation();
+
+  /* --------------------------------------
+      ⭐ 회원 vs 비회원 자동 구분
+  -------------------------------------- */
+  const isGuest = location.pathname.startsWith("/booking-guest");
 
   const [bookingData, setBookingData] = useState(null);
   const [confirmationNumber, setConfirmationNumber] = useState("");
 
-  /* -----------------------------
-     날짜 계산
-  ----------------------------- */
+  /* --------------------------------------
+      비회원 정보 받기
+  -------------------------------------- */
+  const guestName = searchParams.get("guestName");
+  const guestEmail = searchParams.get("guestEmail");
+  const guestPhone = searchParams.get("guestPhone");
+
+  /* --------------------------------------
+      날짜 계산
+  -------------------------------------- */
   const calculateNights = (checkIn, checkOut) => {
     if (!checkIn || !checkOut) return 1;
     const diff = new Date(checkOut) - new Date(checkIn);
@@ -32,9 +50,9 @@ const BookingComplete = () => {
       weekday: "short",
     });
 
-  /* -----------------------------
-     예약 정보 세팅 + 저장
-  ----------------------------- */
+  /* --------------------------------------
+      예약 데이터 로딩
+  -------------------------------------- */
   useEffect(() => {
     const checkIn = searchParams.get("checkIn");
     const checkOut = searchParams.get("checkOut");
@@ -48,7 +66,7 @@ const BookingComplete = () => {
       return;
     }
 
-    // 예약 번호 생성
+    // 예약번호 생성
     const confNum = `BK${Date.now().toString().slice(-8)}`;
     setConfirmationNumber(confNum);
 
@@ -71,7 +89,7 @@ const BookingComplete = () => {
         const tax = Math.floor(totalRoom * 0.1);
 
         const bookingObj = {
-          id: confNum, // 예약 상세 페이지에서 사용
+          id: confNum,
           hotel,
           room,
           checkIn,
@@ -87,13 +105,15 @@ const BookingComplete = () => {
           status: "예정됨",
         };
 
-        // 🔥 localStorage에 저장
-        const stored = localStorage.getItem("bookings");
-        const bookingList = stored ? JSON.parse(stored) : [];
-        bookingList.push(bookingObj);
-        localStorage.setItem("bookings", JSON.stringify(bookingList));
+        // ⭐ 회원일 때만 localStorage에 저장 (마이페이지 용)
+        if (!isGuest) {
+          const stored = localStorage.getItem("bookings");
+          const bookingList = stored ? JSON.parse(stored) : [];
+          bookingList.push(bookingObj);
+          localStorage.setItem("bookings", JSON.stringify(bookingList));
+        }
 
-        // state 적용(화면 표시용)
+        // 화면 표시용
         setBookingData({
           hotel,
           room,
@@ -110,9 +130,10 @@ const BookingComplete = () => {
         });
       }
     );
-  }, [hotelId, searchParams, navigate]);
+  }, [hotelId, searchParams, navigate, isGuest]);
 
-  if (!bookingData) return <div className="booking-complete">로딩 중...</div>;
+  if (!bookingData)
+    return <div className="booking-complete">로딩 중...</div>;
 
   const { hotel, room, checkIn, checkOut, guests, payment } = bookingData;
 
@@ -121,16 +142,45 @@ const BookingComplete = () => {
       <div className="success-icon">✓</div>
 
       <h1>예약이 완료되었습니다!</h1>
-      <p className="success-message">예약 확인 이메일이 전송되었습니다.</p>
+      <p className="success-message">
+        {isGuest
+          ? "입력하신 연락처로 예약 정보가 전송되었습니다."
+          : "예약 확인 이메일이 전송되었습니다."}
+      </p>
 
       <div className="confirmation-card">
-
         <div className="confirmation-number">
           <div className="label">예약 번호</div>
           <div className="number">{confirmationNumber}</div>
         </div>
 
-        {/* 호텔 */}
+        {/* ⭐ 비회원 예약자 정보 */}
+        {isGuest && (
+          <div className="info-section">
+            <h3>
+              <span className="icon">👤</span> 예약자 정보 (비회원)
+            </h3>
+
+            <div className="info-grid">
+              <div className="info-item">
+                <div className="label">이름</div>
+                <div className="value">{guestName}</div>
+              </div>
+
+              <div className="info-item">
+                <div className="label">이메일</div>
+                <div className="value">{guestEmail}</div>
+              </div>
+
+              <div className="info-item">
+                <div className="label">전화번호</div>
+                <div className="value">{guestPhone}</div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* 호텔 정보 */}
         <div className="info-section">
           <h3>
             <span className="icon">🏨</span> 숙소 정보
@@ -141,12 +191,11 @@ const BookingComplete = () => {
             <div className="hotel-details">
               <div className="hotel-name">{hotel.name}</div>
               <div className="hotel-address">{hotel.address}</div>
-              <div className="hotel-phone">📞 고객센터 전화번호 없음</div>
             </div>
           </div>
         </div>
 
-        {/* 날짜 */}
+        {/* 날짜 정보 */}
         <div className="info-section">
           <h3>
             <span className="icon">📅</span> 예약 상세
@@ -178,11 +227,12 @@ const BookingComplete = () => {
           </div>
         </div>
 
-        {/* 객실 */}
+        {/* 객실 정보 */}
         <div className="info-section">
           <h3>
             <span className="icon">🛏️</span> 객실 정보
           </h3>
+
           <div className="info-grid">
             <div className="info-item">
               <div className="label">객실 타입</div>
@@ -201,11 +251,15 @@ const BookingComplete = () => {
           </div>
         </div>
 
-        {/* 요금 */}
+        {/* 요금 정보 */}
         <div className="price-summary">
           <div className="price-row">
-            <span>₩{formatPrice(payment.roomPrice)} × {payment.nights}박</span>
-            <span>₩{formatPrice(payment.roomPrice * payment.nights)}</span>
+            <span>
+              ₩{formatPrice(payment.roomPrice)} × {payment.nights}박
+            </span>
+            <span>
+              ₩{formatPrice(payment.roomPrice * payment.nights)}
+            </span>
           </div>
 
           <div className="price-row">
@@ -225,24 +279,31 @@ const BookingComplete = () => {
         </div>
       </div>
 
-      {/* 안내 */}
+      {/* 비회원 문구 변경 */}
       <div className="email-notice">
         <span className="icon">✉️</span>
-        예약 확인서가 이메일로 전송되었습니다.
+        {isGuest
+          ? "입력하신 이메일로 예약 정보가 전송되었습니다."
+          : "예약 확인서가 이메일로 전송되었습니다."}
       </div>
 
       {/* 버튼 */}
       <div className="action-buttons">
-        <button
-          className="btn btn-primary"
-          onClick={() =>
-            navigate(`/mypage/bookings/${confirmationNumber}`)
-          }
-        >
-          예약 내역 보기
-        </button>
+        {!isGuest && (
+          <button
+            className="btn btn-primary"
+            onClick={() =>
+              navigate(`/mypage/bookings/${confirmationNumber}`)
+            }
+          >
+            예약 내역 보기
+          </button>
+        )}
 
-        <button className="btn btn-secondary" onClick={() => navigate("/")}>
+        <button
+          className="btn btn-secondary"
+          onClick={() => navigate("/")}
+        >
           홈으로 이동
         </button>
       </div>
