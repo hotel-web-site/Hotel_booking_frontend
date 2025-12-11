@@ -1,52 +1,59 @@
-    /* 예약 취소 버튼 */
-    .cancel-btn {
-      padding: 8px 18px;
-      
-      background: #f9efef;
-      border-radius: 8px;
-      font-size: 14px;
-      font-weight: 700;
-      color: #d93025;
-      cursor: pointer;
-      margin-left: 6px;
-      transition: background 0.18s, color 0.18s, border 0.18s, transform 0.18s;
+.title {
+  padding-top: 10px;
+}
 
-      &:hover {
-        background: #f8d2d2;
-        color: #a81c1c;
-        border-color: #a81c1c;
-        
-      }
-      &:active {
-        background: #ffd6d6;
-        color: #fff;
-        border-color: #a81c1c;
-      }
-    }
+/* 예약 취소 버튼 */
+.cancel-btn {
+  padding: 8px 18px;
 
-    /* 다시 예약하기 버튼 */
-    .rebook-btn {
-      padding: 8px 18px;
-      background: #2563eb;
-      border: none;
-      border-radius: 8px;
-      font-size: 14px;
-      font-weight: 700;
-      color: #fff;
-      cursor: pointer;
-      margin-left: 6px;
-      transition: background 0.18s, color 0.18s, transform 0.18s;
+  background: #f9efef;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #d93025;
+  cursor: pointer;
+  margin-left: 6px;
+  transition: background 0.18s, color 0.18s, border 0.18s, transform 0.18s;
 
-      &:hover {
-        background: #1742a0;
-        color: #fff;
-        transform: translateY(-2px);
-      }
-      &:active {
-        background: #0e265c;
-        color: #fff;
-      }
-    }
+  &:hover {
+    background: #f8d2d2;
+    color: #a81c1c;
+    border-color: #a81c1c;
+
+  }
+
+  &:active {
+    background: #ffd6d6;
+    color: #fff;
+    border-color: #a81c1c;
+  }
+}
+
+/* 다시 예약하기 버튼 */
+.rebook-btn {
+  padding: 8px 18px;
+  background: #2563eb;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  cursor: pointer;
+  margin-left: 6px;
+  transition: background 0.18s, color 0.18s, transform 0.18s;
+
+  &:hover {
+    background: #1742a0;
+    color: #fff;
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    background: #0e265c;
+    color: #fff;
+  }
+}
+
 .booking-detail-page {
   width: 100%;
   max-width: 900px;
@@ -72,8 +79,10 @@
     padding-bottom: 14px;
     margin-bottom: 26px;
     border-bottom: 1px solid #e5e5e5;
+    gap: 10px;
 
     .filter-label {
+      width: 40px;
       font-size: 16px;
       font-weight: 600;
       color: #333;
@@ -127,11 +136,13 @@
         display: flex;
         gap: 18px;
         align-items: flex-start;
+
         .left-wrap {
           display: flex;
           flex-direction: column;
           align-items: flex-start;
         }
+
         .booking-img {
           width: 200px;
           height: 120px;
@@ -157,79 +168,79 @@
           gap: 10px;
           display: flex;
           flex-direction: column;
-            font-weight: 600;
-            color: #666;
-          }
+          font-weight: 600;
+          color: #666;
+        }
 
-          .check-date {
-            font-size: 16px;
-            font-weight: 700;
-            margin-bottom: 8px;
-            color: #06152b;
+        .check-date {
+          font-size: 16px;
+          font-weight: 700;
+          margin-bottom: 8px;
+          color: #06152b;
+        }
+      }
+    }
+
+    /* 오른쪽 섹션 */
+    .right {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-end;
+      gap: 12px;
+
+      /* 시간 정보 */
+      .time-info {
+        text-align: right;
+
+        p {
+          font-size: 13px;
+          color: #444;
+          margin-bottom: 4px;
+
+          span {
+            margin-left: 6px;
+            font-weight: 600;
           }
         }
       }
 
-      /* 오른쪽 섹션 */
-      .right {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: flex-end;
-        gap: 12px;
+      /* 상태 (예정됨/취소됨 등) */
+      .status {
+        font-size: 14px;
+        font-weight: 700;
+        padding: 4px 10px;
+        border-radius: 6px;
 
-        /* 시간 정보 */
-        .time-info {
-          text-align: right;
-
-          p {
-            font-size: 13px;
-            color: #444;
-            margin-bottom: 4px;
-
-            span {
-              margin-left: 6px;
-              font-weight: 600;
-            }
-          }
+        &.active {
+          background: #e8f6ef;
+          color: #009f65;
         }
 
-        /* 상태 (예정됨/취소됨 등) */
-        .status {
-          font-size: 14px;
-          font-weight: 700;
-          padding: 4px 10px;
-          border-radius: 6px;
-
-          &.active {
-            background: #e8f6ef;
-            color: #009f65;
-          }
-
-          &.cancelled {
-            background: #ffecec;
-            color: #d93025;
-          }
+        &.cancelled {
+          background: #ffecec;
+          color: #d93025;
         }
+      }
 
-        /* 티켓 다운로드 버튼 */
-        .download-btn {
-          padding: 8px 14px;
-          background: #dff3ea;
-          border: 1px solid #b6e6cf;
-          border-radius: 8px;
-          font-size: 14px;
-          font-weight: 600;
-          cursor: pointer;
-          transition: 0.15s ease;
+      /* 티켓 다운로드 버튼 */
+      .download-btn {
+        padding: 8px 14px;
+        background: #dff3ea;
+        border: 1px solid #b6e6cf;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.15s ease;
 
-          &:hover {
-            background: #ccebdd;
-          }
+        &:hover {
+          background: #ccebdd;
         }
       }
     }
   }
+}
 
 /* 📱 반응형 */
 @media (max-width: 600px) {

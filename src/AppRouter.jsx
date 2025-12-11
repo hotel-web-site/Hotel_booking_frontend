@@ -50,6 +50,12 @@ import InquiryHistoryPage from "./pages/support/InquiryHistoryPage";
 import NotFoundPage from "./pages/common/NotFoundPage";
 import ScrollToTop from "./components/common/ScrollToTop";
 
+/* ============================
+   비회원 예약조회 페이지
+============================ */
+import GuestBookingSearchPage from "./pages/guest/GuestBookingSearchPage";
+import GuestBookingResultPage from "./pages/guest/GuestBookingResultPage";
+
 const AppRouter = () => {
   return (
     <BrowserRouter>
@@ -60,6 +66,7 @@ const AppRouter = () => {
             MAIN LAYOUT (헤더 + 푸터)
         ============================ */}
         <Route path="/" element={<MainLayout />}>
+
           {/* 홈 */}
           <Route index element={<HomePage />} />
 
@@ -90,13 +97,21 @@ const AppRouter = () => {
             <Route path="complete" element={<BookingComplete />} />
           </Route>
 
-          {/* 예약 (비회원) → 헤더/푸터 유지됨 */}
+          {/* 예약 (비회원) */}
           <Route path="booking-guest/:hotelId" element={<BookingStepLayout />}>
             <Route index element={<BookingStepDates />} />
             <Route path="room" element={<BookingStepRoom />} />
             <Route path="extras" element={<BookingStepExtras />} />
             <Route path="payment" element={<BookingStepPayment />} />
             <Route path="complete" element={<BookingComplete />} />
+          </Route>
+
+          {/* ============================
+              비회원 예약조회 (NEW)
+          ============================ */}
+          <Route path="guest">
+            <Route path="booking" element={<GuestBookingSearchPage />} />
+            <Route path="booking-result" element={<GuestBookingResultPage />} />
           </Route>
 
           {/* 고객센터 */}
@@ -165,7 +180,6 @@ const AppRouter = () => {
 
         {/* 404 */}
         <Route path="*" element={<NotFoundPage />} />
-
       </Routes>
     </BrowserRouter>
   );

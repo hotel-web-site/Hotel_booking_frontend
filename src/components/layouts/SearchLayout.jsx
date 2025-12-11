@@ -73,8 +73,6 @@ const SearchLayout = () => {
   ------------------------------------------------------- */
   return (
     <div className="search-layout">
-      <Header />
-
       <div className="search-container">
         {/* 🔍 상단 검색바 */}
         <div className="search-top-bar">
@@ -85,7 +83,6 @@ const SearchLayout = () => {
             onSearch={handleSearch}
           />
         </div>
-
         {/* 좌측 필터 + 우측 호텔 리스트 */}
         <div className="search-content">
           <aside className="search-sidebar">
@@ -94,14 +91,11 @@ const SearchLayout = () => {
               onFilterChange={handleFilterChange}
             />
           </aside>
-
           <main className="search-main">
             <Outlet context={{ filters }} />
           </main>
         </div>
       </div>
-
-      <Footer />
     </div>
   );
 };

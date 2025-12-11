@@ -99,9 +99,15 @@ const BookingStepRoom = () => {
     }
   }, [rooms, selectedRoomId]);
 
+  /* ===========================================================
+      객실 선택 (토글 가능)
+  =========================================================== */
   const handleSelectRoom = (room) => {
     if (!isRoomAvailable(room)) return;
-    setSelectedRoomId(room.id);
+
+    setSelectedRoomId((prev) =>
+      String(prev) === String(room.id) ? null : room.id
+    );
   };
 
   /* ===========================================================
@@ -120,7 +126,6 @@ const BookingStepRoom = () => {
     const params = new URLSearchParams(searchParams);
     params.set("roomId", selectedRoomId);
 
-    // guest=1 상태 유지
     if (isGuest) params.set("guest", "1");
 
     navigate(`${basePath}/${hotelId}/payment?${params.toString()}`);
@@ -214,15 +219,13 @@ const BookingStepRoom = () => {
         <button
           className="btn-go-payment"
           onClick={goToPayment}
-          disabled={
-            !selectedRoomId ||
-            !rooms.find((r) => String(r.id) === String(selectedRoomId)) ||
-            !isRoomAvailable(
-              rooms.find((r) => String(r.id) === String(selectedRoomId))
-            )
-          }
+          disabled={rooms.length === 0 || !selectedRoomId}
         >
-          {selectedRoomId ? "결제 단계로 이동" : "예약 가능한 객실이 없습니다"}
+          {rooms.length === 0
+            ? "예약 가능한 객실이 없습니다"
+            : !selectedRoomId
+            ? "객실을 선택해 주세요"
+            : "결제 단계로 이동"}
         </button>
       </div>
     </div>
