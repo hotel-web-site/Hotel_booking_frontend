@@ -29,6 +29,7 @@ import SignupPage from "./pages/auth/SignupPage";
 import ResetPasswordPage from "./pages/auth/ResetPasswordPage";
 import KakaoCallbackPage from "./pages/auth/KakaoCallbackPage";
 import GoogleCallbackPage from "./pages/auth/GoogleCallbackPage";
+import FindPasswordPage from "./pages/auth/FindPasswordPage";
 
 import MyAccountPage from "./pages/mypage/MyAccountPage";
 import MyPaymentPage from "./pages/mypage/MyPaymentPage";
@@ -60,7 +61,6 @@ const AppRouter = () => {
   return (
     <BrowserRouter>
       <ScrollToTop />
-
       <Routes>
         {/* ============================
             MAIN LAYOUT (헤더 + 푸터)
@@ -165,6 +165,7 @@ const AppRouter = () => {
         <Route element={<AuthLayout />}>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
+          <Route path="/findpassword" element={<FindPasswordPage />} />
           <Route path="/reset-password" element={<ResetPasswordPage />} />
           <Route path="/add-payment" element={<AddPaymentPage />} />
 
