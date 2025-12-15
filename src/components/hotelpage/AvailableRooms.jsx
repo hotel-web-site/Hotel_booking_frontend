@@ -32,16 +32,17 @@ const AvailableRooms = ({ rooms }) => {
 
     /* 🔥 객실 예약 가능 여부 체크 */
     const isRoomAvailable = (room) => {
+        // ⭐ 날짜 선택 전이면 무조건 예약 가능
+        if (!checkIn || !checkOut) return true;
+
         const fitsGuests = room.maxGuests >= totalGuests;
+        if (!fitsGuests) return false;
 
-        if (!Array.isArray(room.availableDates)) return fitsGuests;
+        if (!Array.isArray(room.availableDates)) return true;
 
-        const dateOK =
-            neededDates.length === 0 ||
-            neededDates.every((d) => room.availableDates.includes(d));
-
-        return fitsGuests && dateOK;
+        return neededDates.every((d) => room.availableDates.includes(d));
     };
+
 
     /* 🔥 예약하기 버튼 클릭 */
     const handleBook = (roomId) => {

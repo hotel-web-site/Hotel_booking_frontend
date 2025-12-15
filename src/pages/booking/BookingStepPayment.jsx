@@ -236,7 +236,7 @@ const BookingStepPayment = () => {
               navigate(`${basePath}/${hotelId}/room?${searchParams.toString()}`)
             }
           >
-            이전 단계로
+            ← 이전 단계로
           </button>
         </div>
 
@@ -352,7 +352,6 @@ const BookingStepPayment = () => {
             ₩{formatPrice(payableAmount)} 결제하기
           </button>
 
-          <div className="payment-secure">안전한 결제 환경 제공</div>
         </div>
       </div>
 

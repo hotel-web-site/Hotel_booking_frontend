@@ -37,7 +37,7 @@ const FindPasswordPage = () => {
 
         {/* ← Back to login */}
         <button className="back-btn" onClick={() => navigate("/login")}>
-          ← Back to login
+          ← 로그인 페이지로
         </button>
 
         <h2 className="title">비밀번호 찾기</h2>

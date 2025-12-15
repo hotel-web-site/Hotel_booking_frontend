@@ -64,7 +64,7 @@ const BookingStepRoom = () => {
   }, [hotelId]);
 
   /* ===========================================================
-      예약 가능 여부 (엔진)
+      예약 가능 여부
   =========================================================== */
   const isRoomAvailable = (room) => {
     if (!room) return false;
@@ -100,7 +100,7 @@ const BookingStepRoom = () => {
   }, [rooms, selectedRoomId]);
 
   /* ===========================================================
-      객실 선택 (토글 가능)
+      객실 선택
   =========================================================== */
   const handleSelectRoom = (room) => {
     if (!isRoomAvailable(room)) return;
@@ -111,7 +111,20 @@ const BookingStepRoom = () => {
   };
 
   /* ===========================================================
-      ⭐ 결제 단계로 이동 — guest 모드 적용
+      ⭐ 이전 단계로 이동 (정답)
+  =========================================================== */
+  const goToPrevious = () => {
+    const params = new URLSearchParams(searchParams);
+
+    // guest 모드 유지
+    if (isGuest) params.set("guest", "1");
+
+    // 날짜 선택 단계로 명시 이동
+    navigate(`${basePath}/${hotelId}?${params.toString()}`);
+  };
+
+  /* ===========================================================
+      ⭐ 결제 단계로 이동
   =========================================================== */
   const goToPayment = () => {
     const selectedRoom = rooms.find(
@@ -214,8 +227,12 @@ const BookingStepRoom = () => {
         })}
       </div>
 
-      {/* 하단 결제 버튼 */}
+      {/* 하단 액션 버튼 */}
       <div className="bottom-action">
+        <button className="btn-prev" onClick={goToPrevious}>
+          이전 단계로
+        </button>
+
         <button
           className="btn-go-payment"
           onClick={goToPayment}
