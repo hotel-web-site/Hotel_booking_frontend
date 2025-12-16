@@ -70,7 +70,6 @@ const Help = () => {
                             key={item.key}
                             type="button"
                             className="faq-card"
-                            onClick={() => handleGo("/faq")}
                         >
                             <h3 className="faq-card-title">{item.title}</h3>
                             <p className="faq-card-desc">{item.description}</p>
