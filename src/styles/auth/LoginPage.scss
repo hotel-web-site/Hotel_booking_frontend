@@ -12,14 +12,7 @@ body, html {
   display: flex;
   justify-content: space-between; /* ⬅ 가운데 공백 제거 핵심 */
   align-items: center;
-  width: 320px;
-  height: 500px;
-  background: white;
-  margin: 0;
-  gap: 0;
-  padding: 0 60px; /* 좌우 여백(원하는 만큼 조절 가능) */
-  padding-bottom: 300px;
-  padding-top: 100px;
+  
 }
 
 /* 왼쪽 로그인 컨테이너 */
