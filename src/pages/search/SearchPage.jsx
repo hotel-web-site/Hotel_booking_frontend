@@ -1,6 +1,6 @@
 // src/pages/search/SearchPage.jsx
 import React, { useEffect, useState } from "react";
-import { useOutletContext } from "react-router-dom";
+import { useOutletContext, useSearchParams } from "react-router-dom";
 import HotelTypesTabs from "../../components/search/HotelTypesTabs";
 import HotelResultsHeader from "../../components/search/HotelResultsHeader";
 import HotelListCards from "../../components/search/HotelListCards";
@@ -11,6 +11,12 @@ import { getHotels, getHotelRooms } from "../../api/hotelClient";
 const normalize = (s) => (s || "").toLowerCase().replace(/\s|-/g, "");
 
 const SearchPage = () => {
+  /* ---------------------------------------------
+     ⭐ 비회원 모드 감지
+  --------------------------------------------- */
+  const [searchParams] = useSearchParams();
+  const isGuest = searchParams.get("guest") === "1";
+
   const { filters } = useOutletContext() || {
     destination: "",
     priceRange: null,
@@ -97,7 +103,7 @@ const SearchPage = () => {
       return;
     }
 
-    /* ---- 목적지 ---- */
+    // ---- 목적지 ----
     if (filters.destination?.trim() !== "") {
       const dest = normalize(filters.destination.trim());
 
@@ -108,7 +114,7 @@ const SearchPage = () => {
       });
     }
 
-    /* ---- 가격 ---- */
+    // ---- 가격 ----
     if (Array.isArray(filters.priceRange)) {
       const [min, max] = filters.priceRange;
 
@@ -118,14 +124,14 @@ const SearchPage = () => {
       });
     }
 
-    /* ---- 평점 ---- */
+    // ---- 평점 ----
     if (filters.rating > 0) {
       result = result.filter(
         (hotel) => (hotel.ratingAverage || hotel.rating || 0) >= filters.rating
       );
     }
 
-    /* ---- freebies ---- */
+    // ---- freebies ----
     if (filters.freebies?.length > 0) {
       const keys = filters.freebies.map((f) => normalize(f));
 
@@ -141,7 +147,7 @@ const SearchPage = () => {
       );
     }
 
-    /* ---- amenities ---- */
+    // ---- amenities ----
     if (filters.amenities?.length > 0) {
       const keys = filters.amenities.map((a) => normalize(a));
 
@@ -183,9 +189,7 @@ const SearchPage = () => {
       );
     }
 
-    /* ---------------------------------------------
-       ⭐ 날짜 없이 인원만 선택해도 인원 필터 적용됨
-    --------------------------------------------- */
+    /* ⭐ 인원만 필터 */
     if (filters.guests?.guests > 0) {
       result = result.filter((hotel) =>
         hotel.rooms?.some(
@@ -217,7 +221,12 @@ const SearchPage = () => {
         onSort={(type) => setSortType(type)}
       />
 
-      <HotelListCards hotels={filteredHotels} filters={filters} />
+      {/* ⭐ guest 모드 전달 */}
+      <HotelListCards 
+        hotels={filteredHotels} 
+        filters={filters} 
+        isGuest={isGuest}
+      />
     </div>
   );
 };

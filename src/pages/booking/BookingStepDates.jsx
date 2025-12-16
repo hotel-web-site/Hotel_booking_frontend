@@ -1,3 +1,4 @@
+// src/components/booking/BookingStepDates.jsx
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { DayPicker } from "react-day-picker";
@@ -18,19 +19,19 @@ const BookingStepDates = () => {
   const [children, setChildren] = useState(0);
   const [hotel, setHotel] = useState(null);
 
+  // 🔥 비회원 모드인지 확인
+  const isGuest = searchParams.get("guest") === "1";
+  const basePath = isGuest ? "/booking-guest" : "/booking";
+
   /* -----------------------------------------------------
-     URL에서 받아온 정보 적용
-     checkIn, checkOut, adults, children, guests, roomId
+     URL에서 받아온 값 적용
   ----------------------------------------------------- */
   useEffect(() => {
     const checkIn = searchParams.get("checkIn");
     const checkOut = searchParams.get("checkOut");
 
-    const a = Number(searchParams.get("adults")) || 2;
-    const c = Number(searchParams.get("children")) || 0;
-
-    setAdults(a);
-    setChildren(c);
+    setAdults(Number(searchParams.get("adults")) || 2);
+    setChildren(Number(searchParams.get("children")) || 0);
 
     if (checkIn) {
       setRange({
@@ -53,8 +54,7 @@ const BookingStepDates = () => {
   };
 
   /* -----------------------------------------------------
-     다음 단계로 이동 (객실 선택)
-     URL 파라미터 유지 + 인원 수정 가능
+     객실 선택 페이지로 이동
   ----------------------------------------------------- */
   const handleContinue = () => {
     if (!range?.from || !range?.to) {
@@ -64,9 +64,7 @@ const BookingStepDates = () => {
 
     const params = new URLSearchParams();
 
-    // 날짜를 YYYY-MM-DD로 저장
     const formatDate = (d) => format(d, "yyyy-MM-dd");
-
     params.set("checkIn", formatDate(range.from));
     params.set("checkOut", formatDate(range.to));
 
@@ -74,11 +72,15 @@ const BookingStepDates = () => {
     params.set("children", children);
     params.set("guests", adults + children);
 
-    // 기존에 선택한 객실(roomId)
+    // 비회원 모드 유지
+    if (isGuest) params.set("guest", "1");
+
+    // 기존 roomId 유지
     const roomId = searchParams.get("roomId");
     if (roomId) params.set("roomId", roomId);
 
-    navigate(`/booking/${hotelId}/room?${params.toString()}`);
+    // 🔥 guest 모드면 booking-guest 경로로 이동
+    navigate(`${basePath}/${hotelId}/room?${params.toString()}`);
   };
 
   return (
@@ -108,9 +110,7 @@ const BookingStepDates = () => {
             />
           </div>
 
-          {/* ======================================
-              투숙객 정보
-          ====================================== */}
+          {/* 투숙객 선택 */}
           <div className="guests-section">
             <h3>투숙객 정보</h3>
 
@@ -121,9 +121,7 @@ const BookingStepDates = () => {
                 <div className="guest-desc">만 19세 이상</div>
               </div>
               <div className="counter">
-                <button onClick={() => setAdults(Math.max(1, adults - 1))}>
-                  -
-                </button>
+                <button onClick={() => setAdults(Math.max(1, adults - 1))}>-</button>
                 <span className="count">{adults}</span>
                 <button onClick={() => setAdults(adults + 1)}>+</button>
               </div>
@@ -149,9 +147,7 @@ const BookingStepDates = () => {
           </div>
         </div>
 
-        {/* ======================================
-            우측 요약 박스
-        ====================================== */}
+        {/* 요약 박스 */}
         <div className="booking-summary">
           {hotel && (
             <div className="summary-hotel">

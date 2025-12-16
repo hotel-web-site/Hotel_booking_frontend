@@ -1,7 +1,7 @@
 // src/pages/hotel/HotelDetailPage.jsx
 
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";   // ⭐ 추가
 import Amenities from "../../components/hotelpage/Amenities";
 import AvailableRooms from "../../components/hotelpage/AvailableRooms";
 import HotelDetailHeader from "../../components/hotelpage/HotelDetailHeader";
@@ -12,7 +12,6 @@ import HotelReviews from "../../components/hotelpage/HotelReviews";
 import "../../styles/pages/hotel/HotelDetailPage.scss";
 
 import {
-  getHotels,
   getHotelDetail,
   getHotelRooms,
 } from "../../api/hotelClient";
@@ -26,6 +25,8 @@ import {
 
 const HotelDetailPage = () => {
   const { hotelId } = useParams(); // URL에서 호텔 ID 추출
+  const [searchParams] = useSearchParams();      // ⭐ 추가
+  const isGuest = searchParams.get("guest") === "1";   // ⭐ 비회원 여부 확인
 
   const [hotel, setHotel] = useState(null);
   const [rooms, setRooms] = useState([]);
@@ -38,7 +39,6 @@ const HotelDetailPage = () => {
       try {
         setLoading(true);
 
-        // 호텔 상세 + 객실 + 리뷰 병렬로 불러오기
         const [hotelData, roomsData, reviewsData] = await Promise.all([
           getHotelDetail(hotelId),
           getHotelRooms(hotelId),
@@ -91,8 +91,8 @@ const HotelDetailPage = () => {
 
       <Amenities amenities={hotel.amenities} />
 
-      {/* ⭐ 인원수/날짜 정보는 AvailableRooms 내부에서 useLocation으로 읽음 */}
-      <AvailableRooms rooms={rooms} />
+      {/* ⭐ AvailableRooms에 비회원 여부 전달 */}
+      <AvailableRooms rooms={rooms} isGuest={isGuest} />
 
       <HotelMap address={hotel.address} location={hotel.location} />
 

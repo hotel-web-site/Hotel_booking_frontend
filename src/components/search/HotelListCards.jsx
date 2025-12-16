@@ -1,10 +1,11 @@
 // src/components/search/HotelListCards.jsx
+
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../styles/components/search/HotelListCards.scss";
 import { toggleWishlist, isWishlisted } from "../../util/wishlistService";
 
-const HotelListCards = ({ hotels = [], filters = {} }) => {
+const HotelListCards = ({ hotels = [], filters = {}, isGuest }) => {
     const navigate = useNavigate();
 
     const [likes, setLikes] = useState({});
@@ -17,8 +18,8 @@ const HotelListCards = ({ hotels = [], filters = {} }) => {
         total: 2,
     };
 
-    /** 🔥 URL 파라미터 생성 함수 */
-    const buildQuery = () => {
+    /** 🔥 URL 파라미터 생성 함수 (params 객체 반환) */
+    const buildParams = () => {
         const params = new URLSearchParams();
 
         if (filters.destination) params.set("destination", filters.destination);
@@ -29,37 +30,45 @@ const HotelListCards = ({ hotels = [], filters = {} }) => {
         params.set("children", guests.children);
         params.set("guests", guests.total);
 
-        return `?${params.toString()}`;
+        return params;
     };
 
-    const query = buildQuery();
+    const baseParams = buildParams();
+
+    /** ⭐ 호텔 상세 페이지로 이동 (guest=1 유지 포함) */
+    const goToHotelDetail = (hotelId) => {
+        const params = new URLSearchParams(baseParams);
+        if (isGuest) params.set("guest", "1");
+
+        navigate(`/hotels/${hotelId}?${params.toString()}`);
+    };
 
     /** 🔥 초기 찜 로딩 */
     useEffect(() => {
-        const initialLikes = {};
+        const initial = {};
         hotels.forEach((hotel) => {
             const id = hotel._id || hotel.id;
-            initialLikes[id] = isWishlisted(id);
+            initial[id] = isWishlisted(id);
         });
-        setLikes(initialLikes);
+        setLikes(initial);
     }, [hotels]);
 
-    /** 찜 토글 */
+    /** 찜 버튼 */
     const handleWishlist = (e, hotel) => {
         e.stopPropagation();
         const id = hotel._id || hotel.id;
+
         const result = toggleWishlist(hotel);
         setLikes((prev) => ({ ...prev, [id]: result }));
     };
 
-    /** 체크인~체크아웃 날짜 배열 생성 */
+    /** 날짜 범위 만들기 */
     const getDateRange = () => {
         if (!filters.checkIn || !filters.checkOut) return [];
-
         const start = new Date(filters.checkIn);
         const end = new Date(filters.checkOut);
-        const days = [];
 
+        const days = [];
         let cur = new Date(start);
         while (cur <= end) {
             days.push(cur.toISOString().split("T")[0]);
@@ -70,30 +79,31 @@ const HotelListCards = ({ hotels = [], filters = {} }) => {
 
     const neededDates = getDateRange();
 
-    /** 🔥 호텔 필터링 (인원수 + 날짜) */
+    /** 🔥 호텔 필터링 (인원수 + 날짜 조건 포함) */
     const filteredHotels = hotels.filter((hotel) => {
-        const totalGuests = Number(filters?.guests?.total) || 1;
+        const totalGuests = filters?.guests?.total || 1;
 
-        // 1) 인원 제한 체크 → rooms 중 하나라도 maxGuests 만족해야 함
-        const hasRoomForGuests = hotel.rooms?.some(
+        // 인원 조건
+        const fitsGuests = hotel.rooms?.some(
             (room) => room.maxGuests >= totalGuests
         );
-        if (!hasRoomForGuests) return false;
+        if (!fitsGuests) return false;
 
-        // 2) 날짜 체크 → rooms 중 하나라도 모든 날짜 포함해야 함
+        // 날짜 조건
         if (neededDates.length > 0) {
-            const dateMatch = hotel.rooms?.some((room) =>
+            const fitsDates = hotel.rooms?.some((room) =>
                 neededDates.every((d) => room.availableDates?.includes(d))
             );
-            if (!dateMatch) return false;
+            if (!fitsDates) return false;
         }
 
         return true;
     });
 
-    /** 실제 출력될 호텔 */
+    /** 출력할 호텔 목록 */
     const visibleHotels = filteredHotels.slice(0, visibleCount);
 
+    /** 검색 결과 없음 */
     if (filteredHotels.length === 0) {
         return (
             <div className="hotel-list-cards no-data">
@@ -123,8 +133,9 @@ const HotelListCards = ({ hotels = [], filters = {} }) => {
                     <div
                         key={id}
                         className="hotel-card"
-                        onClick={() => navigate(`/hotels/${hotel.id}${query}`)}
+                        onClick={() => goToHotelDetail(hotel.id)}
                     >
+                        {/* 이미지 */}
                         <div className="hotel-image">
                             <img src={hotel.image} alt={hotel.name} />
                         </div>
@@ -167,6 +178,7 @@ const HotelListCards = ({ hotels = [], filters = {} }) => {
                             <div className="card-divider"></div>
 
                             <div className="hotel-footer">
+                                {/* 찜 */}
                                 <button
                                     className="wishlist-button"
                                     onClick={(e) => handleWishlist(e, hotel)}
@@ -174,11 +186,12 @@ const HotelListCards = ({ hotels = [], filters = {} }) => {
                                     {liked ? "♥" : "♡"}
                                 </button>
 
+                                {/* 상세보기 */}
                                 <button
                                     className="view-button"
                                     onClick={(e) => {
                                         e.stopPropagation();
-                                        navigate(`/hotels/${hotel.id}${query}`);
+                                        goToHotelDetail(hotel.id);
                                     }}
                                 >
                                     상세보기
