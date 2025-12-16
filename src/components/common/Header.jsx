@@ -54,6 +54,7 @@ const Header = () => {
                     <Link to="/support/help">고객센터</Link>
                     <Link to="/search?guest=1">비회원 예약</Link>
                     <Link to="/guest/booking">비회원 예약조회</Link>
+                    <Link to="/support/notices">공지사항</Link>
                 </nav>
             </div>
 
