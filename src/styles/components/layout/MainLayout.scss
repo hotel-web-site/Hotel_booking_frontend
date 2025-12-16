@@ -1,0 +1,11 @@
+.main-layout {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.main-layout > main {
+    flex: 1;
+    padding: 0;      /* 🔥 중요 */
+    margin: 0;       /* 🔥 중요 */
+}

@@ -25,6 +25,7 @@ const HomePage = () => {
     }, []);
 
     return (
+        
         <div className="home-page top-container">
             <HeroSection />
 

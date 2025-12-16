@@ -9,7 +9,6 @@ const MyPageLayout = () => {
       <Header />
       <div className="mypage-layout">
         <aside>{/* 사이드바 네비게이션 */}</aside>
-
         <main>
           <Outlet />
         </main>

@@ -1,5 +1,6 @@
+// src/components/common/Header.jsx
 import { useState, useContext, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import "../../styles/components/common/Header.scss";
 
@@ -7,9 +8,9 @@ const Header = () => {
     const [openMenu, setOpenMenu] = useState(false);
     const { user, logout } = useContext(AuthContext);
     const navigate = useNavigate();
+    const location = useLocation();
     const isLoggedIn = !!user;
 
-    // 🔹 포인트 상태 (임시로 localStorage 사용, 나중에 백엔드 연동 시 API로 교체)
     const [points, setPoints] = useState(0);
 
     useEffect(() => {
@@ -20,17 +21,22 @@ const Header = () => {
         }
     }, []);
 
-    const formatPoints = (p) =>
-        new Intl.NumberFormat("ko-KR").format(Number(p || 0));
-
     const handleLogout = () => {
         logout();
         navigate("/");
     };
 
+    const formatPoints = (p) =>
+        new Intl.NumberFormat("ko-KR").format(Number(p || 0));
+
+    // ⭐ 페이지 이동 시 프로필 메뉴 자동 닫기
+    useEffect(() => {
+        setOpenMenu(false);
+    }, [location]);
+
     return (
         <header className="header">
-            {/* 🔹 좌측 로고 및 네비게이션 */}
+            {/* LEFT: 로고 */}
             <div className="header-left">
                 <Link to="/" className="logo">
                     <img
@@ -39,14 +45,19 @@ const Header = () => {
                         className="logo-image"
                     />
                 </Link>
+            </div>
 
+            {/* CENTER: 메뉴 */}
+            <div className="header-center">
                 <nav className="nav">
                     <Link to="/search">호텔검색</Link>
                     <Link to="/support/help">고객센터</Link>
+                    <Link to="/search?guest=1">비회원 예약</Link>
+                    <Link to="/guest/booking">비회원 예약조회</Link>
                 </nav>
             </div>
 
-            {/* 🔹 우측 로그인/회원가입 또는 사용자 메뉴 */}
+            {/* RIGHT: 로그인 / 프로필 */}
             <div className="header-right">
                 {!isLoggedIn && (
                     <>
@@ -61,6 +72,7 @@ const Header = () => {
 
                 {isLoggedIn && (
                     <div className="profile-area">
+                        {/* 프로필 버튼 */}
                         <div
                             className="profile"
                             onClick={() => setOpenMenu(!openMenu)}
@@ -72,73 +84,51 @@ const Header = () => {
                             <span>{user.nickname}</span>
                         </div>
 
+                        {/* 드롭다운 메뉴 */}
                         {openMenu && (
-                            <div className="profile-menu">
+                            <div
+                                className="profile-menu"
+                                onMouseLeave={() => setOpenMenu(false)}
+                            >
                                 <div className="user-menu-layout">
-                                    {/* ◀ 왼쪽 유저 정보 */}
                                     <div className="left-info">
                                         <div className="avatar">
                                             {user.nickname?.[0]?.toUpperCase()}
                                         </div>
                                         <div className="user-details">
-                                            <span className="username">
-                                                {user.nickname}
-                                            </span>
+                                            <span className="username">{user.nickname}</span>
                                             <span className="status">Online</span>
                                             <span className="points">
                                                 나의 포인트:{" "}
-                                                <strong>
-                                                    {formatPoints(points)}
-                                                </strong>
-                                                P
+                                                <strong>{formatPoints(points)}</strong>P
                                             </span>
                                         </div>
                                     </div>
 
-                                    {/* ▶ 오른쪽 메뉴 (찜 목록도 여기로 이동) */}
                                     <div className="right-menu">
-                                        <Link
-                                            className="item"
-                                            to="/mypage/account"
-                                        >
+                                        <Link className="item" to="/mypage/account">
                                             계정
                                         </Link>
-                                        <Link
-                                            className="item"
-                                            to="/mypage/bookings/:bookingId"
-                                        >
+                                        <Link className="item" to="/mypage/bookings/:bookingId">
                                             결제내역
                                         </Link>
                                         <Link className="item" to="/mypage/payment">
                                             결제수단
                                         </Link>
-                                        <Link
-                                            className="item"
-                                            to="/mypage/coupons"
-                                        >
+                                        <Link className="item" to="/mypage/coupons">
                                             쿠폰 목록
                                         </Link>
-                                        <Link
-                                            className="item"
-                                            to="/mypage/reviews"
-                                        >
+                                        <Link className="item" to="/mypage/reviews">
                                             내 리뷰
                                         </Link>
-                                        <Link
-                                            className="item"
-                                            to="/mypage/wishlist"
-                                        >
+                                        <Link className="item" to="/mypage/wishlist">
                                             찜 목록
                                         </Link>
                                     </div>
                                 </div>
 
                                 <div className="divider"></div>
-
-                                <button
-                                    className="item logout"
-                                    onClick={handleLogout}
-                                >
+                                <button className="logout" onClick={handleLogout}>
                                     로그아웃
                                 </button>
                             </div>

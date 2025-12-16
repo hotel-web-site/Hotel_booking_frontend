@@ -7,6 +7,10 @@ const AvailableRooms = ({ rooms }) => {
     const { hotelId } = useParams();
     const [searchParams] = useSearchParams();
 
+    /* 🔥 비회원 여부 */
+    const isGuest = searchParams.get("guest") === "1";
+    const basePath = isGuest ? "/booking-guest" : "/booking";
+
     /* 🔥 URL 파라미터 값 가져오기 */
     const checkIn = searchParams.get("checkIn") || "";
     const checkOut = searchParams.get("checkOut") || "";
@@ -14,7 +18,7 @@ const AvailableRooms = ({ rooms }) => {
     const children = Number(searchParams.get("children") || 0);
     const totalGuests = adults + children;
 
-    /* 🔥 예약 가능 날짜 리스트 */
+    /* 🔥 예약 날짜 계산 */
     const neededDates = [];
     if (checkIn && checkOut) {
         let cur = new Date(checkIn);
@@ -28,16 +32,17 @@ const AvailableRooms = ({ rooms }) => {
 
     /* 🔥 객실 예약 가능 여부 체크 */
     const isRoomAvailable = (room) => {
+        // ⭐ 날짜 선택 전이면 무조건 예약 가능
+        if (!checkIn || !checkOut) return true;
+
         const fitsGuests = room.maxGuests >= totalGuests;
+        if (!fitsGuests) return false;
 
-        if (!Array.isArray(room.availableDates)) return fitsGuests;
+        if (!Array.isArray(room.availableDates)) return true;
 
-        const dateOK =
-            neededDates.length === 0 ||
-            neededDates.every((d) => room.availableDates.includes(d));
-
-        return fitsGuests && dateOK;
+        return neededDates.every((d) => room.availableDates.includes(d));
     };
+
 
     /* 🔥 예약하기 버튼 클릭 */
     const handleBook = (roomId) => {
@@ -49,7 +54,11 @@ const AvailableRooms = ({ rooms }) => {
         params.set("children", children);
         params.set("roomId", roomId);
 
-        navigate(`/booking/${hotelId}?${params.toString()}`);
+        // ⭐ guest 유지
+        if (isGuest) params.set("guest", "1");
+
+        // ⭐ 회원/비회원에 따라 다른 경로로 이동
+        navigate(`${basePath}/${hotelId}?${params.toString()}`);
     };
 
     return (

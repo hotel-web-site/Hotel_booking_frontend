@@ -7,13 +7,43 @@
 }
 
 /* ================================
-   hero-card (왼쪽 세로 레이아웃로 변경)
+   Swiper Underline Pagination (고급 적용)
+================================ */
+.hero-swiper {
+    .swiper-pagination {
+        bottom: 34px !important;
+        display: flex;
+        justify-content: center;
+        gap: 14px;
+        align-items: center;
+    }
+
+    /* 기본 점 ● 제거 후 막대 형태로 재설계 */
+    .swiper-pagination-bullet {
+        width: 32px;
+        height: 3px;
+        background: rgba(255, 255, 255, 0.35);
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        opacity: 1 !important; /* Swiper 기본 페이드 제거 */
+    }
+
+    /* 활성화된 막대 → 더 밝고 넓어져서 강조 */
+    .swiper-pagination-bullet-active {
+        background: rgba(255, 255, 255, 0.9);
+        width: 48px;
+        height: 3.5px;
+    }
+}
+
+/* ================================
+   hero-card (왼쪽 세로 레이아웃)
 ================================ */
 .hero-card {
     display: flex;
-    flex-direction: column;     /* ← 검색바 아래 배치 위해 column */
+    flex-direction: column;
     justify-content: center;
-    align-items: flex-start;      /* ← 왼쪽 정렬 */
+    align-items: flex-start;
 
     width: 100%;
     height: 840px;
@@ -32,7 +62,7 @@
 }
 
 /* ================================
-   텍스트 영역 (왼쪽 정렬 유지)
+   텍스트 영역
 ================================ */
 .hero-content {
     display: flex;
@@ -40,7 +70,7 @@
     gap: 12px;
     color: #ffffff;
     text-align: left;
-    margin-right: auto;  /* 왼쪽 끝으로 이동 */
+    margin-right: auto;
     margin-left: 120px;
 }
 
@@ -62,13 +92,13 @@
 }
 
 /* ================================
-   검색 버튼 wrapper (텍스트 바로 아래 왼쪽으로 이동)
+   검색 버튼 wrapper
 ================================ */
 .search-btn-wrapper {
     position: relative;
     z-index: 20;
-    margin-top: 40px;       /* 텍스트와 간격 */
-    margin-right: auto;      /* 왼쪽 정렬 */
+    margin-top: 40px;
+    margin-right: auto;
     margin-left: 120px;
 
     .btn--blur {

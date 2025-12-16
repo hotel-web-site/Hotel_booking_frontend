@@ -1,3 +1,4 @@
+// src/components/booking/BookingStepRoom.jsx
 import React, { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import "../../styles/components/booking/BookingStepRoom.scss";
@@ -8,6 +9,12 @@ const BookingStepRoom = () => {
   const { hotelId } = useParams();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+
+  /* ===========================================================
+      ⭐ 비회원 모드 감지
+  =========================================================== */
+  const isGuest = searchParams.get("guest") === "1";
+  const basePath = isGuest ? "/booking-guest" : "/booking";
 
   const [rooms, setRooms] = useState([]);
   const initialSelectedRoomId = searchParams.get("roomId");
@@ -57,16 +64,14 @@ const BookingStepRoom = () => {
   }, [hotelId]);
 
   /* ===========================================================
-      예약 가능 여부 (엔진)
+      예약 가능 여부
   =========================================================== */
   const isRoomAvailable = (room) => {
-    if (!room) return false; // 안전 장치
+    if (!room) return false;
 
-    // 1) 인원 제한 체크
     const fitsGuests = Number(room.maxGuests) >= Number(totalGuests);
     if (!fitsGuests) return false;
 
-    // 2) 날짜 체크
     if (!Array.isArray(room.availableDates)) return true;
 
     return neededDates.every((d) => room.availableDates.includes(d));
@@ -94,13 +99,32 @@ const BookingStepRoom = () => {
     }
   }, [rooms, selectedRoomId]);
 
+  /* ===========================================================
+      객실 선택
+  =========================================================== */
   const handleSelectRoom = (room) => {
     if (!isRoomAvailable(room)) return;
-    setSelectedRoomId(room.id);
+
+    setSelectedRoomId((prev) =>
+      String(prev) === String(room.id) ? null : room.id
+    );
   };
 
   /* ===========================================================
-      결제 단계 이동
+      ⭐ 이전 단계로 이동 (정답)
+  =========================================================== */
+  const goToPrevious = () => {
+    const params = new URLSearchParams(searchParams);
+
+    // guest 모드 유지
+    if (isGuest) params.set("guest", "1");
+
+    // 날짜 선택 단계로 명시 이동
+    navigate(`${basePath}/${hotelId}?${params.toString()}`);
+  };
+
+  /* ===========================================================
+      ⭐ 결제 단계로 이동
   =========================================================== */
   const goToPayment = () => {
     const selectedRoom = rooms.find(
@@ -115,7 +139,9 @@ const BookingStepRoom = () => {
     const params = new URLSearchParams(searchParams);
     params.set("roomId", selectedRoomId);
 
-    navigate(`/booking/${hotelId}/payment?${params.toString()}`);
+    if (isGuest) params.set("guest", "1");
+
+    navigate(`${basePath}/${hotelId}/payment?${params.toString()}`);
   };
 
   return (
@@ -201,20 +227,22 @@ const BookingStepRoom = () => {
         })}
       </div>
 
-      {/* 하단 결제 버튼 */}
+      {/* 하단 액션 버튼 */}
       <div className="bottom-action">
+        <button className="btn-prev" onClick={goToPrevious}>
+          이전 단계로
+        </button>
+
         <button
           className="btn-go-payment"
           onClick={goToPayment}
-          disabled={
-            !selectedRoomId ||
-            !rooms.find((r) => String(r.id) === String(selectedRoomId)) ||
-            !isRoomAvailable(
-              rooms.find((r) => String(r.id) === String(selectedRoomId))
-            )
-          }
+          disabled={rooms.length === 0 || !selectedRoomId}
         >
-          {selectedRoomId ? "결제 단계로 이동" : "예약 가능한 객실이 없습니다"}
+          {rooms.length === 0
+            ? "예약 가능한 객실이 없습니다"
+            : !selectedRoomId
+            ? "객실을 선택해 주세요"
+            : "결제 단계로 이동"}
         </button>
       </div>
     </div>

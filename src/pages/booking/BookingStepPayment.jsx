@@ -1,5 +1,11 @@
+// src/pages/booking/BookingStepPayment.jsx
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate, useSearchParams } from "react-router-dom";
+import {
+  useParams,
+  useNavigate,
+  useSearchParams,
+  useLocation,
+} from "react-router-dom";
 import "../../styles/components/booking/BookingStepPayment.scss";
 
 import { getHotelDetail, getHotelRooms } from "../../api/hotelClient";
@@ -9,6 +15,29 @@ const BookingStepPayment = () => {
   const { hotelId } = useParams();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const location = useLocation();
+
+  /* ---------------------------------------
+      ⭐ 회원 / 비회원 구분
+  --------------------------------------- */
+  const isGuest = location.pathname.startsWith("/booking-guest");
+  const basePath = isGuest ? "/booking-guest" : "/booking";
+
+  /* ---------------------------------------
+      ⭐ 비회원 결제 모달 상태
+  --------------------------------------- */
+  const [guestModalOpen, setGuestModalOpen] = useState(false);
+
+  const [guestInfo, setGuestInfo] = useState({
+    name: "",
+    email: "",
+    phone: "",
+  });
+
+  const handleGuestChange = (e) => {
+    const { name, value } = e.target;
+    setGuestInfo((prev) => ({ ...prev, [name]: value }));
+  };
 
   /* ---------------------------------------
       결제 카드 상태
@@ -34,28 +63,24 @@ const BookingStepPayment = () => {
   const roomId = searchParams.get("roomId");
 
   useEffect(() => {
-    // roomId 없는 경우 → 객실 선택 페이지로 이동 (안전 처리)
     if (!roomId) {
-      navigate(`/booking/${hotelId}/room?${searchParams.toString()}`);
+      navigate(`${basePath}/${hotelId}/room?${searchParams.toString()}`);
       return;
     }
 
-    // 호텔 정보
     getHotelDetail(hotelId).then((res) => {
       if (res?.hotel) setHotel(res.hotel);
     });
 
-    // 객실 정보
     getHotelRooms(hotelId).then((list) => {
       const found = list.find((r) => String(r.id) === String(roomId));
-      if (!found) {
+      if (found) setRoom(found);
+      else {
         alert("선택한 객실 정보를 찾을 수 없습니다.");
-        navigate(`/booking/${hotelId}/room?${searchParams.toString()}`);
-        return;
+        navigate(`${basePath}/${hotelId}/room?${searchParams.toString()}`);
       }
-      setRoom(found);
     });
-  }, [hotelId, roomId, navigate, searchParams]);
+  }, [hotelId, roomId, navigate, searchParams, basePath]);
 
   /* ---------------------------------------
       예약 정보
@@ -68,13 +93,12 @@ const BookingStepPayment = () => {
   const calcNights = () => {
     if (!checkIn || !checkOut) return 0;
     const diff = new Date(checkOut) - new Date(checkIn);
-    return Math.ceil(diff / (1000 * 60 * 60 * 24));
+    return Math.ceil(diff / 86400000);
   };
-
   const nights = calcNights();
 
   /* ---------------------------------------
-      금액 계산 (안전 처리)
+      가격 계산
   --------------------------------------- */
   const priceRoom = room?.price ?? 0;
   const totalPrice = priceRoom * nights;
@@ -82,57 +106,39 @@ const BookingStepPayment = () => {
   const tax = Math.floor(totalPrice * 0.1);
   const finalTotal = totalPrice + serviceFee + tax;
 
-  const formatPrice = (p) =>
-    new Intl.NumberFormat("ko-KR").format(Number(p || 0));
+  const formatPrice = (p) => new Intl.NumberFormat("ko-KR").format(Number(p));
 
   /* ---------------------------------------
-      포인트 상태 (localStorage 기반)
-      - 추후 백엔드 연결 시 API로 교체
+      포인트 (회원만 적용)
   --------------------------------------- */
-  const [points, setPoints] = useState(0); // 보유 포인트
-  const [usedPoints, setUsedPoints] = useState(0); // 이번 결제에 사용할 포인트
+  const [points, setPoints] = useState(0);
+  const [usedPoints, setUsedPoints] = useState(0);
 
-  // 최초 로딩 시 localStorage에서 포인트 불러오기
   useEffect(() => {
-    const stored = localStorage.getItem("userPoints");
-    if (stored) {
-      const num = Number(stored);
-      if (!Number.isNaN(num)) setPoints(num);
+    if (!isGuest) {
+      const stored = localStorage.getItem("userPoints");
+      if (stored) setPoints(Number(stored));
     }
-  }, []);
+  }, [isGuest]);
 
-  // 포인트 사용/취소 버튼
   const handleUsePoints = () => {
+    if (isGuest) return;
+
     if (usedPoints > 0) {
-      // 이미 사용 중이면 취소
       setUsedPoints(0);
       return;
     }
-
-    if (points <= 0) {
-      alert("사용 가능한 포인트가 없습니다.");
-      return;
-    }
-
-    if (finalTotal <= 0) {
-      alert("결제 금액이 없습니다.");
-      return;
-    }
-
-    // 결제 금액을 넘지 않도록 제한
     const use = Math.min(points, finalTotal);
     setUsedPoints(use);
   };
 
-  // 실제 결제 예정 금액 (포인트 차감 후)
   const payableAmount = Math.max(finalTotal - usedPoints, 0);
 
   /* ---------------------------------------
-      약관 동의 상태
+      약관 상태
   --------------------------------------- */
   const [formData, setFormData] = useState({
     agree: false,
-    saveCard: false,
   });
 
   const handleInputChange = (e) => {
@@ -141,32 +147,56 @@ const BookingStepPayment = () => {
   };
 
   /* ---------------------------------------
-      결제 버튼 클릭
+      ⭐ 결제 버튼 클릭
   --------------------------------------- */
-  const handleSubmit = () => {
-    if (!cards.length) {
+  const handlePayClick = () => {
+    if (!formData.agree) {
+      alert("약관에 동의해야 결제 가능합니다.");
+      return;
+    }
+
+    if (cards.length === 0) {
       alert("결제 수단을 등록해주세요.");
       return;
     }
-    if (!formData.agree) {
-      alert("약관에 동의해야 결제가 가능합니다.");
+
+    if (isGuest) {
+      setGuestModalOpen(true);
       return;
     }
 
-    // ✅ 포인트 정산 로직 (백엔드 연결 전: localStorage 사용)
-    const remainingPoints = points - usedPoints; // 이번 결제에서 사용한 포인트 차감
-    // 실제 결제 금액 기준 0.1% 적립
-    const earnedPoints = Math.floor(payableAmount * 0.001);
-    const updatedPoints = remainingPoints + earnedPoints;
+    finishPayment();
+  };
 
-    setPoints(updatedPoints);
-    localStorage.setItem("userPoints", String(updatedPoints));
+  /* ---------------------------------------
+      ⭐ 비회원 결제 완료 처리
+  --------------------------------------- */
+  const handleGuestSubmit = () => {
+    if (!guestInfo.name || !guestInfo.email || !guestInfo.phone) {
+      alert("모든 정보를 입력해주세요.");
+      return;
+    }
 
-    // TODO: 백엔드 연결 후 아래처럼 교체
-    // await api.post("/points/use", { usedPoints });
-    // await api.post("/points/earn", { amount: payableAmount });
+    const params = new URLSearchParams(searchParams);
+    params.set("guestName", guestInfo.name);
+    params.set("guestEmail", guestInfo.email);
+    params.set("guestPhone", guestInfo.phone);
 
-    navigate(`/booking/${hotelId}/complete?${searchParams.toString()}`);
+    navigate(`${basePath}/${hotelId}/complete?${params.toString()}`);
+  };
+
+  /* ---------------------------------------
+      ⭐ 회원 결제 완료 처리
+  --------------------------------------- */
+  const finishPayment = () => {
+    const remaining = points - usedPoints;
+    const earned = Math.floor(payableAmount * 0.001);
+    const updated = remaining + earned;
+
+    setPoints(updated);
+    localStorage.setItem("userPoints", updated);
+
+    navigate(`${basePath}/${hotelId}/complete?${searchParams.toString()}`);
   };
 
   /* ---------------------------------------
@@ -175,7 +205,6 @@ const BookingStepPayment = () => {
   return (
     <div className="booking-payment">
       <div className="booking-content">
-        {/* LEFT: 카드를 선택하는 영역 */}
         <PaymentContent
           cards={cards}
           handleAddCard={handleAddCard}
@@ -192,50 +221,29 @@ const BookingStepPayment = () => {
             <div className="term-item">
               <input
                 type="checkbox"
-                id="saveCard"
-                name="saveCard"
-                checked={formData.saveCard}
-                onChange={handleInputChange}
-              />
-              <label htmlFor="saveCard">
-                <div className="term-title">결제수단 안전하게 저장</div>
-              </label>
-            </div>
-
-            <div className="term-item">
-              <input
-                type="checkbox"
                 id="agree"
                 name="agree"
                 checked={formData.agree}
                 onChange={handleInputChange}
               />
-              <label htmlFor="agree">
-                <div className="term-title">
-                  이용약관 및 개인정보처리방침에 동의합니다.
-                </div>
-              </label>
+              <label htmlFor="agree">이용약관 및 개인정보처리방침에 동의합니다.</label>
             </div>
           </div>
-          {/* 약관 동의 밑 빈 공간에 이전 단계로 버튼 */}
-          <div style={{ width: "100%", display: "flex", justifyContent: "flex-end", marginTop: "32px" }}>
-            <button
-              className="btn-back"
-              onClick={() => {
-                const params = new URLSearchParams(searchParams);
-                navigate(`/booking/${hotelId}/room?${params.toString()}`);
-              }}
-            >
-              이전 단계로
-            </button>
-          </div>
+
+          <button
+            className="btn-back"
+            onClick={() =>
+              navigate(`${basePath}/${hotelId}/room?${searchParams.toString()}`)
+            }
+          >
+            ← 이전 단계로
+          </button>
         </div>
 
-        {/* RIGHT: 결제 요약 */}
+        {/* 오른쪽 예약 요약 */}
         <div className="payment-summary">
           <h3>예약 요약</h3>
 
-          {/* 호텔 정보 */}
           {hotel && (
             <div className="booking-details">
               <div className="detail-item">
@@ -249,7 +257,6 @@ const BookingStepPayment = () => {
             </div>
           )}
 
-          {/* 날짜 정보 */}
           <div className="booking-details">
             <div className="detail-item">
               <span className="label">체크인</span>
@@ -257,29 +264,24 @@ const BookingStepPayment = () => {
                 {checkIn ? new Date(checkIn).toLocaleDateString("ko-KR") : "-"}
               </span>
             </div>
-
             <div className="detail-item">
               <span className="label">체크아웃</span>
               <span className="value">
                 {checkOut ? new Date(checkOut).toLocaleDateString("ko-KR") : "-"}
               </span>
             </div>
-
             <div className="detail-item">
               <span className="label">숙박 기간</span>
               <span className="value">{nights}박</span>
             </div>
-
             <div className="detail-item">
               <span className="label">투숙객</span>
               <span className="value">
-                성인 {adults}명
-                {children > 0 && ` / 어린이 ${children}명`}
+                성인 {adults}명 {children > 0 && ` / 어린이 ${children}명`}
               </span>
             </div>
           </div>
 
-          {/* 객실 정보 */}
           {room && (
             <div className="booking-details">
               <div className="detail-item">
@@ -291,7 +293,7 @@ const BookingStepPayment = () => {
             </div>
           )}
 
-          {/* 가격 상세 */}
+          {/* 가격 정보 */}
           <div className="price-breakdown">
             <div className="price-row">
               <span className="label">
@@ -310,59 +312,105 @@ const BookingStepPayment = () => {
               <span className="value">₩{formatPrice(tax)}</span>
             </div>
 
-            {/* 기본 총합 (포인트 적용 전) */}
             <div className="price-row total">
               <span className="label">총 합계</span>
               <span className="value">₩{formatPrice(finalTotal)}</span>
             </div>
 
-            {/* 포인트 사용 시 차감 표시 */}
-            {usedPoints > 0 && (
+            {!isGuest && usedPoints > 0 && (
               <div className="price-row">
                 <span className="label">포인트 사용</span>
                 <span className="value">- ₩{formatPrice(usedPoints)}P</span>
               </div>
             )}
 
-            {/* 실제 결제 예정 금액 */}
             <div className="price-row total payable">
               <span className="label">결제 예정 금액</span>
               <span className="value">₩{formatPrice(payableAmount)}</span>
             </div>
           </div>
 
-          {/* 포인트 영역 */}
-          <div className="points-section">
-            <div className="points-info">
-              보유 포인트: <strong>{formatPrice(points)}</strong>P
-            </div>
-            <button
-              type="button"
-              className="btn btn--outline"
-              onClick={handleUsePoints}
-              disabled={points === 0 && usedPoints === 0}
-            >
-              {usedPoints > 0 ? "포인트 사용 취소" : "포인트 사용"}
-            </button>
-            {usedPoints > 0 && (
-              <div className="points-used">
-                사용 포인트: {formatPrice(usedPoints)}P (결제 금액에서 차감)
+          {!isGuest && (
+            <div className="points-section">
+              <div className="points-info">
+                보유 포인트: <strong>{formatPrice(points)}</strong>P
               </div>
-            )}
-          </div>
+              <button
+                className="btn btn--outline"
+                onClick={handleUsePoints}
+              >
+                {usedPoints > 0 ? "포인트 사용 취소" : "포인트 사용"}
+              </button>
+            </div>
+          )}
 
-          {/* 결제 버튼 */}
           <button
-            disabled={!formData.agree || cards.length === 0}
-            onClick={handleSubmit}
+            disabled={!formData.agree}
+            onClick={handlePayClick}
             className="btn btn--primary btn--lg"
           >
             ₩{formatPrice(payableAmount)} 결제하기
           </button>
 
-          <div className="payment-secure">안전한 결제 환경 제공</div>
         </div>
       </div>
+
+      {/* ⭐ 비회원 정보 모달 — 화면 정중앙 */}
+      {guestModalOpen && (
+        <div
+          className="guest-modal-backdrop"
+          onClick={() => setGuestModalOpen(false)}
+        >
+          <div
+            className="guest-modal"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3>비회원 정보 입력</h3>
+
+            <div className="input-row">
+              <label>이름</label>
+              <input
+                name="name"
+                value={guestInfo.name}
+                onChange={handleGuestChange}
+                placeholder="이름"
+              />
+            </div>
+
+            <div className="input-row">
+              <label>이메일</label>
+              <input
+                name="email"
+                value={guestInfo.email}
+                onChange={handleGuestChange}
+                placeholder="이메일"
+              />
+            </div>
+
+            <div className="input-row">
+              <label>전화번호</label>
+              <input
+                name="phone"
+                value={guestInfo.phone}
+                onChange={handleGuestChange}
+                placeholder="전화번호"
+              />
+            </div>
+
+            <div className="modal-actions">
+              <button className="btn--primary" onClick={handleGuestSubmit}>
+                결제 완료
+              </button>
+              <button
+                className="btn--outline"
+                onClick={() => setGuestModalOpen(false)}
+              >
+                취소
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
