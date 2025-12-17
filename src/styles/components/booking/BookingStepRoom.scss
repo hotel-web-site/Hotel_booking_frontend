@@ -71,7 +71,7 @@
                     0 12px 24px rgba(0, 0, 0, 0.08);
             }
 
-            /* 선택된 카드 강조 */
+            /* 선택된 카드 */
             &.selected {
                 border: 2px solid #2b70ff;
                 transform: translateY(-4px);
@@ -80,7 +80,7 @@
                     0 10px 20px rgba(43, 112, 255, 0.18);
             }
 
-            /* 예약불가 카드 */
+            /* 예약 불가 */
             &.disabled {
                 opacity: 0.55;
                 filter: grayscale(20%);
@@ -88,9 +88,7 @@
                 background: #f3f3f3;
             }
 
-            /* ============================
-               왼쪽 이미지
-            ============================ */
+            /* 이미지 */
             .room-image {
                 position: relative;
                 height: 230px;
@@ -106,7 +104,6 @@
                     }
                 }
 
-                /* 할인 배지 */
                 .room-badge {
                     position: absolute;
                     top: 14px;
@@ -117,23 +114,18 @@
                     color: white;
                     font-weight: 700;
                     font-size: 0.9rem;
-
                     border-radius: 12px;
                     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
                 }
 
-                /* 예약불가 배지 */
                 .soldout {
                     top: unset;
                     bottom: 14px;
-                    left: 14px;
                     background: #ff4d4d !important;
                 }
             }
 
-            /* ============================
-               오른쪽 상세 정보
-            ============================ */
+            /* 상세 */
             .room-details {
                 padding: 22px 26px;
                 display: flex;
@@ -152,9 +144,6 @@
                     margin-bottom: 16px;
                 }
 
-                /* --------------------
-                   편의시설
-                -------------------- */
                 .room-amenities {
                     display: flex;
                     flex-wrap: wrap;
@@ -168,9 +157,6 @@
                     }
                 }
 
-                /* --------------------
-                   가격 + 버튼
-                -------------------- */
                 .price-row {
                     margin-top: auto;
                     padding-top: 16px;
@@ -191,18 +177,16 @@
                         }
                     }
 
-                    /* 선택 버튼 */
                     .btn-select {
                         padding: 10px 24px;
                         background: #2b70ff;
                         color: white;
-
                         border: none;
                         border-radius: 12px;
                         font-size: 1.1rem;
                         font-weight: 700;
-
                         cursor: pointer;
+
                         transition: 0.2s ease;
                         box-shadow: 0 4px 14px rgba(43, 112, 255, 0.25);
 
@@ -213,18 +197,15 @@
 
                         &.selected {
                             background: #0f3ea8;
-                            box-shadow: 0 4px 16px rgba(0, 50, 160, 0.28);
                         }
                     }
 
-                    /* 예약불가 버튼 */
                     .btn-disabled {
                         padding: 10px 24px;
                         border-radius: 12px;
                         background: #ddd;
                         color: #666;
                         border: none;
-
                         font-size: 1.05rem;
                         font-weight: 700;
                     }
@@ -232,7 +213,6 @@
             }
         }
 
-        /* 모바일 대응 */
         @media (max-width: 768px) {
             .room-card {
                 grid-template-columns: 1fr;
@@ -245,6 +225,9 @@
     }
 }
 
+/* ===========================================
+   하단 액션 버튼 (이전 + 결제)
+=========================================== */
 .bottom-action {
     position: sticky;
     bottom: 0;
@@ -254,35 +237,60 @@
     border-top: 1px solid #eee;
 
     display: flex;
+    gap: 14px;
     justify-content: center;
 
+    .btn-prev {
+        flex: 1;
+        max-width: 220px;
+        padding: 18px 0;
+
+        background: #f1f3f5;
+        color: #333;
+        border-radius: 12px;
+
+        font-size: 1.3rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: background 0.2s ease;
+
+        &:hover {
+            background: #e9ecef;
+        }
+    }
+
     .btn-go-payment {
-        width: 100%;
-        max-width: 480px;
+        flex: 2;
+        max-width: 420px;
         padding: 18px 0;
 
         border: none;
         border-radius: 12px;
         font-size: 1.3rem;
-        font-weight: 700;
+        font-weight: 800;
 
         background: #0d60ff;
         color: white;
         cursor: pointer;
         box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
 
-        transition: 0.2s ease;
-
         &:disabled {
             background: #d6d6d6;
-            color: white;
             cursor: not-allowed;
             box-shadow: none;
         }
 
         &:not(:disabled):hover {
             background: #0a4fcc;
-            transform: translateY(-2px);
+        }
+    }
+
+    @media (max-width: 768px) {
+        flex-direction: column;
+
+        .btn-prev,
+        .btn-go-payment {
+            max-width: 100%;
         }
     }
 }

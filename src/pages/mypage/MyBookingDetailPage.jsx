@@ -104,18 +104,20 @@ const MyBookingDetailPage = () => {
           >
             {/* LEFT */}
             <div className="left">
-              <img
-                src={item.hotel.images?.[0] || item.hotel.image}
-                alt="hotel"
-                className="booking-img"
-              />
-
+              <div className="left-wrap">
+                <p className="hotel-name">{item.hotel.name}</p>
+                <img
+                  src={item.hotel.images?.[0] || item.hotel.image}
+                  alt="hotel"
+                  className="booking-img"
+                />
+              </div>
               <div className="date-info">
                 <p className="check-title">체크인</p>
                 <p className="check-date">
                   {new Date(item.checkIn).toLocaleDateString("ko-KR")}
                 </p>
-
+          
                 <p className="check-title">체크아웃</p>
                 <p className="check-date">
                   {new Date(item.checkOut).toLocaleDateString("ko-KR")}

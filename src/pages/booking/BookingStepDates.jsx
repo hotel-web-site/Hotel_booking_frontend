@@ -1,3 +1,4 @@
+// src/components/booking/BookingStepDates.jsx
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { DayPicker } from "react-day-picker";
@@ -18,11 +19,19 @@ const BookingStepDates = () => {
   const [children, setChildren] = useState(0);
   const [hotel, setHotel] = useState(null);
 
-  // ⭐ 호텔 상세 + 기존 URL 값 불러오기
+  // 🔥 비회원 모드인지 확인
+  const isGuest = searchParams.get("guest") === "1";
+  const basePath = isGuest ? "/booking-guest" : "/booking";
+
+  /* -----------------------------------------------------
+     URL에서 받아온 값 적용
+  ----------------------------------------------------- */
   useEffect(() => {
     const checkIn = searchParams.get("checkIn");
     const checkOut = searchParams.get("checkOut");
-    const guests = searchParams.get("adults");
+
+    setAdults(Number(searchParams.get("adults")) || 2);
+    setChildren(Number(searchParams.get("children")) || 0);
 
     if (checkIn) {
       setRange({
@@ -31,22 +40,22 @@ const BookingStepDates = () => {
       });
     }
 
-    if (guests) setAdults(parseInt(guests));
-
     getHotelDetail(hotelId).then((res) => {
       if (res?.hotel) setHotel(res.hotel);
     });
   }, [hotelId, searchParams]);
 
+  /* -----------------------------------------------------
+     숙박일수 계산
+  ----------------------------------------------------- */
   const calculateNights = () => {
     if (!range?.from || !range?.to) return 0;
-    const diff = range.to - range.from;
-    return Math.ceil(diff / (1000 * 60 * 60 * 24));
+    return Math.ceil((range.to - range.from) / (1000 * 60 * 60 * 24));
   };
 
-  /* --------------------------------------------------------
-     날짜 선택 완료 → 객실 선택으로 이동 (roomId 포함)
-  -------------------------------------------------------- */
+  /* -----------------------------------------------------
+     객실 선택 페이지로 이동
+  ----------------------------------------------------- */
   const handleContinue = () => {
     if (!range?.from || !range?.to) {
       alert("날짜를 선택해주세요.");
@@ -54,18 +63,24 @@ const BookingStepDates = () => {
     }
 
     const params = new URLSearchParams();
-    params.append("checkIn", range.from.toISOString());
-    params.append("checkOut", range.to.toISOString());
-    params.append("adults", adults);
-    params.append("children", children);
 
-    // 🔥 URL에서 받은 roomId 그대로 넘긴다 (선택 강조용)
+    const formatDate = (d) => format(d, "yyyy-MM-dd");
+    params.set("checkIn", formatDate(range.from));
+    params.set("checkOut", formatDate(range.to));
+
+    params.set("adults", adults);
+    params.set("children", children);
+    params.set("guests", adults + children);
+
+    // 비회원 모드 유지
+    if (isGuest) params.set("guest", "1");
+
+    // 기존 roomId 유지
     const roomId = searchParams.get("roomId");
-    if (roomId) {
-      params.append("roomId", roomId);
-    }
+    if (roomId) params.set("roomId", roomId);
 
-    navigate(`/booking/${hotelId}/room?${params.toString()}`);
+    // 🔥 guest 모드면 booking-guest 경로로 이동
+    navigate(`${basePath}/${hotelId}/room?${params.toString()}`);
   };
 
   return (
@@ -95,9 +110,11 @@ const BookingStepDates = () => {
             />
           </div>
 
+          {/* 투숙객 선택 */}
           <div className="guests-section">
             <h3>투숙객 정보</h3>
 
+            {/* 성인 */}
             <div className="guest-controls">
               <div className="guest-info">
                 <div className="guest-type">성인</div>
@@ -110,6 +127,7 @@ const BookingStepDates = () => {
               </div>
             </div>
 
+            {/* 어린이 */}
             <div className="guest-controls">
               <div className="guest-info">
                 <div className="guest-type">어린이</div>
@@ -129,6 +147,7 @@ const BookingStepDates = () => {
           </div>
         </div>
 
+        {/* 요약 박스 */}
         <div className="booking-summary">
           {hotel && (
             <div className="summary-hotel">
@@ -156,7 +175,7 @@ const BookingStepDates = () => {
                 <div>
                   <span className="label">투숙객</span>
                   <span className="value">
-                    {adults}명 성인, {children}명 어린이
+                    성인 {adults}명, 어린이 {children}명 (총 {adults + children}명)
                   </span>
                 </div>
               </div>

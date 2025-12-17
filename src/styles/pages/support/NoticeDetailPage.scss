@@ -1,0 +1,68 @@
+/* ===============================
+   공지사항 상세
+================================ */
+
+.notice-detail {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 80px 0 320px;
+}
+
+/* 제목 */
+.notice-detail h2 {
+    font-size: 26px;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+/* 메타 정보 */
+.meta {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    font-size: 13px;
+    color: #999;
+    margin-bottom: 50px;
+}
+
+/* 본문 */
+.notice-content,
+.notice-detail pre {
+    font-family: inherit;
+    white-space: pre-wrap;
+    line-height: 1.8;
+    font-size: 15px;
+    color: #333;
+    margin-bottom: 80px;
+}
+
+/* 이미지 */
+.notice-detail img {
+    display: block;
+    max-width: 100%;
+    margin: 0 auto 40px;
+}
+
+/* 하단 버튼 영역 */
+.notice-actions {
+    display: flex;
+    justify-content: center;
+}
+
+/* 목록 버튼 */
+.notice-actions button {
+    width: 180px;
+    height: 44px;
+    border: 1px solid #999;
+    background: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover {
+        background: #333;
+        color: #fff;
+        border-color: #333;
+    }
+}

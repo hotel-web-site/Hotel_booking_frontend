@@ -9,8 +9,6 @@ import {
 
 const HotelReviews = ({
   hotelId,
-  rating,
-  reviewCount,
   createReview,
   updateReview,
   deleteReview,
@@ -19,44 +17,44 @@ const HotelReviews = ({
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // ⭐ 페이지네이션 상태
+  /* ⭐ 페이지네이션 상태 */
   const reviewsPerPage = 5;
   const [page, setPage] = useState(1);
 
   const totalPages = Math.ceil(reviews.length / reviewsPerPage);
-
   const start = (page - 1) * reviewsPerPage;
   const currentReviews = reviews.slice(start, start + reviewsPerPage);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
-  // ✅ 리뷰 작성 완료 처리 + 알림
+  /* ✅ 리뷰 작성 처리 */
   const handleSubmitReview = async (reviewData) => {
-    // reviewData에 hotelId가 없으면 붙여서 보냄 (mock에서 hotelId NaN 방지)
     const payload = {
       ...reviewData,
       hotelId: reviewData.hotelId ?? hotelId,
     };
 
-    await createReview(payload);   // 새 리뷰 생성
-    await getReviews();            // 리스트 갱신
-    setPage(1);                    // 최신 리뷰 보이도록 1페이지로 이동
+    await createReview(payload);
+    await getReviews();     // 리뷰 목록 갱신
+    setPage(1);             // 최신 리뷰가 보이도록
     closeModal();
 
-    // 🔔 리뷰 작성 완료 안내
     alert(
-      "리뷰 작성이 완료되었습니다.\n마이페이지 -> 내 리뷰에서 확인하실 수 있습니다."
+      "리뷰 작성이 완료되었습니다.\n마이페이지 → 내 리뷰에서 확인하실 수 있습니다."
     );
   };
 
-  // ⭐ 평균 평점 계산
+  /* ⭐ 평균 평점 + 라벨 */
   const avgRating = Number(calculateAverageRating(reviews)) || 0;
   const avgLabel = getRatingLabel(avgRating);
-  const verifiedCount = reviewCount || reviews.length;
+
+  /* ✅ 리뷰 개수는 실제 배열 기준 */
+  const verifiedCount = reviews.length;
 
   return (
     <div className="hotel-reviews">
+      {/* 헤더 */}
       <div className="header-row">
         <h3 className="reviews-title">리뷰</h3>
         <button className="give-review-btn" onClick={openModal}>
@@ -127,7 +125,7 @@ const HotelReviews = ({
           </button>
 
           <span className="page-text">
-            {page} of {totalPages}
+            {page} / {totalPages}
           </span>
 
           <button
@@ -142,7 +140,10 @@ const HotelReviews = ({
 
       {/* 리뷰 작성 모달 */}
       {isModalOpen && (
-        <ReviewModal closeModal={closeModal} onSubmit={handleSubmitReview} />
+        <ReviewModal
+          closeModal={closeModal}
+          onSubmit={handleSubmitReview}
+        />
       )}
     </div>
   );
