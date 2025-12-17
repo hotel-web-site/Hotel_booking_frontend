@@ -16,8 +16,36 @@ const PaymentContent = () => {
 
   const [showModal, setShowModal] = useState(false);
 
+
+  // 카드번호 4자리마다 자동 공백
+  const handleInputCardNumber = (value) => {
+    let onlyNum = value.replace(/\D/g, "").slice(0, 16);
+    let formatted = onlyNum.replace(/(\d{4})(?=\d)/g, "$1 ");
+    setForm((prev) => ({ ...prev, cardNumber: formatted }));
+  };
+
+
+  // 만료일 MM/YY 자동 포맷팅
+  const handleInputExp = (value) => {
+    let onlyNum = value.replace(/[^0-9]/g, "").slice(0, 4);
+    let formatted = onlyNum;
+    if (onlyNum.length > 2) {
+      formatted = onlyNum.slice(0, 2) + "/" + onlyNum.slice(2);
+    }
+    else if (onlyNum.length > 0 && onlyNum.length <= 2) {
+      formatted = onlyNum;
+    }
+    setForm((prev) => ({ ...prev, exp: formatted }));
+  };
+
   const handleInput = (key, value) => {
-    setForm((prev) => ({ ...prev, [key]: value }));
+    if (key === "cardNumber") {
+      handleInputCardNumber(value);
+    } else if (key === "exp") {
+      handleInputExp(value);
+    } else {
+      setForm((prev) => ({ ...prev, [key]: value }));
+    }
   };
 
   // Luhn 알고리즘으로 카드 번호 유효성 검사
@@ -145,6 +173,9 @@ const PaymentContent = () => {
                 placeholder="0000 0000 0000 0000"
                 value={form.cardNumber}
                 onChange={(e) => handleInput("cardNumber", e.target.value)}
+                maxLength={19} // 16자리+공백 3개
+                autoComplete="cc-number"
+                inputMode="numeric"
               />
             </div>
 
@@ -156,6 +187,9 @@ const PaymentContent = () => {
                   placeholder="MM/YY"
                   value={form.exp}
                   onChange={(e) => handleInput("exp", e.target.value)}
+                  maxLength={5}
+                  inputMode="numeric"
+                  autoComplete="cc-exp"
                 />
               </div>
 
@@ -165,7 +199,14 @@ const PaymentContent = () => {
                   type="text"
                   placeholder="123"
                   value={form.cvc}
-                  onChange={(e) => handleInput("cvc", e.target.value)}
+                  onChange={e => {
+                    // 숫자만, 3자리 제한
+                    let v = e.target.value.replace(/\D/g, "").slice(0, 3);
+                    handleInput("cvc", v);
+                  }}
+                  maxLength={3}
+                  inputMode="numeric"
+                  autoComplete="cc-csc"
                 />
               </div>
             </div>
@@ -193,14 +234,7 @@ const PaymentContent = () => {
               </select>
             </div>
 
-            <label className="checkbox">
-              <input
-                type="checkbox"
-                checked={form.saveInfo}
-                onChange={(e) => handleInput("saveInfo", e.target.checked)}
-              />
-              정보 저장하기
-            </label>
+            
 
             <button
               className="submit-btn"
