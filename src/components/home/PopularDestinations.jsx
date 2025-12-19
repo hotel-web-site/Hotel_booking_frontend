@@ -7,17 +7,33 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 
 import "../../styles/components/home/PopularDestinations.scss";
-import { getHotels } from "../../api/hotelClient"; // 🔥 호텔 리스트 API 가져오기
+import { getHotels } from "../../api/hotelClient";
 import DestinationCard from "./DestinationCard";
 
 const PopularDestinations = () => {
     const navigate = useNavigate();
+    // 💡 초기값을 빈 배열로 설정하여 데이터 로딩 전 에러 방지
     const [hotels, setHotels] = useState([]);
 
     useEffect(() => {
         const fetchHotels = async () => {
-            const data = await getHotels(); // 🔥 mock 호텔 리스트 가져오기
-            setHotels(data);
+            try {
+                const data = await getHotels();
+                /**
+                 * 💡 중요 포인트:
+                 * 백엔드 listHotels API는 { data: { list: [...], total: X } }를 반환합니다.
+                 * hotelClient.js에서 response.data.data를 리턴하므로,
+                 * 여기서는 data.list를 추출해서 state에 넣어야 배열이 저장됩니다.
+                 */
+                if (data && data.list) {
+                    setHotels(data.list);
+                } else if (Array.isArray(data)) {
+                    // 혹시 몰라 배열로 직접 올 경우에 대한 방어 로직
+                    setHotels(data);
+                }
+            } catch (error) {
+                console.error("인기 숙소 로딩 실패:", error);
+            }
         };
 
         fetchHotels();
@@ -53,11 +69,17 @@ const PopularDestinations = () => {
                     }}
                     className="destinations-swiper"
                 >
-                    {hotels.map((hotel) => (
-                        <SwiperSlide key={hotel.id}>
-                            <DestinationCard destination={hotel} />
-                        </SwiperSlide>
-                    ))}
+                    {/* 💡 hotels가 배열일 때만 map을 실행하도록 안전장치 추가 */}
+                    {Array.isArray(hotels) && hotels.length > 0 ? (
+                        hotels.map((hotel) => (
+                            <SwiperSlide key={hotel.id || hotel._id}>
+                                <DestinationCard destination={hotel} />
+                            </SwiperSlide>
+                        ))
+                    ) : (
+                        // 데이터가 없을 때 표시할 빈 슬라이드 (선택 사항)
+                        <div className="no-data">등록된 추천 숙소가 없습니다.</div>
+                    )}
                 </Swiper>
             </div>
         </section>

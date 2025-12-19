@@ -29,6 +29,7 @@ import SignupPage from "./pages/auth/SignupPage";
 import ResetPasswordPage from "./pages/auth/ResetPasswordPage";
 import KakaoCallbackPage from "./pages/auth/KakaoCallbackPage";
 import GoogleCallbackPage from "./pages/auth/GoogleCallbackPage";
+import NaverCallbackPage from "./pages/auth/NaverCallbackPage";
 import FindPasswordPage from "./pages/auth/FindPasswordPage";
 
 import MyAccountPage from "./pages/mypage/MyAccountPage";
@@ -140,18 +141,18 @@ const AppRouter = () => {
             </ProtectedRoute>
           }
         >
+          {/* 마이페이지 메인 (계정 관리) */}
           <Route index element={<MyAccountPage />} />
           <Route path="account" element={<MyAccountPage />} />
 
+          {/* 예약 관리 섹션 */}
           <Route path="bookings">
-            <Route index element={<MyBookingsPage />} />
-            <Route path=":bookingId" element={<MyBookingDetail />} />
-            <Route path="view/:bookingId" element={<MyBookingDetailView />} />
-            <Route path="item/:bookingId" element={<MyBookingDetailItem />} />
+            <Route index element={<MyBookingsPage />} /> {/* 예약 목록 */}
+            <Route path=":bookingId" element={<MyBookingDetail />} /> {/* 예약 상세 */}
           </Route>
 
+          {/* 기타 마이페이지 메뉴 */}
           <Route path="payment" element={<MyPaymentPage />} />
-          <Route path="profile" element={<ProfilePage />} />
           <Route path="reviews" element={<MyReviewsPage />} />
           <Route path="wishlist" element={<WishlistPage />} />
           <Route path="coupons" element={<MyCouponsPage />} />
@@ -178,6 +179,10 @@ const AppRouter = () => {
             element={<GoogleCallbackPage />}
           />
         </Route>
+        <Route
+          path="/oauth/naver/callback"
+          element={<NaverCallbackPage />}
+        />
 
         {/* 404 */}
         <Route path="*" element={<NotFoundPage />} />
