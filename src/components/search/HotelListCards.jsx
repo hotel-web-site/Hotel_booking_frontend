@@ -1,5 +1,3 @@
-// src/components/search/HotelListCards.jsx
-
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../styles/components/search/HotelListCards.scss";
@@ -7,107 +5,50 @@ import { toggleWishlist, isWishlisted } from "../../util/wishlistService";
 
 const HotelListCards = ({ hotels = [], filters = {}, isGuest }) => {
     const navigate = useNavigate();
-
     const [likes, setLikes] = useState({});
     const [visibleCount, setVisibleCount] = useState(6);
 
-    /** 🔥 guests 구조 준비 */
-    const guests = filters.guests || {
-        adults: 2,
-        children: 0,
-        total: 2,
-    };
-
-    /** 🔥 URL 파라미터 생성 함수 (params 객체 반환) */
     const buildParams = () => {
         const params = new URLSearchParams();
-
-        if (filters.destination) params.set("destination", filters.destination);
-        if (filters.checkIn) params.set("checkIn", filters.checkIn);
-        if (filters.checkOut) params.set("checkOut", filters.checkOut);
-
-        params.set("adults", guests.adults);
-        params.set("children", guests.children);
-        params.set("guests", guests.total);
-
-        return params;
-    };
-
-    const baseParams = buildParams();
-
-    /** ⭐ 호텔 상세 페이지로 이동 (guest=1 유지 포함) */
-    const goToHotelDetail = (hotelId) => {
-        const params = new URLSearchParams(baseParams);
+        const guests = filters?.guests || { adults: 2, children: 0, total: 2 };
+        if (filters?.destination) params.set("destination", filters.destination);
+        if (filters?.checkIn) params.set("checkIn", filters.checkIn);
+        if (filters?.checkOut) params.set("checkOut", filters.checkOut);
+        params.set("adults", guests.adults ?? 2);
+        params.set("children", guests.children ?? 0);
+        params.set("guests", (Number(guests.adults || 2) + Number(guests.children || 0)));
         if (isGuest) params.set("guest", "1");
-
-        navigate(`/hotels/${hotelId}?${params.toString()}`);
+        return params.toString();
     };
 
-    /** 🔥 초기 찜 로딩 */
+    const goToHotelDetail = (hotelId) => {
+        const queryString = buildParams();
+        navigate(`/hotels/${hotelId}?${queryString}`);
+    };
+
     useEffect(() => {
         const initial = {};
         hotels.forEach((hotel) => {
             const id = hotel._id || hotel.id;
-            initial[id] = isWishlisted(id);
+            if (id) initial[id] = isWishlisted(id);
         });
         setLikes(initial);
     }, [hotels]);
 
-    /** 찜 버튼 */
     const handleWishlist = (e, hotel) => {
         e.stopPropagation();
         const id = hotel._id || hotel.id;
-
         const result = toggleWishlist(hotel);
         setLikes((prev) => ({ ...prev, [id]: result }));
     };
 
-    /** 날짜 범위 만들기 */
-    const getDateRange = () => {
-        if (!filters.checkIn || !filters.checkOut) return [];
-        const start = new Date(filters.checkIn);
-        const end = new Date(filters.checkOut);
+    const visibleHotels = hotels.slice(0, visibleCount);
 
-        const days = [];
-        let cur = new Date(start);
-        while (cur <= end) {
-            days.push(cur.toISOString().split("T")[0]);
-            cur.setDate(cur.getDate() + 1);
-        }
-        return days;
-    };
-
-    const neededDates = getDateRange();
-
-    /** 🔥 호텔 필터링 (인원수 + 날짜 조건 포함) */
-    const filteredHotels = hotels.filter((hotel) => {
-        const totalGuests = filters?.guests?.total || 1;
-
-        // 인원 조건
-        const fitsGuests = hotel.rooms?.some(
-            (room) => room.maxGuests >= totalGuests
-        );
-        if (!fitsGuests) return false;
-
-        // 날짜 조건
-        if (neededDates.length > 0) {
-            const fitsDates = hotel.rooms?.some((room) =>
-                neededDates.every((d) => room.availableDates?.includes(d))
-            );
-            if (!fitsDates) return false;
-        }
-
-        return true;
-    });
-
-    /** 출력할 호텔 목록 */
-    const visibleHotels = filteredHotels.slice(0, visibleCount);
-
-    /** 검색 결과 없음 */
-    if (filteredHotels.length === 0) {
+    if (hotels.length === 0) {
         return (
             <div className="hotel-list-cards no-data">
-                검색 결과가 없습니다.
+                <p>검색 결과가 없습니다.</p>
+                <span>다른 조건으로 검색해 보세요.</span>
             </div>
         );
     }
@@ -115,85 +56,73 @@ const HotelListCards = ({ hotels = [], filters = {}, isGuest }) => {
     return (
         <div className="hotel-list-cards">
             {visibleHotels.map((hotel) => {
-                const id = hotel._id || hotel.id;
+                const targetId = hotel._id || hotel.id;
+                const price = hotel.displayPrice || hotel.price;
 
-                const mainRoom =
-                    hotel.rooms && hotel.rooms.length > 0
-                        ? hotel.rooms[0]
-                        : {};
+                // ⭐ 기존 가짜 데이터 방어 로직을 서비스 필드명으로 정교화
+                const hasRealReviews = Array.isArray(hotel.reviews) && hotel.reviews.length > 0;
+                const ratingReviews = hotel.ratingCount || (hasRealReviews ? hotel.reviews.length : 0);
+                const ratingScore = ratingReviews > 0 ? (hotel.ratingAverage || hotel.rating || 0) : 0;
 
-                const price = mainRoom?.price ?? null;
-                const amenitiesCount = mainRoom?.amenities?.length || 0;
+                const amenitiesCount = Array.isArray(hotel.amenities)
+                    ? hotel.amenities.length
+                    : (hotel.rooms?.[0]?.amenities?.length || 0);
 
-                const liked = !!likes[id];
-                const ratingScore = hotel.ratingAverage ?? hotel.rating ?? "-";
-                const ratingReviews = hotel.ratingCount ?? hotel.reviews ?? 0;
+                const liked = !!likes[targetId];
 
                 return (
-                    <div
-                        key={id}
-                        className="hotel-card"
-                        onClick={() => goToHotelDetail(hotel.id)}
-                    >
-                        {/* 이미지 */}
+                    <div key={targetId} className="hotel-card" onClick={() => goToHotelDetail(targetId)}>
                         <div className="hotel-image">
-                            <img src={hotel.image} alt={hotel.name} />
+                            <img
+                                src={hotel.image || hotel.images?.[0] || hotel.rooms?.[0]?.images?.[0] || "/assets/images/default-hotel.jpg"}
+                                alt={hotel.name}
+                                onError={(e) => { e.target.src = "/assets/images/default-hotel.jpg"; }}
+                            />
                         </div>
 
-                        {/* 호텔 정보 */}
                         <div className="hotel-info">
                             <div className="hotel-header">
                                 <h3 className="hotel-name">{hotel.name}</h3>
-
                                 <div className="hotel-price">
                                     <div className="price-label">최저가</div>
                                     <div className="price-amount">
-                                        {price
-                                            ? `₩${price.toLocaleString()}/night`
-                                            : "가격 정보 없음"}
+                                        {price ? `₩${Number(price).toLocaleString()}` : "가격 정보 없음"}
                                     </div>
-                                    <div className="price-note">세금 별도</div>
+                                    {price && <div className="price-note">1박 기준</div>}
                                 </div>
                             </div>
 
                             <div className="hotel-location">
-                                {hotel.location}
+                                <i className="icon-location"></i> {hotel.location || hotel.address}
                             </div>
 
                             <div className="hotel-meta">
                                 <div className="hotel-amenities">
-                                    {amenitiesCount}개 편의시설
+                                    {amenitiesCount > 0 ? `${amenitiesCount}개 편의시설` : "기본 편의시설 제공"}
                                 </div>
                             </div>
 
                             <div className="hotel-rating">
-                                <span className="rating-score">
-                                    {ratingScore}
-                                </span>
-                                <span className="rating-reviews">
-                                    {ratingReviews}개 리뷰
-                                </span>
+                                {ratingReviews > 0 ? (
+                                    <>
+                                        <span className="rating-badge">{Number(ratingScore).toFixed(1)}</span>
+                                        <span className="rating-reviews">{ratingReviews}개 리뷰</span>
+                                    </>
+                                ) : (
+                                    <span className="no-rating">아직 등록된 리뷰가 없습니다</span>
+                                )}
                             </div>
 
                             <div className="card-divider"></div>
 
                             <div className="hotel-footer">
-                                {/* 찜 */}
                                 <button
-                                    className="wishlist-button"
+                                    className={`wishlist-button ${liked ? "active" : ""}`}
                                     onClick={(e) => handleWishlist(e, hotel)}
                                 >
-                                    {liked ? "♥" : "♡"}
+                                    {liked ? "❤️" : "♡"}
                                 </button>
-
-                                {/* 상세보기 */}
-                                <button
-                                    className="view-button"
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        goToHotelDetail(hotel.id);
-                                    }}
-                                >
+                                <button className="view-button" onClick={(e) => { e.stopPropagation(); goToHotelDetail(targetId); }}>
                                     상세보기
                                 </button>
                             </div>
@@ -202,13 +131,12 @@ const HotelListCards = ({ hotels = [], filters = {}, isGuest }) => {
                 );
             })}
 
-            {visibleCount < filteredHotels.length && (
-                <button
-                    className="load-more"
-                    onClick={() => setVisibleCount((prev) => prev + 6)}
-                >
-                    더보기
-                </button>
+            {visibleCount < hotels.length && (
+                <div className="load-more-container">
+                    <button className="load-more" onClick={() => setVisibleCount(prev => prev + 6)}>
+                        호텔 더보기
+                    </button>
+                </div>
             )}
         </div>
     );

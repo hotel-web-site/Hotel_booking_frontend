@@ -12,6 +12,9 @@ import PolicyModal from "../../components/auth/PolicyModal";
 const imageList = [img1, img2, img3];
 
 const SignupPage = () => {
+    // ✅ Vite 환경 변수 설정 (기본값 /api)
+    const apiUrl = import.meta.env.VITE_API_BASE_URL || "/api";
+
     const navigate = useNavigate();
     const [current, setCurrent] = useState(0);
     const [message, setMessage] = useState("");
@@ -55,8 +58,6 @@ const SignupPage = () => {
             return;
         }
 
-
-
         if (form.password.length < 8 || form.password.length > 12) {
             setMessage("비밀번호는 8자리 이상 12자리 이하로 입력해야 합니다.");
             return;
@@ -73,16 +74,17 @@ const SignupPage = () => {
         }
 
         try {
-            await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/register`, {
-                name: `${form.first} ${form.last}`, // User 모델 name 필드
+            // ✅ 하드코딩된 경로 대신 환경 변수 사용
+            await axios.post(`${apiUrl}/users/register`, {
+                name: `${form.first}${form.last}`,
                 email: form.email,
-                password: form.password,             // backend pre-save hook에서 해싱
+                password: form.password,
                 phoneNumber: form.phone,
                 marketingAgree: form.agree,
             });
 
             alert("회원가입 완료!");
-            navigate("/loginpage");
+            navigate("/login");
         } catch (err) {
             setMessage(err.response?.data?.message || "회원가입 실패");
         }
@@ -96,7 +98,7 @@ const SignupPage = () => {
                     style={{ transform: `translateX(-${current * 100}%)` }}
                 >
                     {imageList.map((src, i) => (
-                        <img key={i} src={src} className="slide-image" />
+                        <img key={i} src={src} className="slide-image" alt={`slide-${i}`} />
                     ))}
                 </div>
 
@@ -168,13 +170,11 @@ const SignupPage = () => {
                         />
                         <span className="pw-toggle" onClick={() => setShowPw(!showPw)}>
                             {showPw ? (
-                                // 눈(보임) 아이콘
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <ellipse cx="12" cy="12" rx="8" ry="5" stroke="#222" strokeWidth="2" />
                                     <circle cx="12" cy="12" r="2" fill="#222" />
                                 </svg>
                             ) : (
-                                // 눈에 슬래시(숨김) 아이콘
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <ellipse cx="12" cy="12" rx="8" ry="5" stroke="#222" strokeWidth="2" />
                                     <circle cx="12" cy="12" r="2" fill="#222" />
@@ -283,36 +283,24 @@ const SignupPage = () => {
                 </div>
 
                 <div className="social-box">
-                    {/* 카카오 로그인 */}
+                    {/* ✅ 수정된 소셜 로그인 박스 */}
                     <button
-                        className="social-btn kakao"
-                        onClick={() => {
-                            const KAKAO_AUTH_URL =
-                                "https://kauth.kakao.com/oauth/authorize?client_id=YOUR_KAKAO_CLIENT_ID&redirect_uri=YOUR_KAKAO_REDIRECT_URI&response_type=code";
-                            window.location.href = KAKAO_AUTH_URL;
-                        }}
+                        className="social-btn"
+                        onClick={() => window.location.href = `${apiUrl}/auth/kakao`}
                     >
                         <img src="https://developers.kakao.com/assets/img/about/logos/kakaotalksharing/kakaotalk_sharing_btn_small.png" alt="카카오 로그인" />
                     </button>
-                    {/* 구글 로그인 */}
+
                     <button
-                        className="social-btn google"
-                        onClick={() => {
-                            const GOOGLE_AUTH_URL =
-                                "https://accounts.google.com/o/oauth2/v2/auth?client_id=YOUR_GOOGLE_CLIENT_ID&redirect_uri=YOUR_GOOGLE_REDIRECT_URI&response_type=code&scope=email%20profile";
-                            window.location.href = GOOGLE_AUTH_URL;
-                        }}
+                        className="social-btn"
+                        onClick={() => window.location.href = `${apiUrl}/auth/google`}
                     >
                         <img src="https://cdn-icons-png.flaticon.com/512/300/300221.png" alt="구글 로그인" />
                     </button>
-                    {/* 네이버 로그인 */}
+
                     <button
-                        className="social-btn naver"
-                        onClick={() => {
-                            const NAVER_AUTH_URL =
-                                "https://nid.naver.com/oauth2.0/authorize?client_id=YOUR_NAVER_CLIENT_ID&redirect_uri=YOUR_NAVER_REDIRECT_URI&response_type=code";
-                            window.location.href = NAVER_AUTH_URL;
-                        }}
+                        className="social-btn"
+                        onClick={() => window.location.href = `${apiUrl}/auth/naver`}
                     >
                         <img src="https://cdn.simpleicons.org/naver/03C75A" alt="네이버 로그인" />
                     </button>

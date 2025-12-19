@@ -1,9 +1,8 @@
-// src/components/booking/BookingStepDates.jsx
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { DayPicker } from "react-day-picker";
 import { ko } from "date-fns/locale";
-import { format } from "date-fns";
+import { format, isBefore, startOfToday } from "date-fns";
 import "react-day-picker/dist/style.css";
 import "../../styles/components/booking/BookingStepDates.scss";
 
@@ -18,13 +17,14 @@ const BookingStepDates = () => {
   const [adults, setAdults] = useState(2);
   const [children, setChildren] = useState(0);
   const [hotel, setHotel] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  // 🔥 비회원 모드인지 확인
+  // 🔥 비회원 모드 감지 로직 유지
   const isGuest = searchParams.get("guest") === "1";
   const basePath = isGuest ? "/booking-guest" : "/booking";
 
   /* -----------------------------------------------------
-     URL에서 받아온 값 적용
+      1. URL 파라미터 적용 및 백엔드 데이터 로드
   ----------------------------------------------------- */
   useEffect(() => {
     const checkIn = searchParams.get("checkIn");
@@ -34,63 +34,74 @@ const BookingStepDates = () => {
     setChildren(Number(searchParams.get("children")) || 0);
 
     if (checkIn) {
+      const fromDate = new Date(checkIn);
+      const toDate = checkOut ? new Date(checkOut) : undefined;
+
+      // 오늘 이전 날짜가 URL에 있을 경우를 대비한 방어 코드
+      const today = startOfToday();
       setRange({
-        from: new Date(checkIn),
-        to: checkOut ? new Date(checkOut) : undefined,
+        from: isBefore(fromDate, today) ? today : fromDate,
+        to: toDate && isBefore(toDate, fromDate) ? undefined : toDate,
       });
     }
 
-    getHotelDetail(hotelId).then((res) => {
-      if (res?.hotel) setHotel(res.hotel);
-    });
+    // 백엔드 API 호출
+    setLoading(true);
+    getHotelDetail(hotelId)
+      .then((res) => {
+        // 백엔드 응답 구조(res.hotel 또는 res)에 유연하게 대응
+        const hotelData = res?.hotel || res;
+        if (hotelData) setHotel(hotelData);
+      })
+      .catch((err) => console.error("호텔 정보 로드 실패:", err))
+      .finally(() => setLoading(false));
   }, [hotelId, searchParams]);
 
   /* -----------------------------------------------------
-     숙박일수 계산
+      2. 숙박일수 계산 (안정성 강화)
   ----------------------------------------------------- */
   const calculateNights = () => {
     if (!range?.from || !range?.to) return 0;
-    return Math.ceil((range.to - range.from) / (1000 * 60 * 60 * 24));
+    const diffTime = Math.abs(range.to - range.from);
+    return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   };
 
   /* -----------------------------------------------------
-     객실 선택 페이지로 이동
+      3. 다음 단계로 이동 (URL 파라미터 직렬화)
   ----------------------------------------------------- */
   const handleContinue = () => {
     if (!range?.from || !range?.to) {
-      alert("날짜를 선택해주세요.");
+      alert("체크인과 체크아웃 날짜를 모두 선택해주세요.");
       return;
     }
 
-    const params = new URLSearchParams();
+    const params = new URLSearchParams(searchParams); // 기존 파라미터 복사
 
     const formatDate = (d) => format(d, "yyyy-MM-dd");
     params.set("checkIn", formatDate(range.from));
     params.set("checkOut", formatDate(range.to));
-
     params.set("adults", adults);
     params.set("children", children);
     params.set("guests", adults + children);
 
-    // 비회원 모드 유지
+    // 비회원/회원 모드 상태값 보존
     if (isGuest) params.set("guest", "1");
 
-    // 기존 roomId 유지
-    const roomId = searchParams.get("roomId");
-    if (roomId) params.set("roomId", roomId);
-
-    // 🔥 guest 모드면 booking-guest 경로로 이동
     navigate(`${basePath}/${hotelId}/room?${params.toString()}`);
   };
+
+  if (loading) return <div className="booking-dates loading">호텔 정보를 확인 중입니다...</div>;
 
   return (
     <div className="booking-dates">
       {hotel && (
         <div className="hotel-top-info">
+          {/* 백엔드 필드명(name) 대응 */}
           <h1 className="title">{hotel.name}</h1>
           <div className="meta-row">
-            <span className="rating">⭐ {hotel.ratingAverage}</span>
-            <span className="location">{hotel.location}</span>
+            {/* 백엔드 평점 필드(ratingAverage) 대응 */}
+            <span className="rating">⭐ {hotel.ratingAverage || hotel.rating || "0.0"}</span>
+            <span className="location">{hotel.address || hotel.location}</span>
           </div>
         </div>
       )}
@@ -106,28 +117,26 @@ const BookingStepDates = () => {
               onSelect={setRange}
               numberOfMonths={2}
               locale={ko}
-              disabled={{ before: new Date() }}
+              disabled={{ before: new Date() }} // 오늘 이전 날짜 선택 불가
+              defaultMonth={range?.from || new Date()}
             />
           </div>
 
-          {/* 투숙객 선택 */}
           <div className="guests-section">
             <h3>투숙객 정보</h3>
 
-            {/* 성인 */}
             <div className="guest-controls">
               <div className="guest-info">
                 <div className="guest-type">성인</div>
                 <div className="guest-desc">만 19세 이상</div>
               </div>
               <div className="counter">
-                <button onClick={() => setAdults(Math.max(1, adults - 1))}>-</button>
+                <button type="button" onClick={() => setAdults(Math.max(1, adults - 1))}>-</button>
                 <span className="count">{adults}</span>
-                <button onClick={() => setAdults(adults + 1)}>+</button>
+                <button type="button" onClick={() => setAdults(adults + 1)}>+</button>
               </div>
             </div>
 
-            {/* 어린이 */}
             <div className="guest-controls">
               <div className="guest-info">
                 <div className="guest-type">어린이</div>
@@ -135,35 +144,39 @@ const BookingStepDates = () => {
               </div>
               <div className="counter">
                 <button
+                  type="button"
                   onClick={() => setChildren(Math.max(0, children - 1))}
                   disabled={children === 0}
                 >
                   -
                 </button>
                 <span className="count">{children}</span>
-                <button onClick={() => setChildren(children + 1)}>+</button>
+                <button type="button" onClick={() => setChildren(children + 1)}>+</button>
               </div>
             </div>
           </div>
         </div>
 
-        {/* 요약 박스 */}
         <div className="booking-summary">
           {hotel && (
             <div className="summary-hotel">
-              <img src={hotel.images?.[0] || hotel.image} alt={hotel.name} />
+              {/* 이미지 배열 혹은 단일 문자열 대응 */}
+              <img
+                src={Array.isArray(hotel.images) ? hotel.images[0] : (hotel.images || hotel.image || "/default-hotel.jpg")}
+                alt={hotel.name}
+              />
               <div className="detail-row">
                 <div>
                   <span className="label">체크인</span>
                   <span className="value">
-                    {range?.from ? format(range.from, "PPP", { locale: ko }) : "-"}
+                    {range?.from ? format(range.from, "PPP", { locale: ko }) : "날짜 선택"}
                   </span>
                 </div>
 
                 <div>
                   <span className="label">체크아웃</span>
                   <span className="value">
-                    {range?.to ? format(range.to, "PPP", { locale: ko }) : "-"}
+                    {range?.to ? format(range.to, "PPP", { locale: ko }) : "날짜 선택"}
                   </span>
                 </div>
 

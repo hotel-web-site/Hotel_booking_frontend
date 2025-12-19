@@ -5,25 +5,23 @@ const MIN_PRICE = 50000;
 const MAX_PRICE = 1200000;
 const STEP_PRICE = 50000;
 
-// 🔑 key: 실제 검색에 사용할 문자열, label: 화면에 보여줄 텍스트
 const FREEBIE_OPTIONS = [
-  { key: "조식포함", label: "조식 포함" },
-  { key: "무료주차", label: "무료 주차" },
-  { key: "wifi", label: "WIFI" },
+  { key: "무료 WiFi", label: "WIFI" },
+  { key: "주차장", label: "주차장" },
+  { key: "수영장", label: "수영장" },
   { key: "공항셔틀버스", label: "공항셔틀버스" },
   { key: "무료취소", label: "무료 취소" },
 ];
 
-// 🔑 amenities도 key/label 분리
-// key는 실제 hotelClient 데이터에 있는 단어로 맞춰 둠
 const AMENITY_OPTIONS = [
-  { key: "24시 프론트데스크", label: "24시 프론트데스크" }, // (mock 데이터엔 아직 없음)
-  { key: "에어컨", label: "에어컨" },                      // 객실 amenities에 "에어컨"
-  { key: "Gym", label: "피트니스" },                       // Busan 호텔 amenities에 "Gym"
-  { key: "Pool", label: "수영장" },                        // 호텔 amenities에 "Pool"
+  { key: "24시 프론트데스크", label: "24시 프론트데스크" },
+  { key: "에어컨", label: "에어컨" },
+  { key: "Gym", label: "피트니스" },
+  { key: "Pool", label: "수영장" },
 ];
 
 const FilterSidebar = ({ filters, onFilterChange }) => {
+  // 기존 아코디언 상태 유지
   const [open, setOpen] = useState({
     price: true,
     rating: true,
@@ -36,14 +34,8 @@ const FilterSidebar = ({ filters, onFilterChange }) => {
   };
 
   /* -------------------- 💰 가격 -------------------- */
-  let [currentMin, currentMax] =
-    Array.isArray(filters?.priceRange) && filters.priceRange.length === 2
-      ? filters.priceRange
-      : [MIN_PRICE, MAX_PRICE];
-
-  if (currentMin < MIN_PRICE) currentMin = MIN_PRICE;
-  if (currentMax < MIN_PRICE || currentMax > MAX_PRICE)
-    currentMax = MAX_PRICE;
+  // filters.priceRange가 없을 경우를 대비한 안전한 할당
+  const currentMax = filters?.priceRange?.[1] ?? MAX_PRICE;
 
   const handlePriceChange = (value) => {
     const max = Number(value);
@@ -53,31 +45,24 @@ const FilterSidebar = ({ filters, onFilterChange }) => {
   const formatKRW = (value) =>
     value.toLocaleString("ko-KR", { maximumFractionDigits: 0 }) + "원";
 
-  /* -------------------- ⭐ Rating -------------------- */
-  const ratingValue =
-    typeof filters.rating === "number" ? filters.rating : 0;
+  /* -------------------- ⭐ 평점 -------------------- */
+  const ratingValue = typeof filters?.rating === "number" ? filters.rating : 0;
 
   const handleRatingClick = (value) => {
-    const next = ratingValue === value ? 0 : value; // 다시 누르면 해제
+    const next = ratingValue === value ? 0 : value;
     onFilterChange("rating", next);
   };
 
-  /* -------------------- 🎁 / 🏊 체크박스 -------------------- */
-  const freebies = filters.freebies || [];
-  const amenities = filters.amenities || [];
+  /* -------------------- 🎁 / 🏊 체크박스 통합 관리 -------------------- */
+  const freebies = filters?.freebies || [];
+  const amenities = filters?.amenities || [];
 
-  const handleFreebieToggle = (key, checked) => {
+  const handleToggle = (type, key, checked) => {
+    const currentList = type === "freebies" ? freebies : amenities;
     const next = checked
-      ? [...freebies, key]
-      : freebies.filter((f) => f !== key);
-    onFilterChange("freebies", next);
-  };
-
-  const handleAmenityToggle = (key, checked) => {
-    const next = checked
-      ? [...amenities, key]
-      : amenities.filter((a) => a !== key);
-    onFilterChange("amenities", next);
+      ? [...currentList, key]
+      : currentList.filter((item) => item !== key);
+    onFilterChange(type, next);
   };
 
   return (
@@ -122,7 +107,8 @@ const FilterSidebar = ({ filters, onFilterChange }) => {
 
         <div className={`filter-body ${open.rating ? "show" : ""}`}>
           <div className="rating-options">
-            {[0, 1, 2, 3, 4].map((value) => (
+            {/* 사용자 경험을 위해 1+ 부터 4+까지 표시 (기존 구조 유지) */}
+            {[1, 2, 3, 4].map((value) => (
               <button
                 key={value}
                 type="button"
@@ -150,9 +136,7 @@ const FilterSidebar = ({ filters, onFilterChange }) => {
                 <input
                   type="checkbox"
                   checked={freebies.includes(opt.key)}
-                  onChange={(e) =>
-                    handleFreebieToggle(opt.key, e.target.checked)
-                  }
+                  onChange={(e) => handleToggle("freebies", opt.key, e.target.checked)}
                 />
                 {opt.label}
               </label>
@@ -175,9 +159,7 @@ const FilterSidebar = ({ filters, onFilterChange }) => {
                 <input
                   type="checkbox"
                   checked={amenities.includes(opt.key)}
-                  onChange={(e) =>
-                    handleAmenityToggle(opt.key, e.target.checked)
-                  }
+                  onChange={(e) => handleToggle("amenities", opt.key, e.target.checked)}
                 />
                 {opt.label}
               </label>
