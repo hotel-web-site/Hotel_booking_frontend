@@ -1,4 +1,3 @@
-// src/pages/mypage/ProfilePage.jsx
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "../../styles/mypage/ProfilePage.scss";
@@ -8,7 +7,7 @@ const ProfilePage = ({
   profileImage,
   name,
   email,
-  activeTab,
+  activeTab, // 현재 어떤 탭이 활성화되어 있는지 부모로부터 전달받음
   onCoverUpload,
   onProfileUpload,
 }) => {
@@ -16,7 +15,7 @@ const ProfilePage = ({
 
   return (
     <div className="profile-page">
-      {/* Cover Image */}
+      {/* Cover Image Section */}
       <div className="cover-section">
         <img
           className="cover-img"
@@ -28,13 +27,13 @@ const ProfilePage = ({
         />
       </div>
 
-      {/* 배경 박스 바깥으로 옮긴 COVER 업로드 버튼 */}
+      {/* 커버 업로드 버튼 */}
       <label className="upload-cover-btn-outside">
         새 커버 이미지 업로드
         <input type="file" accept="image/*" onChange={onCoverUpload} />
       </label>
 
-      {/* Profile Section */}
+      {/* Profile Info Section */}
       <div className="profile-section">
         <div className="profile-img-wrap">
           <img
@@ -45,7 +44,6 @@ const ProfilePage = ({
             }
             alt="profile"
           />
-
           <label className="profile-upload-btn">
             <input type="file" accept="image/*" onChange={onProfileUpload} />
             <span>✏️</span>
@@ -56,7 +54,7 @@ const ProfilePage = ({
         <p className="profile-email">{email}</p>
       </div>
 
-      {/* Tab Navigation */}
+      {/* Tab Navigation Menu */}
       <div className="tab-menu">
         <button
           type="button"
@@ -69,7 +67,8 @@ const ProfilePage = ({
         <button
           type="button"
           className={`tab ${activeTab === "booking" ? "active" : ""}`}
-          onClick={() => navigate("/mypage/bookings/:bookingId")}
+          // 💡 수정: 특정 ID가 아닌 전체 예약 내역 목록으로 이동
+          onClick={() => navigate("/mypage/bookings")}
         >
           내역
         </button>
@@ -90,7 +89,6 @@ const ProfilePage = ({
           쿠폰
         </button>
 
-        {/* 🔹 새로 추가되는 "내 리뷰" 탭 */}
         <button
           type="button"
           className={`tab ${activeTab === "reviews" ? "active" : ""}`}
@@ -98,10 +96,19 @@ const ProfilePage = ({
         >
           내 리뷰
         </button>
+
+        {/* 🔹 수정된 "찜 목록" 탭 */}
+        <button
+          type="button"
+          // 💡 수정: activeTab 조건을 "wishlist"로 변경 (reviews와 중복 방지)
+          className={`tab ${activeTab === "wishlist" ? "active" : ""}`}
+          onClick={() => navigate("/mypage/wishlist")}
+        >
+          찜 목록
+        </button>
       </div>
     </div>
   );
 };
 
 export default ProfilePage;
-

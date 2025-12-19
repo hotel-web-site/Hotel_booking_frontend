@@ -1,18 +1,22 @@
 /* ===============================
-   공지사항 목록 페이지
+   공지사항 목록 페이지 (Responsive)
 ================================ */
 
 .notice-page {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 80px 0 320px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 80px 0 320px;
+
+  /* ✅ 화면이 좁아지면 좌우 여백 확보 */
+  padding-left: 16px;
+  padding-right: 16px;
 }
 
 .page-title {
-    text-align: center;
-    font-size: 28px;
-    font-weight: 600;
-    margin-bottom: 60px;
+  text-align: center;
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 60px;
 }
 
 /* ===============================
@@ -20,25 +24,31 @@
 ================================ */
 
 .notice-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-bottom: 12px;
-    border-bottom: 1px solid #333;
-    margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #333;
+  margin-bottom: 20px;
+  gap: 12px;
 
-    span {
-        font-size: 14px;
-        color: #666;
-    }
+  span {
+    font-size: 14px;
+    color: #666;
+    white-space: nowrap;
+  }
 }
 
 .search-input {
-    width: 260px;
-    height: 36px;
-    padding: 0 12px;
-    border: 1px solid #ccc;
-    font-size: 13px;
+  width: 260px;
+  height: 36px;
+  padding: 0 12px;
+  border: 1px solid #ccc;
+  font-size: 13px;
+
+  /* ✅ 모바일에서 폼이 튀지 않게 */
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 /* ===============================
@@ -46,45 +56,51 @@
 ================================ */
 
 .notice-table {
-    width: 100%;
-    border-collapse: collapse;
+  width: 100%;
+  border-collapse: collapse;
 
-    tr {
-        cursor: pointer;
-        border-bottom: 1px solid #ddd;
+  tr {
+    cursor: pointer;
+    border-bottom: 1px solid #ddd;
 
-        &:hover {
-            background: #fafafa;
-        }
+    &:hover {
+      background: #fafafa;
     }
+  }
 
-    td {
-        padding: 18px 10px;
-        font-size: 14px;
-        color: #333;
+  td {
+    padding: 18px 10px;
+    font-size: 14px;
+    color: #333;
+    vertical-align: middle;
+  }
+
+  td:nth-child(1) {
+    width: 160px;
+    text-align: center;
+    color: #777;
+    white-space: nowrap;
+  }
+
+  td:nth-child(2) {
+    text-align: left;
+
+    /* ✅ 제목이 길어도 레이아웃 깨지지 않게 */
+    word-break: break-word;
+
+    mark {
+      background: #fff3bf;
+      font-weight: 600;
+      padding: 0 2px;
     }
+  }
 
-    td:nth-child(1) {
-        width: 160px;
-        text-align: center;
-        color: #777;
-    }
-
-    td:nth-child(2) {
-        text-align: left;
-
-        mark {
-            background: #fff3bf;
-            font-weight: 600;
-            padding: 0 2px;
-        }
-    }
-
-    td:nth-child(3) {
-        width: 140px;
-        text-align: right;
-        color: #999;
-    }
+  td:nth-child(3) {
+    width: 140px;
+    text-align: right;
+    color: #999;
+    white-space: nowrap;
+  }
 }
 
 /* ===============================
@@ -92,45 +108,178 @@
 ================================ */
 
 .pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 6px;
-    margin-top: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  margin-top: 40px;
+  flex-wrap: wrap; /* ✅ 모바일에서 줄바꿈 허용 */
+
+  button {
+    min-width: 32px;
+    height: 32px;
+    padding: 0 6px;
+    border: 1px solid #ccc;
+    background: #fff;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+
+    &:hover:not(:disabled) {
+      border-color: #8b6f4e;
+      color: #fafaf9;
+      cursor: pointer;
+    }
+
+    &.active {
+      background: #8b6f4e;
+      border-color: #8b6f4e;
+      color: #fff;
+      font-weight: 600;
+      cursor: default;
+    }
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+  }
+
+  .nav-btn {
+    font-size: 16px;
+    line-height: 1;
+  }
+}
+
+/* ============================================================
+   ✅ Responsive Breakpoints
+============================================================ */
+
+/* --- 992px 이하: 태블릿/작은 노트북 --- */
+@media (max-width: 992px) {
+  .notice-page {
+    padding-top: 60px;
+    padding-bottom: 220px;
+  }
+
+  .page-title {
+    font-size: 24px;
+    margin-bottom: 40px;
+  }
+
+  .search-input {
+    width: 220px;
+  }
+
+  .notice-table {
+    td {
+      padding: 16px 8px;
+      font-size: 13px;
+    }
+
+    td:nth-child(1) {
+      width: 130px;
+    }
+
+    td:nth-child(3) {
+      width: 120px;
+    }
+  }
+}
+
+/* --- 768px 이하: 태블릿 세로 --- */
+@media (max-width: 768px) {
+  .notice-page {
+    padding-top: 50px;
+    padding-bottom: 200px;
+  }
+
+  .page-title {
+    font-size: 22px;
+    margin-bottom: 32px;
+  }
+
+  /* ✅ 상단 헤더: 세로로 배치 */
+  .notice-header {
+    flex-direction: column;
+    align-items: stretch;
+
+    span {
+      white-space: normal;
+    }
+  }
+
+  .search-input {
+    width: 100%;
+    height: 40px;
+    font-size: 14px;
+  }
+
+  /* ✅ 테이블: 날짜(3열) 숨기고 2열에 더 집중 */
+  .notice-table {
+    td:nth-child(1) {
+      width: 110px;
+    }
+
+    td:nth-child(3) {
+      display: none; /* 날짜 숨김 */
+    }
+
+    td {
+      padding: 14px 8px;
+    }
+  }
+
+  .pagination {
+    gap: 8px;
 
     button {
-        min-width: 32px;
-        height: 32px;
-        padding: 0 6px;
-        border: 1px solid #ccc;
-        background: #fff;
-        font-size: 13px;
-        cursor: pointer;
-        transition: all 0.15s ease;
+      min-width: 34px;
+      height: 34px;
+    }
+  }
+}
 
-        &:hover:not(:disabled) {
-            border-color: #8b6f4e;
-            color: #fafaf9;
-            cursor: pointer;
-        }
+/* --- 480px 이하: 모바일 --- */
+@media (max-width: 480px) {
+  .notice-page {
+    padding-top: 40px;
+    padding-bottom: 160px;
+  }
 
-        &.active {
-            background: #8b6f4e;
-            border-color: #8b6f4e;
-            color: #fff;
-            font-weight: 600;
-            cursor: default;
-        }
+  .page-title {
+    font-size: 20px;
+    margin-bottom: 26px;
+  }
 
-        &:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-        }
+  .notice-header {
+    padding-bottom: 10px;
+  }
+
+  .notice-table {
+    /* ✅ 모바일에서는 "번호/제목" 2줄처럼 보이게 */
+    td {
+      font-size: 13px;
+      padding: 12px 6px;
     }
 
-    /* 앞/뒤 버튼 */
-    .nav-btn {
-        font-size: 16px;
-        line-height: 1;
+    td:nth-child(1) {
+      width: 86px;
+      font-size: 12px;
     }
+
+    td:nth-child(2) {
+      line-height: 1.35;
+    }
+  }
+
+  .pagination {
+    margin-top: 28px;
+
+    button {
+      min-width: 32px;
+      height: 32px;
+      font-size: 12px;
+    }
+  }
 }

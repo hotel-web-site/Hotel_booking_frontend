@@ -1,4 +1,3 @@
-// src/components/search/SearchFilterWrap.jsx
 import React, { useState, useEffect } from "react";
 import "../../styles/components/search/SearchFilterWrap.scss";
 
@@ -7,55 +6,49 @@ const normalize = (s) => (s || "").toLowerCase().replace(/\s+/g, "");
 const DEFAULT_GUESTS = { adults: 2, children: 0, total: 2 };
 
 const SearchFilterWrap = ({ filters = {}, onFilterChange, onSearch, hotels = [] }) => {
-    // 🔥 기본값 안전하게 세팅
+    // 1. 상태 선언 (기존 구조 유지)
     const [keyword, setKeyword] = useState(filters.destination || "");
     const [checkIn, setCheckIn] = useState(filters.checkIn || "");
     const [checkOut, setCheckOut] = useState(filters.checkOut || "");
+    const [suggestions, setSuggestions] = useState([]);
+    const [activeIndex, setActiveIndex] = useState(-1);
 
-    const initialGuests = filters.guests
-        ? {
-              adults: Number(filters.guests.adults) || 2,
-              children: Number(filters.guests.children) || 0,
-              total:
-                  (Number(filters.guests.adults) || 2) +
-                  (Number(filters.guests.children) || 0),
-          }
-        : DEFAULT_GUESTS;
+    // 2. 인원수 상태 (안전한 초기값 설정)
+    const [guests, setGuests] = useState(() => {
+        if (filters.guests) {
+            const a = Number(filters.guests.adults) || 2;
+            const c = Number(filters.guests.children) || 0;
+            return { adults: a, children: c, total: a + c };
+        }
+        return DEFAULT_GUESTS;
+    });
 
-    const [guests, setGuests] = useState(initialGuests);
-
-    // ------------------------------------------
-    // 🔥 guests.total 자동 계산 (NaN 절대 방지)
-    // ------------------------------------------
+    // 3. 인원 변경 시 total 자동 계산 및 부모에 즉시 알림
     useEffect(() => {
-        setGuests((prev) => ({
-            ...prev,
-            total: Number(prev.adults) + Number(prev.children),
-        }));
-    }, [guests.adults, guests.children]);
+        const total = Number(guests.adults) + Number(guests.children);
+        if (guests.total !== total) {
+            const updatedGuests = { ...guests, total };
+            setGuests(updatedGuests);
+            // 필터가 변경되었음을 부모에게 알림 (사이드바 등과 동기화)
+            onFilterChange?.("guests", updatedGuests);
+        }
+    }, [guests.adults, guests.children, onFilterChange]);
 
-    // ------------------------------------------
-    // filters 변경 시 동기화 (URL 반영 등)
-    // ------------------------------------------
+    // 4. 외부 filters 변경 시 동기화 (URL 파라미터나 초기화 버튼 대응)
     useEffect(() => {
         setKeyword(filters.destination || "");
         setCheckIn(filters.checkIn || "");
         setCheckOut(filters.checkOut || "");
-
         if (filters.guests) {
             setGuests({
                 adults: Number(filters.guests.adults) || 2,
                 children: Number(filters.guests.children) || 0,
-                total:
-                    (Number(filters.guests.adults) || 2) +
-                    (Number(filters.guests.children) || 0),
+                total: (Number(filters.guests.adults) || 2) + (Number(filters.guests.children) || 0)
             });
         }
     }, [filters]);
 
-    // ------------------------------------------
-    // 🔍 검색 실행
-    // ------------------------------------------
+    // 5. 검색 실행 함수
     const handleSearch = () => {
         const payload = {
             destination: keyword,
@@ -66,12 +59,11 @@ const SearchFilterWrap = ({ filters = {}, onFilterChange, onSearch, hotels = [] 
 
         onSearch?.(payload);
 
-        // URL 파라미터 생성
+        // URL 업데이트 (기존 로직 유지)
         const params = new URLSearchParams();
         if (keyword) params.set("destination", keyword);
         if (checkIn) params.set("checkIn", checkIn);
         if (checkOut) params.set("checkOut", checkOut);
-
         params.set("adults", guests.adults);
         params.set("children", guests.children);
         params.set("guests", guests.total);
@@ -79,20 +71,13 @@ const SearchFilterWrap = ({ filters = {}, onFilterChange, onSearch, hotels = [] 
         window.history.replaceState(null, "", `?${params.toString()}`);
     };
 
-    // ------------------------------------------
-    // 자동완성
-    // ------------------------------------------
-    const [suggestions, setSuggestions] = useState([]);
-    const [activeIndex, setActiveIndex] = useState(-1);
-
+    // 6. 자동완성 로직 (기존 유지)
     useEffect(() => {
         const term = normalize(keyword);
         if (!term) return setSuggestions([]);
-
         const matches = hotels
             .filter((hotel) => normalize(hotel.name).includes(term))
             .slice(0, 5);
-
         setSuggestions(matches);
     }, [keyword, hotels]);
 
@@ -108,13 +93,9 @@ const SearchFilterWrap = ({ filters = {}, onFilterChange, onSearch, hotels = [] 
                 handleSearch();
             }
         }
-
         if (e.key === "ArrowDown") {
-            setActiveIndex((prev) =>
-                prev < suggestions.length - 1 ? prev + 1 : prev
-            );
+            setActiveIndex((prev) => (prev < suggestions.length - 1 ? prev + 1 : prev));
         }
-
         if (e.key === "ArrowUp") {
             setActiveIndex((prev) => (prev > 0 ? prev - 1 : -1));
         }
@@ -123,7 +104,7 @@ const SearchFilterWrap = ({ filters = {}, onFilterChange, onSearch, hotels = [] 
     return (
         <div className="search-bar-wrapper">
             <div className="search-bar inner">
-                {/* Destination */}
+                {/* Destination: 기존 마크업 보존 */}
                 <div className="search-item">
                     <label>호텔명 검색</label>
                     <div className="input-box autocomplete-wrapper">
@@ -148,7 +129,8 @@ const SearchFilterWrap = ({ filters = {}, onFilterChange, onSearch, hotels = [] 
                                             setKeyword(hotel.name);
                                             onFilterChange?.("destination", hotel.name);
                                             setSuggestions([]);
-                                            handleSearch();
+                                            // 선택 즉시 검색 실행 로직 유지
+                                            setTimeout(handleSearch, 0);
                                         }}
                                     >
                                         {hotel.name}
@@ -166,7 +148,10 @@ const SearchFilterWrap = ({ filters = {}, onFilterChange, onSearch, hotels = [] 
                         <input
                             type="date"
                             value={checkIn}
-                            onChange={(e) => setCheckIn(e.target.value)}
+                            onChange={(e) => {
+                                setCheckIn(e.target.value);
+                                onFilterChange?.("checkIn", e.target.value);
+                            }}
                         />
                     </div>
                 </div>
@@ -181,75 +166,36 @@ const SearchFilterWrap = ({ filters = {}, onFilterChange, onSearch, hotels = [] 
                             onChange={(e) => {
                                 if (checkIn && e.target.value < checkIn) return;
                                 setCheckOut(e.target.value);
+                                onFilterChange?.("checkOut", e.target.value);
                             }}
                         />
                     </div>
                 </div>
 
-                {/* 🔥 Guests - 성인/어린이 카운터 */}
+                {/* Guests - 성인/어린이 카운터: 기존 마크업 보존 */}
                 <div className="search-item">
                     <label>투숙객</label>
-
                     <div className="guest-counter">
-                        {/* Adults */}
                         <div className="guest-row">
                             <span>성인</span>
                             <div className="counter">
-                                <button
-                                    onClick={() =>
-                                        setGuests((prev) => ({
-                                            ...prev,
-                                            adults: Math.max(1, prev.adults - 1),
-                                        }))
-                                    }
-                                >
-                                    -
-                                </button>
+                                <button onClick={() => setGuests(p => ({ ...p, adults: Math.max(1, p.adults - 1) }))}>-</button>
                                 <span>{guests.adults}</span>
-                                <button
-                                    onClick={() =>
-                                        setGuests((prev) => ({
-                                            ...prev,
-                                            adults: prev.adults + 1,
-                                        }))
-                                    }
-                                >
-                                    +
-                                </button>
+                                <button onClick={() => setGuests(p => ({ ...p, adults: p.adults + 1 }))}>+</button>
                             </div>
                         </div>
 
-                        {/* Children */}
                         <div className="guest-row">
                             <span>어린이</span>
                             <div className="counter">
-                                <button
-                                    onClick={() =>
-                                        setGuests((prev) => ({
-                                            ...prev,
-                                            children: Math.max(0, prev.children - 1),
-                                        }))
-                                    }
-                                >
-                                    -
-                                </button>
+                                <button onClick={() => setGuests(p => ({ ...p, children: Math.max(0, p.children - 1) }))}>-</button>
                                 <span>{guests.children}</span>
-                                <button
-                                    onClick={() =>
-                                        setGuests((prev) => ({
-                                            ...prev,
-                                            children: prev.children + 1,
-                                        }))
-                                    }
-                                >
-                                    +
-                                </button>
+                                <button onClick={() => setGuests(p => ({ ...p, children: p.children + 1 }))}>+</button>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                {/* 검색 버튼 */}
                 <button className="search-button" onClick={handleSearch}>
                     🔍
                 </button>

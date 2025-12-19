@@ -19,45 +19,45 @@ const AvailableRooms = ({ rooms }) => {
     const totalGuests = adults + children;
 
     /* 🔥 예약 날짜 계산 */
-    const neededDates = [];
-    if (checkIn && checkOut) {
+    const getDateRange = () => {
+        if (!checkIn || !checkOut) return [];
+        const range = [];
         let cur = new Date(checkIn);
         const end = new Date(checkOut);
-
         while (cur <= end) {
-            neededDates.push(cur.toISOString().split("T")[0]);
+            range.push(cur.toISOString().split("T")[0]);
             cur.setDate(cur.getDate() + 1);
         }
-    }
+        return range;
+    };
+    const neededDates = getDateRange();
 
     /* 🔥 객실 예약 가능 여부 체크 */
     const isRoomAvailable = (room) => {
-        // ⭐ 날짜 선택 전이면 무조건 예약 가능
         if (!checkIn || !checkOut) return true;
 
-        const fitsGuests = room.maxGuests >= totalGuests;
+        // 인원수 체크 (데이터가 없을 경우 대비해 기본값 10 설정)
+        const max = Number(room.maxGuests) || 10;
+        const fitsGuests = max >= totalGuests;
         if (!fitsGuests) return false;
 
-        if (!Array.isArray(room.availableDates)) return true;
+        // 날짜 체크 (availableDates가 없으면 모든 날짜 가능으로 간주)
+        if (!room.availableDates || !Array.isArray(room.availableDates) || room.availableDates.length === 0) {
+            return true;
+        }
 
         return neededDates.every((d) => room.availableDates.includes(d));
     };
 
-
     /* 🔥 예약하기 버튼 클릭 */
-    const handleBook = (roomId) => {
-        const params = new URLSearchParams();
+    const handleBook = (room) => {
+        // ⭐ 백엔드 ID인 _id를 우선적으로 가져옴
+        const roomId = room._id || room.id;
+        const params = new URLSearchParams(searchParams); // 기존 파라미터 유지
 
-        if (checkIn) params.set("checkIn", checkIn);
-        if (checkOut) params.set("checkOut", checkOut);
-        params.set("adults", adults);
-        params.set("children", children);
-        params.set("roomId", roomId);
-
-        // ⭐ guest 유지
+        params.set("roomId", String(roomId));
         if (isGuest) params.set("guest", "1");
 
-        // ⭐ 회원/비회원에 따라 다른 경로로 이동
         navigate(`${basePath}/${hotelId}?${params.toString()}`);
     };
 
@@ -67,38 +67,43 @@ const AvailableRooms = ({ rooms }) => {
 
             <div className="rooms-list">
                 {rooms.map((room) => {
+                    // ⭐ 고유 키값 설정: _id가 있으면 쓰고 없으면 id를 사용 (둘 다 없으면 index라도 사용)
+                    const roomId = room._id || room.id;
                     const available = isRoomAvailable(room);
 
                     return (
-                        <div key={room.id} className={`room-row ${!available ? "disabled" : ""}`}>
+                        <div key={String(roomId)} className={`room-row ${!available ? "disabled" : ""}`}>
                             {/* 왼쪽: 이미지 + 텍스트 */}
                             <div className="room-info">
                                 <div className="room-img">
-                                    <img src={room.images[0]} alt={room.name} />
+                                    <img
+                                        src={Array.isArray(room.images) && room.images.length > 0 ? room.images[0] : "/default-room.jpg"}
+                                        alt={room.name}
+                                    />
                                     {!available && <div className="room-badge">예약 불가</div>}
                                 </div>
 
                                 <div className="room-text">
                                     <p className="room-name">{room.name}</p>
-                                    <p className="room-type">{room.type}</p>
-                                    <p className="room-max">최대 {room.maxGuests}명</p>
+                                    <p className="room-type">{room.type || room.bedType}</p>
+                                    <p className="room-max">최대 {room.maxGuests || 2}명</p>
                                 </div>
                             </div>
 
                             {/* 오른쪽: 가격 + 버튼 */}
                             <div className="room-actions">
                                 <p className="room-price">
-                                    ₩{room.price.toLocaleString()}
+                                    ₩{(room.price || 0).toLocaleString()}
                                     <span className="night">/박</span>
                                 </p>
 
                                 {available ? (
-                                    <button className="book-btn" onClick={() => handleBook(room.id)}>
+                                    <button className="book-btn" onClick={() => handleBook(room)}>
                                         예약하기
                                     </button>
                                 ) : (
                                     <button className="book-btn disabled" disabled>
-                                        예약 불가
+                                        {Number(room.maxGuests) < totalGuests ? "인원 초과" : "예약 불가"}
                                     </button>
                                 )}
                             </div>

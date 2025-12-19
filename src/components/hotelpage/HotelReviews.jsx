@@ -1,147 +1,106 @@
 import React, { useState } from "react";
 import "../../styles/components/hotelpage/HotelReviews.scss";
 import ReviewModal from "./ReviewModal";
+import { getRatingLabel, calculateAverageRating, renderStars } from "../../util/reviewHelper";
 
-import {
-  getRatingLabel,
-  calculateAverageRating,
-} from "../../util/reviewHelper";
-
-const HotelReviews = ({
-  hotelId,
-  createReview,
-  updateReview,
-  deleteReview,
-  reviews = [],
-  getReviews,
-}) => {
+const HotelReviews = ({ hotelId, createReview, reviews = [], getReviews }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  /* ⭐ 페이지네이션 상태 */
-  const reviewsPerPage = 5;
   const [page, setPage] = useState(1);
+  const reviewsPerPage = 5;
 
-  const totalPages = Math.ceil(reviews.length / reviewsPerPage);
-  const start = (page - 1) * reviewsPerPage;
-  const currentReviews = reviews.slice(start, start + reviewsPerPage);
+  const safeReviews = Array.isArray(reviews) ? reviews : [];
+  const totalCount = safeReviews.length;
+  const avgRating = calculateAverageRating(safeReviews);
+  const avgLabel = getRatingLabel(avgRating, totalCount);
 
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
+  const totalPages = Math.ceil(totalCount / reviewsPerPage) || 1;
+  const currentReviews = safeReviews.slice((page - 1) * reviewsPerPage, page * reviewsPerPage);
 
-  /* ✅ 리뷰 작성 처리 */
   const handleSubmitReview = async (reviewData) => {
-    const payload = {
-      ...reviewData,
-      hotelId: reviewData.hotelId ?? hotelId,
-    };
+    try {
+      // 1. 서버에 리뷰 등록
+      await createReview(hotelId, reviewData.rating, reviewData.comment);
 
-    await createReview(payload);
-    await getReviews();     // 리뷰 목록 갱신
-    setPage(1);             // 최신 리뷰가 보이도록
-    closeModal();
+      // 2. 부모 컴포넌트의 데이터 갱신 (ID 전달)
+      if (getReviews) await getReviews(hotelId);
 
-    alert(
-      "리뷰 작성이 완료되었습니다.\n마이페이지 → 내 리뷰에서 확인하실 수 있습니다."
-    );
+      setPage(1); // 첫 페이지로 이동
+      setIsModalOpen(false);
+      alert("리뷰가 등록되었습니다!");
+    } catch (err) {
+      alert(err.message);
+    }
   };
-
-  /* ⭐ 평균 평점 + 라벨 */
-  const avgRating = Number(calculateAverageRating(reviews)) || 0;
-  const avgLabel = getRatingLabel(avgRating);
-
-  /* ✅ 리뷰 개수는 실제 배열 기준 */
-  const verifiedCount = reviews.length;
 
   return (
     <div className="hotel-reviews">
-      {/* 헤더 */}
       <div className="header-row">
-        <h3 className="reviews-title">리뷰</h3>
-        <button className="give-review-btn" onClick={openModal}>
-          리뷰 작성하기
+        <h3 className="reviews-title">리뷰 {totalCount}개</h3>
+        <button className="give-review-btn" onClick={() => setIsModalOpen(true)}>
+          {totalCount === 0 ? "첫 리뷰 작성하기" : "리뷰 작성하기"}
         </button>
       </div>
 
-      {/* 평균 평점 */}
-      <div className="avg-row">
-        <div className="avg-score">{avgRating.toFixed(1)}</div>
-        <div className="avg-meta">
-          <div className="avg-label">{avgLabel}</div>
-          <div className="avg-count">{verifiedCount}개 인증 리뷰</div>
+      {avgRating !== null ? (
+        <div className="avg-row">
+          <div className="avg-score">{avgRating.toFixed(1)}</div>
+          <div className="avg-meta">
+            <div className="avg-label">{avgLabel}</div>
+            <div className="avg-count">{totalCount}개 인증 리뷰</div>
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className="no-review-summary">아직 평점이 없습니다. 첫 리뷰를 기다리고 있어요!</div>
+      )}
 
-      {/* 리뷰 리스트 */}
       <ul className="review-list">
         {currentReviews.length > 0 ? (
-          currentReviews.map((review) => {
-            const label = getRatingLabel(review.rating);
-
-            return (
-              <li key={review.id} className="review-item">
-                <div className="review-main">
-                  <div className="profile-image">
-                    <img
-                      src="https://via.placeholder.com/40"
-                      alt="profile"
-                    />
-                  </div>
-
-                  <div className="review-content">
-                    <div className="review-header">
-                      <span className="review-score">
-                        {Number(review.rating).toFixed(1)}
-                      </span>
-                      <span className="review-label">{label}</span>
-                      <span className="review-author">
-                        {review.userId?.name || "익명"}
-                      </span>
-                    </div>
-
-                    <p className="review-comment">{review.comment}</p>
-                  </div>
+          currentReviews.map((review) => (
+            <li key={review._id || review.id} className="review-item">
+              <div className="review-main">
+                <div className="profile-image">
+                  <img
+                    src={review.userId?.profileImage || "https://placehold.co/40"}
+                    alt="user"
+                    onError={(e) => { e.target.src = "https://placehold.co/40"; }}
+                  />
                 </div>
-
-                <button type="button" className="flag-btn">
-                  ⚑
-                </button>
-              </li>
-            );
-          })
+                <div className="review-content">
+                  <div className="review-header">
+                    <span className="review-stars" style={{ color: "#ffc107" }}>
+                      {renderStars(review.rating)}
+                    </span>
+                    <span className="review-author">{review.userId?.name || review.userName || "익명"}</span>
+                    {/* 날짜 표시가 필요한 경우 추가 */}
+                    {(review.createdAt || review.date) && (
+                      <span className="review-date">
+                        {new Date(review.createdAt || review.date).toLocaleDateString()}
+                      </span>
+                    )}
+                  </div>
+                  <p className="review-comment">{review.comment}</p>
+                </div>
+              </div>
+              <button type="button" className="flag-btn">⚑</button>
+            </li>
+          ))
         ) : (
-          <li className="no-review">리뷰가 없습니다.</li>
+          <li className="no-review-item">작성된 리뷰가 없습니다.</li>
         )}
       </ul>
 
-      {/* 페이지네이션 */}
+      {/* 페이지네이션 UI (레이아웃 유지) */}
       {totalPages > 1 && (
         <div className="review-pagination">
-          <button
-            className="page-arrow"
-            disabled={page === 1}
-            onClick={() => setPage(page - 1)}
-          >
-            ◀
-          </button>
-
-          <span className="page-text">
-            {page} / {totalPages}
-          </span>
-
-          <button
-            className="page-arrow"
-            disabled={page === totalPages}
-            onClick={() => setPage(page + 1)}
-          >
-            ▶
-          </button>
+          <button disabled={page === 1} onClick={() => setPage(page - 1)}>◀</button>
+          <span className="page-text">{page} / {totalPages}</span>
+          <button disabled={page === totalPages} onClick={() => setPage(page + 1)}>▶</button>
         </div>
       )}
 
-      {/* 리뷰 작성 모달 */}
       {isModalOpen && (
         <ReviewModal
-          closeModal={closeModal}
+          closeModal={() => setIsModalOpen(false)}
           onSubmit={handleSubmitReview}
         />
       )}

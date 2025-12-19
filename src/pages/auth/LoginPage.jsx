@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../styles/auth/LoginPage.scss";
-import { authenticateUser } from "../../api/mockUser";
+import axiosInstance from "../../api/axiosConfig";
 import { AuthContext } from "../../context/AuthContext";
 
 import img1 from "../../assets/image1.jpeg";
@@ -11,15 +11,19 @@ import img3 from "../../assets/image3.jpeg";
 const imageList = [img1, img2, img3];
 
 const LoginPage = () => {
+  // ✅ Vite 환경 변수 설정 (기본값 /api)
+  const apiUrl = import.meta.env.VITE_API_BASE_URL || "/api";
+
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [remember, setRemember] = useState(false);
   const [message, setMessage] = useState("");
   const [current, setCurrent] = useState(0);
   const navigate = useNavigate();
 
-  // 🔥 AuthContext 가져오기
+  // AuthContext에서 로그인 함수 가져오기
   const { login } = useContext(AuthContext);
 
+  // 배경 이미지 슬라이더 로직
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrent((prev) => (prev + 1) % imageList.length);
@@ -33,45 +37,61 @@ const LoginPage = () => {
     else setFormData({ ...formData, [name]: value });
   };
 
-  // ✅ mockUser.js로 로그인 처리 + AuthContext 로그인 처리
-  const handleSubmit = (e) => {
+  //handleSubmit 로직 (기존과 동일하되 토큰 처리 유지)
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage("");
 
-    // mockUser.js 인증 실행
-    const result = authenticateUser(formData.email, formData.password);
+    try {
+      const response = await axiosInstance.post("/users/login", {
+        email: formData.email,
+        password: formData.password,
+      });
 
-    if (!result.success) {
-      setMessage(result.message);
-      return;
+      const resBody = response.data;
+      const resData = resBody.data || resBody;
+
+      const token = resData.token || resData.accessToken || resBody.token || resBody.accessToken;
+      const user = resData.user || resBody.user;
+
+      if (!token) {
+        throw new Error("서버 응답에 인증 토큰이 포함되어 있지 않습니다.");
+      }
+
+      const userData = {
+        id: user?.id || user?._id,
+        email: user?.email,
+        nickname: user?.name || user?.nickname || "사용자",
+        profileImg: user?.profileImg || "/default_profile.png",
+        role: user?.role,
+        token: token,
+      };
+
+      login(userData);
+      localStorage.setItem("user", JSON.stringify(userData));
+      localStorage.setItem("accessToken", token);
+      localStorage.setItem("token", token);
+
+      const refreshToken = resData.refreshToken || resBody.refreshToken;
+      if (refreshToken) {
+        localStorage.setItem("refreshToken", refreshToken);
+      }
+
+      alert("로그인 성공!");
+      navigate("/");
+
+    } catch (err) {
+      console.error("Login Error Details:", err);
+      const errorText = err.response?.data?.message || err.message || "로그인에 실패했습니다.";
+      setMessage(errorText);
     }
-
-    // 🔥 Header가 원하는 구조로 userData 변환
-    const userData = {
-      id: result.user.id,
-      email: result.user.email,
-      nickname: result.user.name,               // Header에서 nickname 사용
-      profileImg: "/default_profile.png",       // Header에서 profileImg 사용
-      token: result.token,
-    };
-
-    // 🔥 AuthContext에 로그인 상태 저장 → Header 즉시 변경됨
-    login(userData);
-
-    // 🔥 localStorage에도 저장 (새로고침 유지)
-    localStorage.setItem("user", JSON.stringify(userData));
-    localStorage.setItem("token", result.token);
-
-    // 홈으로 이동
-    navigate("/");
   };
 
   return (
     <div className="page-wrapper">
-      {/* LEFT LOGIN */}
+      {/* 왼쪽 로그인 폼 구역 */}
       <div className="auth-container">
         <h2 className="login-title">Login</h2>
-
         <form onSubmit={handleSubmit} className="auth-form">
           <input
             type="email"
@@ -81,7 +101,6 @@ const LoginPage = () => {
             onChange={handleChange}
             required
           />
-
           <input
             type="password"
             name="password"
@@ -90,7 +109,6 @@ const LoginPage = () => {
             onChange={handleChange}
             required
           />
-
           <label className="remember-row">
             <input
               type="checkbox"
@@ -99,87 +117,39 @@ const LoginPage = () => {
             />
             비밀번호 기억하기
           </label>
-
           <button type="submit" className="login-btn">로그인</button>
-
-          <button
-            type="button"
-            className="signup-btn"
-            onClick={() => navigate("/signup")}
-          >
-            회원가입
-          </button>
-
-          <button
-            type="button"
-            className="resetpw-btn"
-            onClick={() => navigate("/findpassword")}
-          >
-            비밀번호 찾기
-          </button>
+          <button type="button" className="signup-btn" onClick={() => navigate("/signup")}>회원가입</button>
+          <button type="button" className="resetpw-btn" onClick={() => navigate("/findpassword")}>비밀번호 찾기</button>
         </form>
 
-        {message && <p className="auth-message">{message}</p>}
+        {message && <p className="auth-message" style={{ color: "#ff4d4f", marginTop: "10px", fontSize: "14px" }}>{message}</p>}
 
-        <div className="social-divider">
-          <span>Or login with</span>
-        </div>
+        <div className="social-divider"><span>Or login with</span></div>
 
+        {/* ✅ 수정된 소셜 로그인 박스 */}
         <div className="social-login-box">
-          {/* 카카오 로그인 */}
-          <button
-            className="social-btn"
-            onClick={() => {
-              const KAKAO_AUTH_URL =
-                "https://kauth.kakao.com/oauth/authorize?client_id=YOUR_KAKAO_CLIENT_ID&redirect_uri=YOUR_KAKAO_REDIRECT_URI&response_type=code";
-              window.location.href = KAKAO_AUTH_URL;
-            }}
-          >
-            <img src="https://developers.kakao.com/assets/img/about/logos/kakaotalksharing/kakaotalk_sharing_btn_small.png" alt="카카오 로그인" />
+          <button className="social-btn" onClick={() => window.location.href = `${apiUrl}/auth/kakao`}>
+            <img src="https://developers.kakao.com/assets/img/about/logos/kakaotalksharing/kakaotalk_sharing_btn_small.png" alt="카카오" />
           </button>
-          {/* 구글 로그인 */}
-          <button
-            className="social-btn"
-            onClick={() => {
-              const GOOGLE_AUTH_URL =
-                "https://accounts.google.com/o/oauth2/v2/auth?client_id=YOUR_GOOGLE_CLIENT_ID&redirect_uri=YOUR_GOOGLE_REDIRECT_URI&response_type=code&scope=email%20profile";
-              window.location.href = GOOGLE_AUTH_URL;
-            }}
-          >
-            <img src="https://cdn-icons-png.flaticon.com/512/300/300221.png" alt="구글 로그인" />
+          <button className="social-btn" onClick={() => window.location.href = `${apiUrl}/auth/google`}>
+            <img src="https://cdn-icons-png.flaticon.com/512/300/300221.png" alt="구글" />
           </button>
-          {/* 네이버 로그인 */}
-          <button
-            className="social-btn"
-            onClick={() => {
-              const NAVER_AUTH_URL =
-                "https://nid.naver.com/oauth2.0/authorize?client_id=YOUR_NAVER_CLIENT_ID&redirect_uri=YOUR_NAVER_REDIRECT_URI&response_type=code";
-              window.location.href = NAVER_AUTH_URL;
-            }}
-          >
-            <img src="https://cdn.simpleicons.org/naver/03C75A" alt="네이버 로그인" />
+          <button className="social-btn" onClick={() => window.location.href = `${apiUrl}/auth/naver`}>
+            <img src="https://cdn.simpleicons.org/naver/03C75A" alt="네이버" />
           </button>
         </div>
       </div>
 
+      {/* 오른쪽 이미지 슬라이더 구역 */}
       <div className="slider-container">
-        <div
-          className="slider-track"
-          style={{
-            transform: `translateX(-${current * 100}%)`
-          }}
-        >
+        <div className="slider-track" style={{ transform: `translateX(-${current * 100}%)` }}>
           {imageList.map((src, i) => (
-            <img key={i} src={src} className="slide-image" />
+            <img key={i} src={src} className="slide-image" alt={`slide-${i}`} />
           ))}
         </div>
-
         <div className="indicator-box">
           {imageList.map((_, i) => (
-            <div
-              key={i}
-              className={`indicator ${current === i ? "active" : ""}`}
-            />
+            <div key={i} className={`indicator ${current === i ? "active" : ""}`} />
           ))}
         </div>
       </div>
