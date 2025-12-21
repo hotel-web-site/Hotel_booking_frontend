@@ -245,3 +245,83 @@
 /* ---------------------------------------------------------
    🌟 MOBILE 관련 스타일 완전 제거됨
 --------------------------------------------------------- */
+/* ===============================
+   Floating Quick Menu (이미지 스타일)
+================================ */
+.quick-menu {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+
+  .quick-menu__stack {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+
+    /* 접힌 상태 */
+    opacity: 0;
+    transform: translateY(10px);
+    pointer-events: none;
+    transition: all 0.2s ease;
+
+    &.is-open {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+  }
+
+  .quick-menu__btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 999px;
+    border: 1px solid #e7e7e7;
+    background: #fff;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+    transition: transform 0.15s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+    }
+
+    .qm-icon {
+      width: 20px;
+      height: 20px;
+      color: #222;
+    }
+  }
+
+  .quick-menu__toggle {
+    width: 46px;
+    height: 46px;
+    border-radius: 999px;
+    border: none;
+    background: #2e6b53; /* 이미지의 초록 버튼 느낌 */
+    color: #fff;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.18);
+
+    .qm-plus {
+      font-size: 26px;
+      line-height: 1;
+      display: inline-block;
+      transform: rotate(0deg);
+      transition: transform 0.2s ease;
+
+      &.is-open {
+        transform: rotate(45deg); /* 열리면 X처럼 */
+      }
+    }
+  }
+}

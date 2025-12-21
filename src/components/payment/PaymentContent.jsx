@@ -30,15 +30,6 @@ const PaymentContent = ({ cards = [], onAddCard, onDeleteCard }) => {
   };
 
   const handleInput = (key, value) => {
-<<<<<<< HEAD
-    if (key === "cardNumber") {
-      handleInputCardNumber(value);
-    } else if (key === "exp") {
-      handleInputExp(value);
-    } else {
-      setForm((prev) => ({ ...prev, [key]: value }));
-    }
-=======
     let formattedValue = value;
     if (key === "cardNumber") {
       formattedValue = value.replace(/\D/g, "").replace(/(\d{4})(?=\d)/g, "$1 ").slice(0, 19);
@@ -48,7 +39,6 @@ const PaymentContent = ({ cards = [], onAddCard, onDeleteCard }) => {
       formattedValue = value.replace(/\D/g, "").slice(0, 3);
     }
     setForm((prev) => ({ ...prev, [key]: formattedValue }));
->>>>>>> 7b5c946 (12/18 서버 업로드 한 내용)
   };
 
   const validateCardNumber = (number) => {
@@ -170,39 +160,11 @@ const PaymentContent = ({ cards = [], onAddCard, onDeleteCard }) => {
             <div className="row">
               <div className="input-wrap">
                 <label className="floating-label">만료일</label>
-<<<<<<< HEAD
-                <input
-                  type="text"
-                  placeholder="MM/YY"
-                  value={form.exp}
-                  onChange={(e) => handleInput("exp", e.target.value)}
-                  maxLength={5}
-                  inputMode="numeric"
-                  autoComplete="cc-exp"
-                />
-=======
                 <input type="text" placeholder="MM/YY" value={form.exp} onChange={(e) => handleInput("exp", e.target.value)} />
->>>>>>> 7b5c946 (12/18 서버 업로드 한 내용)
               </div>
               <div className="input-wrap">
                 <label className="floating-label">CVC</label>
-<<<<<<< HEAD
-                <input
-                  type="text"
-                  placeholder="123"
-                  value={form.cvc}
-                  onChange={e => {
-                    // 숫자만, 3자리 제한
-                    let v = e.target.value.replace(/\D/g, "").slice(0, 3);
-                    handleInput("cvc", v);
-                  }}
-                  maxLength={3}
-                  inputMode="numeric"
-                  autoComplete="cc-csc"
-                />
-=======
                 <input type="text" placeholder="123" value={form.cvc} onChange={(e) => handleInput("cvc", e.target.value)} />
->>>>>>> 7b5c946 (12/18 서버 업로드 한 내용)
               </div>
             </div>
 
@@ -220,19 +182,7 @@ const PaymentContent = ({ cards = [], onAddCard, onDeleteCard }) => {
               </select>
             </div>
 
-<<<<<<< HEAD
-            
-
-            <button
-              className="submit-btn"
-              onClick={handleSubmitCard}
-              type="button"
-            >
-              카드 추가
-            </button>
-=======
             <button className="submit-btn" onClick={handleSubmitCard} style={{ marginTop: "20px" }}>카드 추가</button>
->>>>>>> 7b5c946 (12/18 서버 업로드 한 내용)
           </div>
         </div>
       )}
