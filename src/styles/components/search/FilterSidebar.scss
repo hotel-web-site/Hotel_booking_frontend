@@ -1,158 +1,177 @@
-.filter-sidebar {
-    width: 300px;
-    position: relative;
-    left: -30px;
-    padding: 20px 24px;
-    display: flex;
-    flex-direction: column;
-    gap: 32px;
+/* ============================================================
+   Filter Sidebar (Responsive)
+   - 데스크탑: 좌측 고정(페이지 grid에 의해 배치)
+   - 모바일: 숨기지 않고 카드처럼 위에 표시
+============================================================ */
 
-     .filter-apply-btn {
-        margin-top: 8px;
-        width: 100%;
-        padding: 10px 0;
-        border-radius: 10px;
-        border: none;
-        background: #00a884;
-        color: #fff;
-        font-size: 14px;
+.filter-sidebar {
+  width: 100%;
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px 22px;
+  box-shadow: 0px 4px 18px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  box-sizing: border-box;
+
+  .filter-title {
+    font-size: 18px;
+    font-weight: 700;
+  }
+
+  .filter-apply-btn {
+    margin-top: 6px;
+    width: 100%;
+    padding: 10px 0;
+    border-radius: 10px;
+    border: none;
+    background: #00a884;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease;
+
+    &:hover {
+      background: #008567;
+    }
+  }
+
+  .filter-box {
+    border-bottom: 1px solid #e6e6e6;
+    padding-bottom: 18px;
+
+    &:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .filter-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+
+      h4 {
+        font-size: 16px;
         font-weight: 600;
+      }
+
+      .arrow {
+        font-size: 14px;
+        transition: transform 0.2s ease;
+        opacity: 0.6;
+
+        &.open {
+          transform: rotate(180deg);
+        }
+      }
+    }
+
+    /* 접힘/펼침 영역 */
+    .filter-body {
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(-6px);
+      transition: all 0.25s ease;
+
+      &.show {
+        max-height: 500px;
+        opacity: 1;
+        transform: translateY(0);
+        margin-top: 14px;
+      }
+    }
+
+    /* Price slider */
+    .price-slider {
+      width: 100%;
+      accent-color: #00a884;
+      cursor: pointer;
+    }
+
+    .price-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      opacity: 0.7;
+      margin-top: 6px;
+    }
+
+    .price-current {
+      margin-top: 8px;
+      font-size: 13px;
+      color: #333;
+
+      strong {
+        font-weight: 600;
+      }
+    }
+
+    /* Rating buttons */
+    .rating-options {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+
+      button {
+        padding: 6px 12px;
+        border: 1px solid #dcdcdc;
+        border-radius: 8px;
+        background: #fff;
+        font-size: 13px;
         cursor: pointer;
-        transition: background 0.2s ease;
+        transition: 0.2s;
 
         &:hover {
-            background: #008567;
+          background: #f3fdf8;
+          border-color: #00a884;
+          color: #00a884;
         }
+      }
     }
+
+    /* Checkbox list */
+    .checkbox-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+
+      label {
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        input {
+          width: 16px;
+          height: 16px;
+        }
+      }
+    }
+  }
+}
+
+/* 태블릿에서 살짝 컴팩트 */
+@media (max-width: 1024px) {
+  .filter-sidebar {
+    padding: 18px 18px;
 
     .filter-title {
-        font-size: 18px;
-        font-weight: 700;
+      font-size: 17px;
     }
 
-    .filter-box {
-        border-bottom: 1px solid #e6e6e6;
-        padding-bottom: 20px;
-
-        &:last-child {
-            border-bottom: none;
-        }
-
-        .filter-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-
-            h4 {
-                font-size: 16px;
-                font-weight: 600;
-            }
-
-            .arrow {
-                font-size: 14px;
-                transition: transform 0.2s ease;
-                opacity: 0.6;
-
-                &.open {
-                    transform: rotate(180deg);
-                }
-            }
-        }
-
-        /* 접힘/펼침 영역 */
-        .filter-body {
-            max-height: 0;
-            overflow: hidden;
-            opacity: 0;
-            transform: translateY(-6px);
-            transition: all 0.25s ease;
-
-            &.show {
-                max-height: 500px;
-                opacity: 1;
-                transform: translateY(0);
-                margin-top: 16px;
-            }
-        }
-
-        /* Price slider */
-        .price-slider {
-            width: 100%;
-            accent-color: #00a884;
-            cursor: pointer;
-        }
-
-        .price-labels {
-            display: flex;
-            justify-content: space-between;
-            font-size: 13px;
-            opacity: 0.7;
-            margin-top: 6px;
-        }
-
-        .price-current {
-            margin-top: 8px;
-            font-size: 13px;
-            color: #333;
-
-            strong {
-                font-weight: 600;
-            }
-        }
-
-        /* Rating buttons */
-        .rating-options {
-            display: flex;
-            gap: 10px;
-
-            button {
-                padding: 6px 12px;
-                border: 1px solid #dcdcdc;
-                border-radius: 8px;
-                background: #fff;
-                font-size: 13px;
-                cursor: pointer;
-                transition: 0.2s;
-
-                &:hover {
-                    background: #f3fdf8;
-                    border-color: #00a884;
-                    color: #00a884;
-                }
-            }
-        }
-
-        /* Checkbox list */
-        .checkbox-list {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-
-            label {
-                font-size: 14px;
-                display: flex;
-                align-items: center;
-                gap: 8px;
-
-                input {
-                    width: 16px;
-                    height: 16px;
-                }
-            }
-        }
+    .filter-box .filter-header h4 {
+      font-size: 15px;
     }
+  }
 }
 
-/* 반응형 */
-@media (max-width: 1024px) {
-    .filter-sidebar {
-        width: 220px;
-    }
-}
-
+/* 모바일: 숨기지 말고 그대로 카드로 표시 */
 @media (max-width: 768px) {
-    .filter-sidebar {
-        display: none;
-    }
+  .filter-sidebar {
+    width: 100%;
+  }
 }

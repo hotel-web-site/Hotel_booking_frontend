@@ -1,43 +1,56 @@
-// src/pages/hotel/HotelDetailPage.jsx
-
 import React, { useState, useEffect } from "react";
-import { useParams, useSearchParams } from "react-router-dom";   // ⭐ 추가
+import { useParams, useSearchParams } from "react-router-dom";
 import Amenities from "../../components/hotelpage/Amenities";
 import AvailableRooms from "../../components/hotelpage/AvailableRooms";
 import HotelDetailHeader from "../../components/hotelpage/HotelDetailHeader";
-import HotelGallery from "../../components/hotelpage/HotelGallery";
+import HotelGalleryModal from "../../components/hotelpage/HotelGalleryModal";
 import HotelMap from "../../components/hotelpage/HotelMap";
 import HotelOverview from "../../components/hotelpage/HotelOverview";
 import HotelReviews from "../../components/hotelpage/HotelReviews";
 import "../../styles/pages/hotel/HotelDetailPage.scss";
 
-import {
-  getHotelDetail,
-  getHotelRooms,
-} from "../../api/hotelClient";
-
-import {
-  getReviews,
-  createReview,
-  updateReview,
-  deleteReview,
-} from "../../api/reviewClient";
+import { calculateAverageRating } from "../../util/reviewHelper";
+import { getHotelDetail, getHotelRooms } from "../../api/hotelClient";
+import { getReviews, createReview, updateReview, deleteReview } from "../../api/reviewClient";
 
 const HotelDetailPage = () => {
-  const { hotelId } = useParams(); // URL에서 호텔 ID 추출
-  const [searchParams] = useSearchParams();      // ⭐ 추가
-  const isGuest = searchParams.get("guest") === "1";   // ⭐ 비회원 여부 확인
+  const { hotelId } = useParams();
+  const [searchParams] = useSearchParams();
+  const isGuest = searchParams.get("guest") === "1";
 
   const [hotel, setHotel] = useState(null);
   const [rooms, setRooms] = useState([]);
+  const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [reviews, setReviews] = useState([]);
+
+  // ⭐ 데이터 갱신 함수 (기존 구조 유지)
+  const refreshReviews = async () => {
+    try {
+      const [reviewsData, hotelData] = await Promise.all([
+        getReviews(hotelId),
+        getHotelDetail(hotelId)
+      ]);
+      const finalReviews = Array.isArray(reviewsData) ? [...reviewsData] : [];
+      const finalHotel = hotelData?.data || hotelData;
+
+      setReviews(finalReviews);
+      setHotel(prev => ({
+        ...prev,
+        ...finalHotel,
+        ratingCount: finalHotel.ratingCount || finalReviews.length,
+        ratingAverage: finalHotel.ratingAverage || calculateAverageRating(finalReviews)
+      }));
+    } catch (err) {
+      console.error("리뷰 갱신 실패:", err);
+    }
+  };
 
   useEffect(() => {
     const fetchHotelData = async () => {
       try {
         setLoading(true);
+        setError(null);
 
         const [hotelData, roomsData, reviewsData] = await Promise.all([
           getHotelDetail(hotelId),
@@ -45,12 +58,23 @@ const HotelDetailPage = () => {
           getReviews(hotelId),
         ]);
 
-        setHotel(hotelData.hotel);
-        setRooms(roomsData);
-        setReviews(reviewsData);
+        const finalHotel = hotelData?.data || hotelData;
+        const finalRooms = roomsData?.list || roomsData || [];
+        const finalReviews = Array.isArray(reviewsData) ? reviewsData : [];
+
+        setHotel({
+          ...finalHotel,
+          image: finalHotel.image || (finalHotel.images && finalHotel.images[0]) || "/assets/images/default-hotel.jpg",
+          rooms: finalRooms,
+          reviews: finalReviews,
+          ratingCount: finalHotel.ratingCount || finalReviews.length,
+          ratingAverage: finalHotel.ratingAverage || calculateAverageRating(finalReviews)
+        });
+
+        setRooms(finalRooms);
+        setReviews(finalReviews);
       } catch (err) {
-        setError(err.message);
-        console.error("Failed to fetch hotel data:", err);
+        setError("호텔 정보를 불러오는 중 에러가 발생했습니다.");
       } finally {
         setLoading(false);
       }
@@ -59,52 +83,43 @@ const HotelDetailPage = () => {
     if (hotelId) fetchHotelData();
   }, [hotelId]);
 
-  if (loading)
-    return <div className="hotel-detail-container inner loading">Loading...</div>;
-
-  if (error)
-    return (
-      <div className="hotel-detail-container inner error">
-        Error: {error}
-      </div>
-    );
-
-  if (!hotel)
-    return (
-      <div className="hotel-detail-container inner">
-        호텔을 찾을 수 없습니다.
-      </div>
-    );
+  if (loading) return <div className="hotel-detail-container inner loading">로딩 중...</div>;
+  if (error) return <div className="hotel-detail-container inner error">{error}</div>;
+  if (!hotel) return <div className="hotel-detail-container inner">숙소를 찾을 수 없습니다.</div>;
 
   return (
     <div className="hotel-detail-container inner">
       <HotelDetailHeader hotel={hotel} />
-
-      <HotelGallery images={hotel.images} hotelName={hotel.name} />
+      <HotelGalleryModal images={hotel.images} name={hotel.name} mainFallbackImage={hotel.image} />
 
       <HotelOverview
         description={hotel.description}
-        rating={hotel.ratingAverage}
-        reviewCount={hotel.ratingCount}
-        tags={hotel.tags}
+        rating={hotel.ratingAverage || 0}
+        reviewCount={hotel.ratingCount || 0}
+        tags={hotel.tags || []}
       />
 
-      <Amenities amenities={hotel.amenities} />
+      <Amenities amenities={hotel.amenities || []} />
 
-      {/* ⭐ AvailableRooms에 비회원 여부 전달 */}
-      <AvailableRooms rooms={rooms} isGuest={isGuest} />
+      <AvailableRooms
+        rooms={rooms}
+        isGuest={isGuest}
+        hotelId={hotelId}
+        searchParams={Object.fromEntries([...searchParams])}
+      />
 
-      <HotelMap address={hotel.address} location={hotel.location} />
+      <HotelMap
+        address={hotel.address || hotel.location}
+        coordinates={hotel.coordinates || hotel.coords}
+      />
 
       <HotelReviews
         hotelId={hotelId}
-        rating={hotel.ratingAverage}
-        reviewCount={hotel.ratingCount}
+        reviews={reviews}
         createReview={createReview}
         updateReview={updateReview}
         deleteReview={deleteReview}
-        reviews={reviews}
-        getReviews={getReviews}
+        getReviews={refreshReviews}
       />
     </div>
   );
