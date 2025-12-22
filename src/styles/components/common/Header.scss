@@ -28,7 +28,10 @@
             width: 190px;
             height: auto;
             transition: opacity 0.25s;
-            &:hover { opacity: 0.85; }
+
+            &:hover {
+                opacity: 0.85;
+            }
         }
     }
 
@@ -51,7 +54,9 @@
                 position: relative;
                 transition: color 0.25s ease;
 
-                &:hover { color: #000; }
+                &:hover {
+                    color: #000;
+                }
 
                 &::after {
                     content: "";
@@ -92,11 +97,18 @@
         .login-btn {
             background: #1e3a8a;
             color: white;
-            &:hover { background: #2649b1; }
+
+            &:hover {
+                background: #2649b1;
+            }
         }
+
         .signup-btn {
             color: #1e3a8a;
-            &:hover { color: #274bb3; }
+
+            &:hover {
+                color: #274bb3;
+            }
         }
     }
 }
@@ -121,7 +133,7 @@
             height: 42px;
             border-radius: 50%;
             object-fit: cover;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
         }
 
         span {
@@ -142,12 +154,19 @@
         border-radius: 12px;
 
         padding: 18px 0;
-        box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
         animation: fadeIn 0.25s ease;
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-6px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(-6px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .user-menu-layout {
@@ -182,9 +201,21 @@
                 align-items: center;
                 gap: 3px;
 
-                .username { font-size: 14px; font-weight: 700; }
-                .status { font-size: 11px; color: #10b981; }
-                .points { font-size: 12px; margin-top: 4px; color: #666; }
+                .username {
+                    font-size: 14px;
+                    font-weight: 700;
+                }
+
+                .status {
+                    font-size: 11px;
+                    color: #10b981;
+                }
+
+                .points {
+                    font-size: 12px;
+                    margin-top: 4px;
+                    color: #666;
+                }
             }
         }
 
@@ -202,7 +233,7 @@
                 transition: background 0.2s ease;
 
                 &:hover {
-                    background: rgba(0,0,0,0.05);
+                    background: rgba(0, 0, 0, 0.05);
                 }
 
                 &:hover::after {
@@ -245,3 +276,90 @@
 /* ---------------------------------------------------------
    🌟 MOBILE 관련 스타일 완전 제거됨
 --------------------------------------------------------- */
+/* ===============================
+   Floating Quick Menu (이미지 스타일)
+================================ */
+.quick-menu {
+    position: fixed;
+    right: 18px;
+    bottom: 18px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+
+    .quick-menu__stack {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+
+        /* 접힌 상태 */
+        opacity: 0;
+        transform: translateY(10px);
+        pointer-events: none;
+        transition: all 0.2s ease;
+
+        &.is-open {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+    }
+
+    .quick-menu__btn {
+        width: 44px;
+        height: 44px;
+        border-radius: 999px;
+        border: 1px solid #e7e7e7;
+        background: #fff;
+        display: grid;
+        place-items: center;
+        cursor: pointer;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+        transition: transform 0.15s ease;
+
+        &:hover {
+            transform: translateY(-2px);
+            background: #2e6b53;
+        }
+
+        .qm-icon {
+            width: 20px;
+            height: 20px;
+            color: #2e6b53;
+        }
+
+        &:hover .qm-icon {
+            color: #fff;
+        }
+    }
+
+    .quick-menu__toggle {
+        width: 46px;
+        height: 46px;
+        border-radius: 999px;
+        border: none;
+        background: #2e6b53;
+        /* 이미지의 초록 버튼 느낌 */
+        color: #fff;
+        display: grid;
+        place-items: center;
+        cursor: pointer;
+        box-shadow: 0 8px 22px rgba(0, 0, 0, 0.18);
+
+        .qm-plus {
+            font-size: 26px;
+            line-height: 1;
+            display: inline-block;
+            transform: rotate(0deg);
+            transition: transform 0.2s ease;
+
+            &.is-open {
+                transform: rotate(45deg);
+                /* 열리면 X처럼 */
+            }
+        }
+    }
+}

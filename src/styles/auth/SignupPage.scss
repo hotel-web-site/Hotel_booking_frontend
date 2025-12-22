@@ -116,16 +116,29 @@
                 gap: 8px;
                 align-items: center;
                 font-size: 14px;
+                flex-wrap: nowrap;
+                white-space: nowrap;
+            }
 
-                input[type="checkbox"] {
-                    width: 16px;
-                    height: 16px;
-                    padding: 0;
-                    margin: 0;
-                    border: 1px solid #888;
-                    border-radius: 3px;
-                    cursor: pointer;
-                }
+            .agree-row .link-btn {
+                background: none;
+                border: none;
+                color: #159570;
+                text-decoration: underline;
+                cursor: pointer;
+                padding: 0 2px;
+                font-size: 14px;
+                white-space: nowrap;
+            }
+
+            .agree-row input[type="checkbox"] {
+                width: 16px;
+                height: 16px;
+                padding: 0;
+                margin: 0;
+                border: 1px solid #888;
+                border-radius: 3px;
+                cursor: pointer;
             }
 
             .create-btn {

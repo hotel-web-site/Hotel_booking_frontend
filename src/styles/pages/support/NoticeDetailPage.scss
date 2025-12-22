@@ -1,68 +1,192 @@
 /* ===============================
-   공지사항 상세
+   공지사항 상세 (Responsive)
 ================================ */
 
 .notice-detail {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 80px 0 320px;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 80px 0 320px;
+
+  /* ✅ 작은 화면에서 좌우 여백 확보 */
+  padding-left: 16px;
+  padding-right: 16px;
+  box-sizing: border-box;
 }
 
 /* 제목 */
 .notice-detail h2 {
-    font-size: 26px;
-    font-weight: 600;
-    text-align: center;
-    margin-bottom: 16px;
+  font-size: 26px;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 16px;
+
+  /* ✅ 긴 제목 줄바꿈 자연스럽게 */
+  word-break: break-word;
 }
 
 /* 메타 정보 */
 .meta {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    font-size: 13px;
-    color: #999;
-    margin-bottom: 50px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  font-size: 13px;
+  color: #999;
+  margin-bottom: 50px;
+
+  /* ✅ 모바일에서 넘치면 줄바꿈 */
+  flex-wrap: wrap;
+  text-align: center;
 }
 
 /* 본문 */
 .notice-content,
 .notice-detail pre {
-    font-family: inherit;
-    white-space: pre-wrap;
-    line-height: 1.8;
-    font-size: 15px;
-    color: #333;
-    margin-bottom: 80px;
+  font-family: inherit;
+  white-space: pre-wrap;
+  line-height: 1.8;
+  font-size: 15px;
+  color: #333;
+  margin-bottom: 80px;
+
+  /* ✅ 긴 URL/긴 단어 터짐 방지 */
+  word-break: break-word;
 }
 
 /* 이미지 */
 .notice-detail img {
-    display: block;
-    max-width: 100%;
-    margin: 0 auto 40px;
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto 40px;
 }
 
 /* 하단 버튼 영역 */
 .notice-actions {
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* 목록 버튼 */
 .notice-actions button {
-    width: 180px;
-    height: 44px;
-    border: 1px solid #999;
-    background: #fff;
-    font-size: 14px;
-    cursor: pointer;
-    transition: all 0.2s;
+  width: 180px;
+  height: 44px;
+  border: 1px solid #999;
+  background: #fff;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
 
-    &:hover {
-        background: #333;
-        color: #fff;
-        border-color: #333;
-    }
+  &:hover {
+    background: #333;
+    color: #fff;
+    border-color: #333;
+  }
+}
+
+/* ============================================================
+   ✅ Responsive
+============================================================ */
+
+/* --- 992px 이하: 태블릿/작은 노트북 --- */
+@media (max-width: 992px) {
+  .notice-detail {
+    padding-top: 64px;
+    padding-bottom: 240px;
+  }
+
+  .notice-detail h2 {
+    font-size: 24px;
+  }
+
+  .meta {
+    margin-bottom: 40px;
+    gap: 16px;
+  }
+
+  .notice-content,
+  .notice-detail pre {
+    font-size: 14px;
+    margin-bottom: 64px;
+  }
+
+  .notice-actions button {
+    width: 170px;
+    height: 42px;
+    font-size: 13px;
+  }
+}
+
+/* --- 768px 이하: 태블릿 세로 --- */
+@media (max-width: 768px) {
+  .notice-detail {
+    padding-top: 52px;
+    padding-bottom: 200px;
+  }
+
+  .notice-detail h2 {
+    font-size: 22px;
+    margin-bottom: 14px;
+  }
+
+  .meta {
+    font-size: 12px;
+    margin-bottom: 32px;
+    gap: 12px;
+  }
+
+  .notice-content,
+  .notice-detail pre {
+    font-size: 14px;
+    line-height: 1.75;
+    margin-bottom: 52px;
+  }
+
+  .notice-detail img {
+    margin-bottom: 28px;
+  }
+
+  .notice-actions button {
+    width: 160px;
+    height: 42px;
+  }
+}
+
+/* --- 480px 이하: 모바일 --- */
+@media (max-width: 480px) {
+  .notice-detail {
+    padding-top: 42px;
+    padding-bottom: 160px;
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .notice-detail h2 {
+    font-size: 20px;
+  }
+
+  .meta {
+    font-size: 12px;
+    margin-bottom: 24px;
+    gap: 10px;
+  }
+
+  .notice-content,
+  .notice-detail pre {
+    font-size: 13px;
+    line-height: 1.7;
+    margin-bottom: 44px;
+  }
+
+  .notice-actions {
+    width: 100%;
+  }
+
+  /* ✅ 모바일에서 버튼 풀가로 */
+  .notice-actions button {
+    width: 100%;
+    max-width: 360px;
+    height: 46px;
+    font-size: 14px;
+  }
 }
