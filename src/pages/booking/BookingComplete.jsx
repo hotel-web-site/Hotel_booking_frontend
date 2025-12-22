@@ -73,11 +73,14 @@ const BookingComplete = () => {
     <div className="booking-complete">
       <div className="success-icon">✓</div>
 
-      <h1>예약이 완료되었습니다!</h1>
+      <h1>
+        {isGuest ? "예약 접수가 완료되었습니다" : "예약이 완료되었습니다!"}
+      </h1>
+
       <p className="success-message">
         {isGuest
-          ? "비회원 예약이 성공적으로 처리되었습니다."
-          : "예약 내역이 마이페이지에 등록되었습니다."}
+          ? "무통장 입금이 확인되면 예약이 확정됩니다."
+          : "예약 확인 이메일이 전송되었습니다."}
       </p>
 
       <div className="confirmation-card">
@@ -102,9 +105,33 @@ const BookingComplete = () => {
           </div>
         </div>
 
+        {/* ⭐ 무통장 입금 안내 */}
+        {isGuest && paymentStatus === "PAYMENT_PENDING" && (
+          <div className="info-section bank-transfer">
+            <h3>🏦 무통장 입금 안내</h3>
+
+            <p className="bank-desc">
+              아래 계좌로 <strong>입금이 확인되면</strong> 예약이 확정됩니다.
+            </p>
+
+            <div className="bank-box">
+              <div>은행명: 국민은행</div>
+              <div>계좌번호: 123-456-789012</div>
+              <div>예금주: Hotel Booking</div>
+              <div className="amount">
+                입금 금액: ₩{formatPrice(payment.total)}
+              </div>
+            </div>
+
+            <p className="bank-notice">
+              ※ 입금 확인까지 최대 1영업일이 소요될 수 있습니다.
+            </p>
+          </div>
+        )}
+
         {/* 숙소 정보 */}
         <div className="info-section">
-          <h3><span className="icon">🏨</span> 숙소 정보</h3>
+          <h3>🏨 숙소 정보</h3>
           <div className="hotel-summary">
             {/* 데이터가 없을 경우를 대비한 Optional Chaining(?.) 사용 */}
             <img

@@ -2,7 +2,7 @@
 @use "../../common/mixins" as *;
 
 /* ============================================================
-   🔹 이전 단계로 버튼 (login back 스타일)
+   🔹 이전 단계로 버튼
 ============================================================ */
 .btn-back {
     background: none;
@@ -23,10 +23,6 @@
     gap: 4px;
 
     transition: color 0.15s ease;
-
-    &::before {
-        font-size: 14px;
-    }
 
     &:hover {
         color: #000;
@@ -71,32 +67,33 @@
             color: #1a1a1a;
         }
 
-        .term-item {
-            display: flex;
-            align-items: center; /* ⭐ 핵심 */
+        /* ✅ 핵심 수정: label 자체를 flex */
+        label {
+            display: inline-flex;
+            align-items: center;
             gap: 8px;
 
-            input[type="checkbox"] {
-                width: 15px;
-                height: 15px;
-                margin: 0;
-                flex-shrink: 0;
-                cursor: pointer;
-            }
+            font-size: 14px;
+            font-weight: 500;
+            color: #444;
+            line-height: 1.4;
+            cursor: pointer;
 
-            label {
-                font-size: 14px;
-                font-weight: 500;
-                color: #444;
-                line-height: 1.4;
-                cursor: pointer;
-                display: inline-block;
-            }
+            /* 줄바꿈 방지 */
+            white-space: normal;
+        }
+
+        input[type="checkbox"] {
+            width: 15px;
+            height: 15px;
+            margin: 0;
+            flex-shrink: 0;
+            cursor: pointer;
         }
     }
 
     /* ========================================================
-       🔹 결제 요약 (기존 유지)
+       🔹 결제 요약
     ======================================================== */
     .payment-summary {
         position: sticky;
@@ -183,91 +180,11 @@
 }
 
 /* ============================================================
-   🔹 비회원 정보 입력 모달 (변경 없음)
+   🔹 비회원 결제수단 숨김 (자리 유지)
 ============================================================ */
-.guest-modal-backdrop {
-    position: fixed;
-    inset: 0;
-
-    background: rgba(0, 0, 0, 0.45);
-    backdrop-filter: blur(3px);
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    z-index: 9999;
-}
-
-.guest-modal {
-    width: 420px;
-    background: #fff;
-    padding: 2rem;
-    border-radius: 18px;
-
-    box-shadow:
-        0 20px 40px rgba(0, 0, 0, 0.25),
-        0 6px 16px rgba(0, 0, 0, 0.15);
-
-    animation: fadeIn 0.25s ease-out;
-
-    h3 {
-        font-size: 1.45rem;
-        font-weight: 800;
-        text-align: center;
-        margin-bottom: 1.4rem;
-    }
-
-    .input-row {
-        display: flex;
-        flex-direction: column;
-        margin-bottom: 1.1rem;
-
-        label {
-            font-size: 0.95rem;
-            font-weight: 600;
-            margin-bottom: 0.4rem;
-        }
-
-        input {
-            padding: 0.75rem 1rem;
-            border-radius: 10px;
-            border: 1px solid #d1d5db;
-
-            &:focus {
-                border-color: #2563eb;
-                box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
-            }
-        }
-    }
-
-    .modal-actions {
-        display: flex;
-        justify-content: space-between;
-        margin-top: 1.8rem;
-
-        .btn--primary {
-            padding: 0.9rem 1.4rem;
-            background: #2563eb;
-            color: #fff;
-            border-radius: 10px;
-
-            &:hover {
-                background: #1e4fc8;
-            }
-        }
-
-        .btn--outline {
-            padding: 0.9rem 1.4rem;
-            background: #fff;
-            border: 1px solid #9ca3af;
-            border-radius: 10px;
-
-            &:hover {
-                background: #f3f4f6;
-            }
-        }
-    }
+.payment-method.hidden {
+    visibility: hidden;
+    pointer-events: none;
 }
 
 /* ============================================================
@@ -278,6 +195,7 @@
         transform: scale(0.92);
         opacity: 0;
     }
+
     to {
         transform: scale(1);
         opacity: 1;

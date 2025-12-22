@@ -65,9 +65,7 @@
 .travel-content {
     width: 100%;
     display: flex;
-    gap: 12px;
-    /* 기존 24px → 더 가까이 */
-    justify-content: space-between;
+    gap: 16px;
     align-items: stretch;
 }
 
