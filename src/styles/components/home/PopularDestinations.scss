@@ -141,7 +141,11 @@
 
 /* 이름 + 가격 */
 .name-price {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     align-items: center;
+    gap: 15px;
 
     h3 {
         margin: 0;
@@ -159,7 +163,7 @@
 .desc {
     font-size: 13px;
     opacity: 0.85;
-    margin-top: 4px;
+    margin: 0 auto;
 }
 
 /* Book 버튼 */
