@@ -64,7 +64,8 @@ const BookingStepPayment = () => {
   const finalTotal = totalPrice + serviceFee + tax;
   const payableAmount = Math.max(finalTotal - usedPoints, 0);
 
-  const formatPrice = (p) => new Intl.NumberFormat("ko-KR").format(Number(p));
+  const formatPrice = (p) =>
+    new Intl.NumberFormat("ko-KR").format(Number(p));
 
   useEffect(() => {
     if (!isGuestMode) {

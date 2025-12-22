@@ -144,7 +144,6 @@ const FloatingQuickMenu = () => {
         label: "호텔검색",
         onClick: () => navigate("/search"),
         icon: (
-          // 돋보기
           <svg viewBox="0 0 24 24" className="qm-icon" aria-hidden="true">
             <path
               fill="currentColor"
@@ -153,12 +152,12 @@ const FloatingQuickMenu = () => {
           </svg>
         ),
       },
+
       {
         key: "support",
         label: "고객센터",
         onClick: () => navigate("/support/help"),
         icon: (
-          // 헤드셋
           <svg viewBox="0 0 24 24" className="qm-icon" aria-hidden="true">
             <path
               fill="currentColor"
@@ -167,40 +166,59 @@ const FloatingQuickMenu = () => {
           </svg>
         ),
       },
+
       {
         key: "guestReserve",
         label: "비회원 예약",
         onClick: () => navigate("/search?guest=1"),
         icon: (
-          // 하트
-          <svg viewBox="0 0 24 24" className="qm-icon" aria-hidden="true">
-            <path
-              fill="currentColor"
-              d="M12 21s-7.2-4.35-9.6-8.4C.6 9.15 2.4 6 6 6c2 0 3.2 1.2 4 2 0.8-0.8 2-2 4-2 3.6 0 5.4 3.15 3.6 6.6C19.2 16.65 12 21 12 21z"
-            />
+          <svg
+            viewBox="0 0 24 24"
+            className="qm-icon"
+            aria-hidden="true"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4z" />
+            <path d="M4 20c0-3.31 3.58-6 8-6" />
+            <path d="M16 18l2 2 4-4" />
           </svg>
         ),
       },
+
       {
         key: "guestLookup",
         label: "비회원 예약조회",
         onClick: () => navigate("/guest/booking"),
         icon: (
-          // 사용자
-          <svg viewBox="0 0 24 24" className="qm-icon" aria-hidden="true">
-            <path
-              fill="currentColor"
-              d="M12 12a4 4 0 10-4-4 4 4 0 004 4zm0 2c-4.418 0-8 2.015-8 4.5V21h16v-2.5C20 16.015 16.418 14 12 14z"
-            />
+          <svg
+            viewBox="0 0 24 24"
+            className="qm-icon"
+            aria-hidden="true"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            {/* 네모 문서 */}
+            <rect x="4" y="4" width="16" height="16" rx="2" ry="2" />
+
+            {/* 돋보기 (정중앙) */}
+            <circle cx="11" cy="11" r="3" />
+            <path d="M14 14l3 3" />
           </svg>
         ),
       },
+
       {
         key: "notice",
         label: "공지사항",
         onClick: () => navigate("/support/notices"),
         icon: (
-          // 글로브(공지)
           <svg viewBox="0 0 24 24" className="qm-icon" aria-hidden="true">
             <path
               fill="currentColor"
@@ -209,9 +227,35 @@ const FloatingQuickMenu = () => {
           </svg>
         ),
       },
+
+      /* ✅ 위로 가기 버튼 */
+      {
+        key: "scrollTop",
+        label: "위로",
+        onClick: () =>
+          window.scrollTo({
+            top: 0,
+            behavior: "smooth",
+          }),
+        icon: (
+          <svg
+            viewBox="0 0 24 24"
+            className="qm-icon"
+            aria-hidden="true"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M18 15l-6-6-6 6" />
+          </svg>
+        ),
+      },
     ],
     [navigate]
   );
+
 
   return (
     <div className="quick-menu">

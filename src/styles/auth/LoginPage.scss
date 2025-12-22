@@ -84,6 +84,22 @@ body, html {
     font-weight: bold;
   }
 
+    /* 비회원 예약 버튼 */
+  .guest-reserve-btn {
+    height: 47px;
+    padding: 12px;
+    background-color: white;
+    border: 1px solid #444;
+    color: #444;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: bold;
+    
+    transition: all 0.2s ease;
+  }
+
+
   .resetpw-btn {
     background: none;
     border: none;
