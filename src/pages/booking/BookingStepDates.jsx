@@ -1,94 +1,24 @@
-import React, { useState, useEffect } from "react";
-import { useParams, useNavigate, useSearchParams } from "react-router-dom";
+import React from "react";
 import { DayPicker } from "react-day-picker";
 import { ko } from "date-fns/locale";
-import { format, isBefore, startOfToday } from "date-fns";
+import { format } from "date-fns";
 import "react-day-picker/dist/style.css";
 import "../../styles/components/booking/BookingStepDates.scss";
-
-import { getHotelDetail } from "../../api/hotelClient";
+import useBookingStepDates from "./hooks/useBookingStepDates";
 
 const BookingStepDates = () => {
-  const { hotelId } = useParams();
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-
-  const [range, setRange] = useState({ from: undefined, to: undefined });
-  const [adults, setAdults] = useState(2);
-  const [children, setChildren] = useState(0);
-  const [hotel, setHotel] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  // 🔥 비회원 모드 감지 로직 유지
-  const isGuest = searchParams.get("guest") === "1";
-  const basePath = isGuest ? "/booking-guest" : "/booking";
-
-  /* -----------------------------------------------------
-      1. URL 파라미터 적용 및 백엔드 데이터 로드
-  ----------------------------------------------------- */
-  useEffect(() => {
-    const checkIn = searchParams.get("checkIn");
-    const checkOut = searchParams.get("checkOut");
-
-    setAdults(Number(searchParams.get("adults")) || 2);
-    setChildren(Number(searchParams.get("children")) || 0);
-
-    if (checkIn) {
-      const fromDate = new Date(checkIn);
-      const toDate = checkOut ? new Date(checkOut) : undefined;
-
-      // 오늘 이전 날짜가 URL에 있을 경우를 대비한 방어 코드
-      const today = startOfToday();
-      setRange({
-        from: isBefore(fromDate, today) ? today : fromDate,
-        to: toDate && isBefore(toDate, fromDate) ? undefined : toDate,
-      });
-    }
-
-    // 백엔드 API 호출
-    setLoading(true);
-    getHotelDetail(hotelId)
-      .then((res) => {
-        // 백엔드 응답 구조(res.hotel 또는 res)에 유연하게 대응
-        const hotelData = res?.hotel || res;
-        if (hotelData) setHotel(hotelData);
-      })
-      .catch((err) => console.error("호텔 정보 로드 실패:", err))
-      .finally(() => setLoading(false));
-  }, [hotelId, searchParams]);
-
-  /* -----------------------------------------------------
-      2. 숙박일수 계산 (안정성 강화)
-  ----------------------------------------------------- */
-  const calculateNights = () => {
-    if (!range?.from || !range?.to) return 0;
-    const diffTime = Math.abs(range.to - range.from);
-    return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-  };
-
-  /* -----------------------------------------------------
-      3. 다음 단계로 이동 (URL 파라미터 직렬화)
-  ----------------------------------------------------- */
-  const handleContinue = () => {
-    if (!range?.from || !range?.to) {
-      alert("체크인과 체크아웃 날짜를 모두 선택해주세요.");
-      return;
-    }
-
-    const params = new URLSearchParams(searchParams); // 기존 파라미터 복사
-
-    const formatDate = (d) => format(d, "yyyy-MM-dd");
-    params.set("checkIn", formatDate(range.from));
-    params.set("checkOut", formatDate(range.to));
-    params.set("adults", adults);
-    params.set("children", children);
-    params.set("guests", adults + children);
-
-    // 비회원/회원 모드 상태값 보존
-    if (isGuest) params.set("guest", "1");
-
-    navigate(`${basePath}/${hotelId}/room?${params.toString()}`);
-  };
+  const {
+    range,
+    setRange,
+    adults,
+    setAdults,
+    children,
+    setChildren,
+    hotel,
+    loading,
+    calculateNights,
+    handleContinue,
+  } = useBookingStepDates();
 
   if (loading) return <div className="booking-dates loading">호텔 정보를 확인 중입니다...</div>;
 

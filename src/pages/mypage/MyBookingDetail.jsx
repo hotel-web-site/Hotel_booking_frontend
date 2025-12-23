@@ -1,18 +1,14 @@
-import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import React from "react";
 import "../../styles/mypage/MyBookingDetail.scss";
+import useMyBookingDetail from "./hooks/useMyBookingDetail";
 
 const MyBookingDetail = () => {
-    const { bookingId } = useParams();
-    const navigate = useNavigate();
-
-    const [booking, setBooking] = useState(null);
-
-    useEffect(() => {
-        const stored = JSON.parse(localStorage.getItem("bookings") || "[]");
-        const found = stored.find((b) => b.id === bookingId);
-        setBooking(found || null);
-    }, [bookingId]);
+    const {
+        booking,
+        bookingId,
+        formatPrice,
+        handleCancel,
+    } = useMyBookingDetail();
 
     if (!booking) {
         return <div className="booking-detail">예약 정보를 찾을 수 없습니다.</div>;
@@ -28,33 +24,12 @@ const MyBookingDetail = () => {
         status,
         createdAt,
     } = booking;
-
     const nights = payment?.nights || 1;
-
-    const formatPrice = (p) =>
-        new Intl.NumberFormat("ko-KR").format(Number(p));
-
-    const handleCancel = () => {
-        if (!window.confirm("정말 예약을 취소하시겠습니까?")) return;
-
-        const list = JSON.parse(localStorage.getItem("bookings") || "[]");
-        const updated = list.map((b) =>
-            b.id === bookingId ? { ...b, status: "취소됨" } : b
-        );
-
-        localStorage.setItem("bookings", JSON.stringify(updated));
-
-        alert("예약이 취소되었습니다.");
-        navigate("/mypage/bookings"); // 예약 목록으로 이동
-    };
 
     return (
         <div className="booking-detail-page">
-
             <h1>예약 상세 정보</h1>
-
             <div className="detail-card">
-
                 {/* 호텔 정보 */}
                 <div className="section">
                     <h2>호텔 정보</h2>
@@ -66,7 +41,6 @@ const MyBookingDetail = () => {
                         </div>
                     </div>
                 </div>
-
                 {/* 예약 정보 */}
                 <div className="section">
                     <h2>예약 정보</h2>
@@ -75,22 +49,18 @@ const MyBookingDetail = () => {
                             <label>예약 번호</label>
                             <div>{bookingId}</div>
                         </div>
-
                         <div>
                             <label>체크인</label>
                             <div>{new Date(checkIn).toLocaleDateString("ko-KR")}</div>
                         </div>
-
                         <div>
                             <label>체크아웃</label>
                             <div>{new Date(checkOut).toLocaleDateString("ko-KR")}</div>
                         </div>
-
                         <div>
                             <label>숙박일</label>
                             <div>{nights}박</div>
                         </div>
-
                         <div>
                             <label>투숙객</label>
                             <div>
@@ -98,14 +68,12 @@ const MyBookingDetail = () => {
                                 {guests.children > 0 && ` / 어린이 ${guests.children}명`}
                             </div>
                         </div>
-
                         <div>
                             <label>상태</label>
                             <div className={`status ${status}`}>{status}</div>
                         </div>
                     </div>
                 </div>
-
                 {/* 객실 정보 */}
                 <div className="section">
                     <h2>객실 정보</h2>
@@ -114,19 +82,16 @@ const MyBookingDetail = () => {
                             <label>객실명</label>
                             <div>{room.name}</div>
                         </div>
-
                         <div>
                             <label>크기</label>
                             <div>{room.size}</div>
                         </div>
-
                         <div>
                             <label>침대</label>
                             <div>{room.bedType}</div>
                         </div>
                     </div>
                 </div>
-
                 {/* 가격 정보 */}
                 <div className="section">
                     <h2>결제 내역</h2>
@@ -149,7 +114,6 @@ const MyBookingDetail = () => {
                         </div>
                     </div>
                 </div>
-
                 {/* 취소 버튼 */}
                 {status !== "취소됨" ? (
                     <button className="btn-cancel" onClick={handleCancel}>
@@ -159,7 +123,6 @@ const MyBookingDetail = () => {
                     <div className="cancelled-msg">이미 취소된 예약입니다.</div>
                 )}
             </div>
-
         </div>
     );
 };

@@ -1,20 +1,11 @@
 // src/pages/ranking/RankingPage.jsx
-import React, { useEffect, useState } from "react";
-import { getHotels } from "../../api/hotelClient";
+import React from "react";
+import useRankingPage from "./hooks/useRankingPage";
 import RankingList from "../../components/ranking/RankingList";
 import "../../styles/pages/ranking/RankingPage.scss";
 
 const RankingPage = () => {
-    const [hotels, setHotels] = useState([]);
-
-    useEffect(() => {
-        const load = async () => {
-            const data = await getHotels();
-            setHotels(data);
-        };
-        load();
-    }, []);
-
+    const { hotels } = useRankingPage();
     return (
         <div className="ranking-page">
             <div className="ranking-header">

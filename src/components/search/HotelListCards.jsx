@@ -1,48 +1,16 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React from "react";
 import "../../styles/components/search/HotelListCards.scss";
-import { toggleWishlist, isWishlisted } from "../../util/wishlistService";
+import { useHotelListCards } from "./hooks/useHotelListCards";
 
 const HotelListCards = ({ hotels = [], filters = {}, isGuest }) => {
-    const navigate = useNavigate();
-    const [likes, setLikes] = useState({});
-    const [visibleCount, setVisibleCount] = useState(6);
-
-    const buildParams = () => {
-        const params = new URLSearchParams();
-        const guests = filters?.guests || { adults: 2, children: 0, total: 2 };
-        if (filters?.destination) params.set("destination", filters.destination);
-        if (filters?.checkIn) params.set("checkIn", filters.checkIn);
-        if (filters?.checkOut) params.set("checkOut", filters.checkOut);
-        params.set("adults", guests.adults ?? 2);
-        params.set("children", guests.children ?? 0);
-        params.set("guests", (Number(guests.adults || 2) + Number(guests.children || 0)));
-        if (isGuest) params.set("guest", "1");
-        return params.toString();
-    };
-
-    const goToHotelDetail = (hotelId) => {
-        const queryString = buildParams();
-        navigate(`/hotels/${hotelId}?${queryString}`);
-    };
-
-    useEffect(() => {
-        const initial = {};
-        hotels.forEach((hotel) => {
-            const id = hotel._id || hotel.id;
-            if (id) initial[id] = isWishlisted(id);
-        });
-        setLikes(initial);
-    }, [hotels]);
-
-    const handleWishlist = (e, hotel) => {
-        e.stopPropagation();
-        const id = hotel._id || hotel.id;
-        const result = toggleWishlist(hotel);
-        setLikes((prev) => ({ ...prev, [id]: result }));
-    };
-
-    const visibleHotels = hotels.slice(0, visibleCount);
+    const {
+        likes,
+        visibleCount,
+        goToHotelDetail,
+        handleWishlist,
+        visibleHotels,
+        handleLoadMore
+    } = useHotelListCards(hotels, filters, isGuest);
 
     if (hotels.length === 0) {
         return (
@@ -133,7 +101,7 @@ const HotelListCards = ({ hotels = [], filters = {}, isGuest }) => {
 
             {visibleCount < hotels.length && (
                 <div className="load-more-container">
-                    <button className="load-more" onClick={() => setVisibleCount(prev => prev + 6)}>
+                    <button className="load-more" onClick={handleLoadMore}>
                         호텔 더보기
                     </button>
                 </div>

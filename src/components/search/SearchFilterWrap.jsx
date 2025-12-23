@@ -1,105 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import "../../styles/components/search/SearchFilterWrap.scss";
-
-const normalize = (s) => (s || "").toLowerCase().replace(/\s+/g, "");
-
-const DEFAULT_GUESTS = { adults: 2, children: 0, total: 2 };
+import { useSearchFilterWrap } from "./hooks/useSearchFilterWrap";
 
 const SearchFilterWrap = ({ filters = {}, onFilterChange, onSearch, hotels = [] }) => {
-    // 1. 상태 선언 (기존 구조 유지)
-    const [keyword, setKeyword] = useState(filters.destination || "");
-    const [checkIn, setCheckIn] = useState(filters.checkIn || "");
-    const [checkOut, setCheckOut] = useState(filters.checkOut || "");
-    const [suggestions, setSuggestions] = useState([]);
-    const [activeIndex, setActiveIndex] = useState(-1);
-
-    // 2. 인원수 상태 (안전한 초기값 설정)
-    const [guests, setGuests] = useState(() => {
-        if (filters.guests) {
-            const a = Number(filters.guests.adults) || 2;
-            const c = Number(filters.guests.children) || 0;
-            return { adults: a, children: c, total: a + c };
-        }
-        return DEFAULT_GUESTS;
-    });
-
-    // 3. 인원 변경 시 total 자동 계산 및 부모에 즉시 알림
-    useEffect(() => {
-        const total = Number(guests.adults) + Number(guests.children);
-        if (guests.total !== total) {
-            const updatedGuests = { ...guests, total };
-            setGuests(updatedGuests);
-            // 필터가 변경되었음을 부모에게 알림 (사이드바 등과 동기화)
-            onFilterChange?.("guests", updatedGuests);
-        }
-    }, [guests.adults, guests.children, onFilterChange]);
-
-    // 4. 외부 filters 변경 시 동기화 (URL 파라미터나 초기화 버튼 대응)
-    useEffect(() => {
-        setKeyword(filters.destination || "");
-        setCheckIn(filters.checkIn || "");
-        setCheckOut(filters.checkOut || "");
-        if (filters.guests) {
-            setGuests({
-                adults: Number(filters.guests.adults) || 2,
-                children: Number(filters.guests.children) || 0,
-                total: (Number(filters.guests.adults) || 2) + (Number(filters.guests.children) || 0)
-            });
-        }
-    }, [filters]);
-
-    // 5. 검색 실행 함수
-    const handleSearch = () => {
-        const payload = {
-            destination: keyword,
-            checkIn,
-            checkOut,
-            guests,
-        };
-
-        onSearch?.(payload);
-
-        // URL 업데이트 (기존 로직 유지)
-        const params = new URLSearchParams();
-        if (keyword) params.set("destination", keyword);
-        if (checkIn) params.set("checkIn", checkIn);
-        if (checkOut) params.set("checkOut", checkOut);
-        params.set("adults", guests.adults);
-        params.set("children", guests.children);
-        params.set("guests", guests.total);
-
-        window.history.replaceState(null, "", `?${params.toString()}`);
-    };
-
-    // 6. 자동완성 로직 (기존 유지)
-    useEffect(() => {
-        const term = normalize(keyword);
-        if (!term) return setSuggestions([]);
-        const matches = hotels
-            .filter((hotel) => normalize(hotel.name).includes(term))
-            .slice(0, 5);
-        setSuggestions(matches);
-    }, [keyword, hotels]);
-
-    const handleKeyDown = (e) => {
-        if (e.key === "Enter") {
-            if (activeIndex >= 0 && suggestions[activeIndex]) {
-                const selectedName = suggestions[activeIndex].name;
-                setKeyword(selectedName);
-                onFilterChange?.("destination", selectedName);
-                setSuggestions([]);
-                handleSearch();
-            } else {
-                handleSearch();
-            }
-        }
-        if (e.key === "ArrowDown") {
-            setActiveIndex((prev) => (prev < suggestions.length - 1 ? prev + 1 : prev));
-        }
-        if (e.key === "ArrowUp") {
-            setActiveIndex((prev) => (prev > 0 ? prev - 1 : -1));
-        }
-    };
+    const {
+        keyword, setKeyword,
+        checkIn, setCheckIn,
+        checkOut, setCheckOut,
+        guests, setGuests,
+        suggestions, setSuggestions,
+        activeIndex, setActiveIndex,
+        handleSearch, handleKeyDown
+    } = useSearchFilterWrap({ filters, onFilterChange, onSearch, hotels });
 
     return (
         <div className="search-bar-wrapper">
@@ -129,7 +41,6 @@ const SearchFilterWrap = ({ filters = {}, onFilterChange, onSearch, hotels = [] 
                                             setKeyword(hotel.name);
                                             onFilterChange?.("destination", hotel.name);
                                             setSuggestions([]);
-                                            // 선택 즉시 검색 실행 로직 유지
                                             setTimeout(handleSearch, 0);
                                         }}
                                     >

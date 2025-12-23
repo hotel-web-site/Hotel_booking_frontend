@@ -1,40 +1,23 @@
-// src/components/ranking/RankingList.jsx
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import "../../styles/components/ranking/RankingList.scss";
-
-const sortHotels = (hotels) => {
-    return [...hotels]
-        .sort((a, b) => {
-            if (b.ratingAverage !== a.ratingAverage)
-                return b.ratingAverage - a.ratingAverage;
-
-            return (b.ratingCount || 0) - (a.ratingCount || 0);
-        })
-        .slice(0, 10);
-};
+import { useRankingList } from "./hooks/useRankingList";
 
 const RankingList = ({ hotels }) => {
-    const sorted = sortHotels(hotels);
-    const navigate = useNavigate();
-
+    const { sorted, goToHotel } = useRankingList(hotels);
     return (
         <div className="ranking-list">
             {sorted.map((hotel, index) => (
                 <div className="ranking-card" key={hotel.id}>
                     <div className="rank-badge">#{index + 1}</div>
-
                     <img
                         src={hotel.image}
                         alt={hotel.name}
                         className="hotel-img"
                     />
-
                     <div className="hotel-content">
                         <div className="hotel-text">
                             <h3 className="hotel-name">{hotel.name}</h3>
                             <p className="hotel-location">{hotel.location}</p>
-
                             <div className="hotel-meta">
                                 <span className="rating-box">
                                     ⭐ {hotel.ratingAverage}{" "}
@@ -47,10 +30,9 @@ const RankingList = ({ hotels }) => {
                                 </span>
                             </div>
                         </div>
-
                         <button
                             className="go-book-btn"
-                            onClick={() => navigate(`/hotels/${hotel.id}`)}
+                            onClick={() => goToHotel(hotel.id)}
                         >
                             예약하러가기
                         </button>

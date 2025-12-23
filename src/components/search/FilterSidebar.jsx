@@ -1,9 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import "../../styles/components/search/FilterSidebar.scss";
-
-const MIN_PRICE = 50000;
-const MAX_PRICE = 1200000;
-const STEP_PRICE = 50000;
+import { useFilterSidebar } from "./hooks/useFilterSidebar";
 
 const FREEBIE_OPTIONS = [
   { key: "무료 WiFi", label: "WIFI" },
@@ -21,49 +18,21 @@ const AMENITY_OPTIONS = [
 ];
 
 const FilterSidebar = ({ filters, onFilterChange }) => {
-  // 기존 아코디언 상태 유지
-  const [open, setOpen] = useState({
-    price: true,
-    rating: true,
-    freebies: true,
-    amenities: true,
-  });
-
-  const toggle = (key) => {
-    setOpen((prev) => ({ ...prev, [key]: !prev[key] }));
-  };
-
-  /* -------------------- 💰 가격 -------------------- */
-  // filters.priceRange가 없을 경우를 대비한 안전한 할당
-  const currentMax = filters?.priceRange?.[1] ?? MAX_PRICE;
-
-  const handlePriceChange = (value) => {
-    const max = Number(value);
-    onFilterChange("priceRange", [MIN_PRICE, max]);
-  };
-
-  const formatKRW = (value) =>
-    value.toLocaleString("ko-KR", { maximumFractionDigits: 0 }) + "원";
-
-  /* -------------------- ⭐ 평점 -------------------- */
-  const ratingValue = typeof filters?.rating === "number" ? filters.rating : 0;
-
-  const handleRatingClick = (value) => {
-    const next = ratingValue === value ? 0 : value;
-    onFilterChange("rating", next);
-  };
-
-  /* -------------------- 🎁 / 🏊 체크박스 통합 관리 -------------------- */
-  const freebies = filters?.freebies || [];
-  const amenities = filters?.amenities || [];
-
-  const handleToggle = (type, key, checked) => {
-    const currentList = type === "freebies" ? freebies : amenities;
-    const next = checked
-      ? [...currentList, key]
-      : currentList.filter((item) => item !== key);
-    onFilterChange(type, next);
-  };
+  const {
+    open,
+    toggle,
+    currentMax,
+    handlePriceChange,
+    formatKRW,
+    ratingValue,
+    handleRatingClick,
+    freebies,
+    amenities,
+    handleToggle,
+    MIN_PRICE,
+    MAX_PRICE,
+    STEP_PRICE
+  } = useFilterSidebar(filters, onFilterChange);
 
   return (
     <aside className="filter-sidebar">
@@ -71,7 +40,7 @@ const FilterSidebar = ({ filters, onFilterChange }) => {
 
       {/* PRICE */}
       <div className="filter-box">
-        <div className="filter-header" onClick={() => toggle("price")}>
+        <div className="filter-header" onClick={() => toggle("price")}>...
           <h4>가격</h4>
           <span className={`arrow ${open.price ? "open" : ""}`}>⌃</span>
         </div>

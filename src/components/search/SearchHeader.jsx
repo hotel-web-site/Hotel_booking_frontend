@@ -1,8 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "../../styles/components/search/SearchHeader.scss";
+import { useSearchHeader } from "./hooks/useSearchHeader";
 
 const SearchHeader = ({ filters, onFilterChange }) => {
+    const { handleInputChange, handleGuestsChange } = useSearchHeader({ filters, onFilterChange });
     return (
         <header className="search-header">
             <div className="search-header-inner">
@@ -19,7 +21,7 @@ const SearchHeader = ({ filters, onFilterChange }) => {
                             type="text"
                             placeholder="신라스테이 울산점, 서울"
                             value={filters.destination}
-                            onChange={(e) => onFilterChange("destination", e.target.value)}
+                            onChange={(e) => handleInputChange("destination", e.target.value)}
                         />
                     </div>
 
@@ -28,7 +30,7 @@ const SearchHeader = ({ filters, onFilterChange }) => {
                         <input
                             type="date"
                             value={filters.checkIn}
-                            onChange={(e) => onFilterChange("checkIn", e.target.value)}
+                            onChange={(e) => handleInputChange("checkIn", e.target.value)}
                         />
                     </div>
 
@@ -37,7 +39,7 @@ const SearchHeader = ({ filters, onFilterChange }) => {
                         <input
                             type="date"
                             value={filters.checkOut}
-                            onChange={(e) => onFilterChange("checkOut", e.target.value)}
+                            onChange={(e) => handleInputChange("checkOut", e.target.value)}
                         />
                     </div>
 
@@ -45,10 +47,7 @@ const SearchHeader = ({ filters, onFilterChange }) => {
                         <label>Rooms & Guests</label>
                         <select
                             value={`${filters.guests.rooms},${filters.guests.guests}`}
-                            onChange={(e) => {
-                                const [rooms, guests] = e.target.value.split(",").map(Number);
-                                onFilterChange("guests", { rooms, guests });
-                            }}
+                            onChange={handleGuestsChange}
                         >
                             <option value="1,2">1 room, 2 guests</option>
                             <option value="1,3">1 room, 3 guests</option>
@@ -58,6 +57,7 @@ const SearchHeader = ({ filters, onFilterChange }) => {
 
                     <button className="search-button">🔍</button>
                 </div>
+
 
                 <div className="header-actions">
                     <Link to="/wishlist" className="action-link">
