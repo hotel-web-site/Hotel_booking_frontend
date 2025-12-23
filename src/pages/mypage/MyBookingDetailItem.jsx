@@ -1,62 +1,20 @@
-import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+
+import React from "react";
 import "../../styles/mypage/MyBookingDetailItem.scss";
+import useMyBookingDetailItem from "./hooks/useMyBookingDetailItem";
 
 const MyBookingDetailItem = () => {
-    const { bookingId } = useParams();
-    const navigate = useNavigate();
-
-    const [booking, setBooking] = useState(null);
-
-    /* ----------------------------------------------------
-       예약 데이터 불러오기
-    ---------------------------------------------------- */
-    useEffect(() => {
-        const stored = localStorage.getItem("bookings");
-        if (!stored) return;
-
-        const list = JSON.parse(stored);
-        const found = list.find((b) => String(b.id) === String(bookingId));
-        setBooking(found || null);
-    }, [bookingId]);
+    const {
+        booking,
+        nights,
+        format,
+        handleCancel,
+        navigate,
+    } = useMyBookingDetailItem();
 
     if (!booking) {
         return <div className="booking-detail-item">예약 정보를 찾을 수 없습니다.</div>;
     }
-
-    const nights = Math.ceil(
-        (new Date(booking.checkOut) - new Date(booking.checkIn)) /
-        (1000 * 60 * 60 * 24)
-    );
-
-    const format = (d) =>
-        new Date(d).toLocaleDateString("ko-KR", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-            weekday: "short",
-        });
-
-    /* ----------------------------------------------------
-       예약 취소
-    ---------------------------------------------------- */
-    const handleCancel = () => {
-        if (!window.confirm("정말 예약을 취소하시겠습니까?")) return;
-
-        const stored = localStorage.getItem("bookings");
-        if (!stored) return;
-
-        const list = JSON.parse(stored);
-
-        const updated = list.map((b) =>
-            b.id === booking.id ? { ...b, status: "취소됨" } : b
-        );
-
-        localStorage.setItem("bookings", JSON.stringify(updated));
-
-        alert("예약이 취소되었습니다.");
-        navigate("/mypage/bookings");
-    };
 
     return (
         <div className="booking-detail-item">
@@ -124,7 +82,7 @@ const MyBookingDetailItem = () => {
                         </button>
                     )}
 
-                    <button className="btn-back" onClick={() => navigate("/mypage/bookings")}>
+                    <button className="btn-back" onClick={() => navigate("/mypage/bookings")}> 
                         ← 예약 목록으로
                     </button>
                 </div>
