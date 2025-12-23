@@ -67,7 +67,6 @@
             color: #1a1a1a;
         }
 
-        /* ✅ 핵심 수정: label 자체를 flex */
         label {
             display: inline-flex;
             align-items: center;
@@ -79,7 +78,6 @@
             line-height: 1.4;
             cursor: pointer;
 
-            /* 줄바꿈 방지 */
             white-space: normal;
         }
 
@@ -180,6 +178,46 @@
 }
 
 /* ============================================================
+   🔥 비회원 모달 Backdrop
+============================================================ */
+.guest-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 9999;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    /* 스크롤 방지 + 모바일 대응 */
+    padding: 20px;
+}
+
+/* ============================================================
+   🔥 비회원 모달
+============================================================ */
+.guest-modal {
+    width: 100%;
+    max-width: 520px;
+    max-height: calc(100vh - 80px);
+
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 28px 32px;
+
+    position: relative;
+    z-index: 10000;
+
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+
+    overflow-y: auto;
+
+    /* ✅ 애니메이션 실제 적용 */
+    animation: fadeIn 0.25s ease-out;
+}
+
+/* ============================================================
    🔹 비회원 결제수단 숨김 (자리 유지)
 ============================================================ */
 .payment-method.hidden {
@@ -188,7 +226,7 @@
 }
 
 /* ============================================================
-   Fade-in
+   Fade-in Animation
 ============================================================ */
 @keyframes fadeIn {
     from {
