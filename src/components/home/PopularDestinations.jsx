@@ -13,18 +13,21 @@ const PopularDestinations = () => {
     return (
         <section className="destinations-container">
             <div className="inner">
-                <div className="section-header">
-                    <div className="text-box">
-                        <h2 className="section-title">여행에 빠지다</h2>
-                        <p>특가상품으로 진행하는 여행을 예약해보세요</p>
-                    </div>
+                <div className="section-header column-header">
+                    <h2 className="section-title">여행에 빠지다</h2>
                     <button
-                        className="btn--primary"
+                        className="btn--primary full-width-btn"
                         onClick={goToSearch}
                     >
                         더 보러가기
                     </button>
                 </div>
+                <p className="section-subtitle">특가상품으로 진행하는 여행을 예약해보세요</p>
+                {(!hotels || hotels.length === 0) && (
+                    <div className="no-data">등록된 추천 숙소가 없습니다.</div>
+                )}
+            </div>
+            {Array.isArray(hotels) && hotels.length > 0 && (
                 <Swiper
                     modules={[Navigation, Pagination]}
                     spaceBetween={20}
@@ -39,17 +42,13 @@ const PopularDestinations = () => {
                     }}
                     className="destinations-swiper"
                 >
-                    {Array.isArray(hotels) && hotels.length > 0 ? (
-                        hotels.map((hotel) => (
-                            <SwiperSlide key={hotel.id || hotel._id}>
-                                <DestinationCard destination={hotel} />
-                            </SwiperSlide>
-                        ))
-                    ) : (
-                        <div className="no-data">등록된 추천 숙소가 없습니다.</div>
-                    )}
+                    {hotels.map((hotel) => (
+                        <SwiperSlide key={hotel.id || hotel._id}>
+                            <DestinationCard destination={hotel} />
+                        </SwiperSlide>
+                    ))}
                 </Swiper>
-            </div>
+            )}
         </section>
     );
 };

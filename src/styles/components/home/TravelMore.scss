@@ -67,6 +67,9 @@
     display: flex;
     gap: 16px;
     align-items: stretch;
+    @media (max-width: 768px) {
+        flex-direction: column;
+    }
 }
 
 .malaka-tour {
@@ -76,6 +79,11 @@
 
 .travel-gallery {
     width: 57%;
-    /* 오른쪽 이미지 공간 넓게 */
+    display: flex; // 추가!
+    gap: 16px;
+    @media (max-width: 768px) {
+        flex-direction: column;
+        width: 100%; // 모바일에서 꽉 차게
+    }
 }
 

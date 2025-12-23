@@ -9,9 +9,15 @@
         margin: 0 auto;
     }
 
+    .homepage-container {
+        max-width: 120rem;
+        margin: 0 auto;
+    }
+
     // 반응형 디자인
     @media (max-width: 76.8rem) {
-        .container {
+
+        .homepage-container {
             padding: 0 1.5rem;
         }
     }
