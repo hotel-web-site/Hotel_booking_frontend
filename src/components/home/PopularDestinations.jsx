@@ -42,11 +42,15 @@ const PopularDestinations = () => {
                     }}
                     className="destinations-swiper"
                 >
-                    {hotels.map((hotel) => (
-                        <SwiperSlide key={hotel.id || hotel._id}>
-                            <DestinationCard destination={hotel} />
-                        </SwiperSlide>
-                    ))}
+                    {Array.isArray(hotels) && hotels.length > 0 ? (
+                        hotels.map((hotel) => (
+                            <SwiperSlide key={hotel.id || hotel._id}>
+                                <DestinationCard destination={hotel} />
+                            </SwiperSlide>
+                        ))
+                    ) : (
+                        <div className="no-data">등록된 추천 숙소가 없습니다.</div>
+                    )}
                 </Swiper>
             )}
         </section>

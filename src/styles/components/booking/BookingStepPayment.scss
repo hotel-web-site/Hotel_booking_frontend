@@ -52,10 +52,6 @@
         }
     }
 }
-
-/* ============================================================
-   🔹 약관 동의 영역
-============================================================ */
 .terms-section {
     background: #ffffff;
     padding: 22px;
@@ -97,7 +93,6 @@
 
 /* ============================================================
    🔹 결제 요약 (우측 sticky)
-============================================================ */
 .payment-summary {
     position: sticky;
     top: 2rem;
@@ -203,6 +198,270 @@
             transform: translateY(-2px);
         }
     }
+
+/* ============================================================
+   🔹 약관 동의 영역
+.terms-section {
+    background: #ffffff;
+    padding: 22px;
+    border-radius: 16px;
+
+    box-shadow:
+        0 12px 28px rgba(0, 0, 0, 0.1),
+        0 3px 8px rgba(0, 0, 0, 0.05);
+
+    h3 {
+        font-size: 1.1rem;
+        font-weight: 700;
+        margin-bottom: 12px;
+        color: #1a1a1a;
+    }
+
+    .term-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    input[type="checkbox"] {
+        width: 15px;
+        height: 15px;
+        margin-top: 2px;
+        flex-shrink: 0;
+        cursor: pointer;
+    }
+
+    label {
+        font-size: 14px;
+        font-weight: 500;
+        color: #444;
+        line-height: 1.4;
+        cursor: pointer;
+    }
+}
+
+/* ============================================================
+   🔹 결제 요약 (우측 sticky)
+.payment-summary {
+    position: sticky;
+    top: 2rem;
+
+    background: #ffffff;
+    padding: 2rem;
+    border-radius: 18px;
+
+    box-shadow:
+        0 16px 32px rgba(0, 0, 0, 0.12),
+        0 4px 14px rgba(0, 0, 0, 0.06);
+
+    height: fit-content;
+
+    h3 {
+        font-size: 1.4rem;
+        font-weight: 800;
+        margin-bottom: 1.6rem;
+    }
+
+    .booking-details {
+        margin-bottom: 1.6rem;
+        padding-bottom: 1.6rem;
+        border-bottom: 1px solid #e6e6e6;
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.8rem;
+
+            .label {
+                color: #7a7a7a;
+                font-size: 14px;
+            }
+
+            .value {
+                font-weight: 600;
+                color: #111;
+                text-align: right;
+            }
+        }
+    }
+
+    .price-breakdown {
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.7rem 0;
+
+            &.points {
+                color: #d64545;
+                font-weight: 600;
+            }
+
+            &.total {
+                margin-top: 1rem;
+                padding-top: 1.2rem;
+                border-top: 2px solid #dcdcdc;
+                font-size: 1.35rem;
+                font-weight: 800;
+            }
+        }
+    }
+
+    .points-section {
+        margin: 1.6rem 0;
+        padding: 14px;
+        background: #f6f7f8;
+        border-radius: 12px;
+
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        p {
+            font-size: 14px;
+            color: #333;
+        }
+    }
+
+    .btn--primary {
+        width: 100%;
+        margin-top: 1.8rem;
+        padding: 1.1rem 0;
+
+        border-radius: 12px;
+        font-size: 1.1rem;
+        font-weight: 700;
+
+        background: $color-primary;
+        color: #fff;
+        border: none;
+
+        cursor: pointer;
+        transition: background 0.2s ease, transform 0.2s ease;
+
+        &.disabled {
+            pointer-events: none;
+        }
+
+        label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+    }
+}
+
+/* ============================================================
+   🔥 비회원 모달 Backdrop
+.guest-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 9999;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 20px;
+}
+
+/* ============================================================
+   🔥 비회원 모달
+.guest-modal {
+    width: 100%;
+    max-width: 520px;
+    max-height: calc(100vh - 80px);
+
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 28px 32px;
+
+    position: relative;
+    z-index: 10000;
+
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    overflow-y: auto;
+
+    animation: fadeIn 0.25s ease-out;
+
+    h3 {
+        font-size: 1.25rem;
+        font-weight: 800;
+        margin-bottom: 20px;
+    }
+
+    .input-row {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        margin-bottom: 14px;
+
+        label {
+            font-size: 14px;
+            font-weight: 500;
+            color: #444;
+            line-height: 1.4;
+            cursor: pointer;
+
+            white-space: normal;
+        }
+
+        input {
+            height: 44px;
+            padding: 0 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+    }
+
+    .modal-actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 22px;
+
+        button {
+            flex: 1;
+        }
+    }
+}
+
+/* ============================================================
+   🔥 비회원 모달 Backdrop
+.guest-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 9999;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    /* 스크롤 방지 + 모바일 대응 */
+    padding: 20px;
+}
+
+/* ============================================================
+   🔥 비회원 모달
+.guest-modal {
+    width: 100%;
+    max-width: 520px;
+    max-height: calc(100vh - 80px);
+
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 28px 32px;
+
+    position: relative;
+    z-index: 10000;
+
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+
+    overflow-y: auto;
+
+    /* ✅ 애니메이션 실제 적용 */
+    animation: fadeIn 0.25s ease-out;
 }
 
 /* ============================================================
@@ -222,8 +481,6 @@
 }
 
 /* ============================================================
-   🔥 비회원 모달
-============================================================ */
 .guest-modal {
     width: 100%;
     max-width: 520px;

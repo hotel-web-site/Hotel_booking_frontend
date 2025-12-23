@@ -80,7 +80,9 @@ export default function useBookingStepPayment() {
                 );
 
                 if (found) setRoom(found);
-                else navigate(`${basePath}/${hotelId}/room?${searchParams.toString()}`);
+                else {
+                    navigate(`${basePath}/${hotelId}/room?${searchParams.toString()}`);
+                }
             } finally {
                 setLoading(false);
             }
@@ -142,7 +144,6 @@ export default function useBookingStepPayment() {
                 ...extra,
             };
 
-            // ✅ 회원 결제 정보
             if (!isGuestMode) {
                 bookingRequestData.paymentInfo = {
                     provider: "card",
@@ -156,7 +157,21 @@ export default function useBookingStepPayment() {
                 isGuestMode
             );
 
-            if (!result) return;
+            // 🔥 응답 구조 방어
+            const booking =
+                result?.booking || result?.data || result;
+
+            if (!booking) {
+                alert("예약 생성에 실패했습니다.");
+                return;
+            }
+
+            const bookingId = booking._id || booking.id;
+
+            if (!bookingId) {
+                alert("예약 ID를 확인할 수 없습니다.");
+                return;
+            }
 
             if (!isGuestMode) {
                 const remaining = points - usedPoints;
@@ -165,12 +180,12 @@ export default function useBookingStepPayment() {
             }
 
             const params = new URLSearchParams(searchParams);
-            const bookingId = result._id || result.id;
             params.set("bookingId", bookingId);
             if (isGuestMode) params.set("guest", "1");
 
             navigate(`${basePath}/${hotelId}/complete?${params.toString()}`);
         } catch (err) {
+            console.error(err);
             alert("예약 실패: " + err.message);
         }
     };
