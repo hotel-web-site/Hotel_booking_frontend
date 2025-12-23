@@ -219,3 +219,28 @@ body, html {
 .indicator.active {
   background: #6fc2a3;
 }
+
+/* =========================================================
+   📱 Mobile — 로그인 폼만 표시 (이미지 숨김)
+========================================================= */
+@media (max-width: 768px) {
+    .page-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        min-height: 100vh;
+    }
+
+    /* 🔥 오른쪽 이미지 슬라이더 숨김 */
+    .slider-container {
+        display: none;
+    }
+
+    /* 🔥 로그인 폼 중앙 배치 */
+    .auth-container {
+        width: 100%;
+        max-width: 420px;
+        margin: 0 auto;
+    }
+}
