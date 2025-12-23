@@ -47,12 +47,17 @@
     flex-direction: column;
     gap: 10px;
     flex: 1;
-    /* 🔥 왼쪽 영역이 자연스럽게 늘어남 */
+    min-width: 0; /* ⭐ 핵심: flex 자식 줄바꿈 정상화 */
 
     .hotel-name {
         font-size: 32px;
         font-weight: 700;
         color: #111;
+
+        /* ⭐ 한 글자씩 떨어지는 현상 방지 */
+        word-break: keep-all;
+        white-space: normal;
+        line-height: 1.25;
     }
 
     .rating-section {
@@ -92,6 +97,7 @@
         .address {
             font-size: 14px;
             color: #444;
+            word-break: keep-all;
         }
     }
 
@@ -126,10 +132,8 @@
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-    /* 🔥 오른쪽 끝 정렬 */
     gap: 14px;
     min-width: 260px;
-    /* 🔥 가격/버튼 영역이 왼쪽으로 밀리지 않도록 고정 */
     padding-top: 30px;
 }
 
@@ -142,6 +146,7 @@
     .price {
         font-weight: 700;
         font-size: 16px;
+
         > span {
             font-size: 24px;
             color: #ff6a6a;
@@ -160,7 +165,8 @@
     align-items: center;
     gap: 12px;
 
-    .icon-btn {
+    .icon-btn,
+    .heart-btn {
         width: 42px;
         height: 42px;
         border-radius: 10px;
@@ -169,21 +175,12 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        cursor: pointer;
 
         svg {
             font-size: 18px;
             color: #444;
         }
-    }
-
-    .heart-btn {
-        width: 42px;
-        height: 42px;
-        border-radius: 10px;
-        border: 1px solid #ddd;
-        background: #fff;
-        font-size: 18px;
-        cursor: pointer;
     }
 
     .book-top-btn {
@@ -195,5 +192,46 @@
         border-radius: 8px;
         border: none;
         cursor: pointer;
+    }
+}
+
+/* =========================================================
+   📱 Mobile (핵심 수정 구간)
+========================================================= */
+@media (max-width: 768px) {
+    .hotel-detail-header {
+        padding: 50px 20px 20px;
+    }
+
+    .hotel-detail-header .hotel-info {
+        flex-direction: column;
+        gap: 18px;
+    }
+
+    .hotel-title-section {
+        width: 100%;
+    }
+
+    .hotel-title-section .hotel-name {
+        font-size: 24px;
+    }
+
+    .price-actions-wrap {
+        width: 100%;
+        padding-top: 0;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .price-section {
+        justify-content: flex-start;
+    }
+
+    .header-actions {
+        width: 100%;
+
+        .book-top-btn {
+            width: 100%;
+        }
     }
 }

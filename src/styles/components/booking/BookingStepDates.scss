@@ -285,3 +285,25 @@
         }
     }
 }
+
+/* =========================================================
+   📱 Mobile — 날짜 선택 아래로 요약 카드 배치
+========================================================= */
+@media (max-width: $breakpoint-md) {
+    .booking-dates {
+        .date-wrapper {
+            flex-direction: column;
+            gap: $spacing-lg;
+            padding-bottom: 0; // 모바일에서는 과한 여백 제거
+        }
+
+        .date-selection {
+            width: 100%;
+        }
+
+        .booking-summary {
+            width: 100%;
+            margin-top: $spacing-lg;
+        }
+    }
+}
