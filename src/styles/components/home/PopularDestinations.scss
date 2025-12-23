@@ -70,6 +70,23 @@
         &:hover {
             background: #2563eb;
         }
+            white-space: nowrap;
+            min-width: 90px;
+            margin-left: 16px;
+            margin-top: 0;
+            @media (max-width: 768px) {
+                padding: 8px 12px;
+                font-size: 13px;
+                min-width: 72px;
+                margin-left: 8px;
+                margin-top: 0;
+            }
+            @media (max-width: 480px) {
+                padding: 7px 8px;
+                font-size: 12px;
+                min-width: 60px;
+                margin-left: 4px;
+            }
     }
 }
 

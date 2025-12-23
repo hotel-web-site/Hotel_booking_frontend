@@ -4,6 +4,7 @@
 /* ---------------------------------------------------------
    🏨 HEADER — 프리미엄 호텔 스타일
 --------------------------------------------------------- */
+
 .header {
     position: sticky;
     top: 0;
@@ -12,7 +13,7 @@
     align-items: center;
     justify-content: space-between;
 
-    padding: 16px 32px;
+    padding: 16px 0 16px 0; // 좌우 padding 제거
     background: rgba(255, 255, 255, 0.85);
     backdrop-filter: blur(10px);
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
@@ -23,15 +24,40 @@
     .header-left {
         display: flex;
         align-items: center;
+        margin: 0;
+        padding: 0;
+        justify-content: flex-start;
 
         .logo-image {
             width: 190px;
             height: auto;
+            margin: 0;
             transition: opacity 0.25s;
 
             &:hover {
                 opacity: 0.85;
             }
+        }
+    }
+
+    // 모바일: 좌우 padding 완전히 제거
+    @media (max-width: 768px) {
+        .header {
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+        .header-left {
+            margin: 0;
+            padding: 0;
+        }
+
+        .header-right {
+            padding-right: 20px;
+        }
+
+        .logo-image {
+            margin: 0;
         }
     }
 
@@ -85,6 +111,7 @@
         display: flex;
         align-items: center;
         gap: 20px;
+        padding-right: 32px;
 
         .btn {
             padding: 8px 14px;
@@ -92,6 +119,22 @@
             font-size: 14px;
             font-weight: 500;
             transition: all 0.25s ease;
+            white-space: nowrap;
+            line-height: 1.2;
+        }
+
+        // 모바일: 버튼/글씨 더 작게
+        @media (max-width: 768px) {
+            .btn {
+                padding: 5px 10px;
+                font-size: 12px;
+                min-width: 44px;
+                white-space: nowrap;
+                line-height: 1.2;
+            }
+            .header-right {
+                padding-right: 6px;
+            }
         }
 
         .login-btn {

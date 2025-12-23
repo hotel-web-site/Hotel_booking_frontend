@@ -14,18 +14,15 @@ const RankingList = ({ hotels = [] }) => {
             {sorted.map((hotel, index) => (
                 <div className="ranking-card" key={hotel.id || hotel._id}>
                     <div className="rank-badge">#{index + 1}</div>
-
                     <img
                         src={hotel.image}
                         alt={hotel.name}
                         className="hotel-img"
                     />
-
                     <div className="hotel-content">
                         <div className="hotel-text">
                             <h3 className="hotel-name">{hotel.name}</h3>
                             <p className="hotel-location">{hotel.location}</p>
-
                             <div className="hotel-meta">
                                 <span className="rating-box">
                                     ⭐ {hotel.ratingAverage}
@@ -40,7 +37,6 @@ const RankingList = ({ hotels = [] }) => {
                                 </span>
                             </div>
                         </div>
-
                         <button
                             className="go-book-btn"
                             onClick={() => goToHotel(hotel.id || hotel._id)}
