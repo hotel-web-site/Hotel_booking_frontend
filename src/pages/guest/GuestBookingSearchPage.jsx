@@ -1,31 +1,13 @@
 // src/pages/guest/GuestBookingSearchPage.jsx
-import React, { useState } from "react";
+import React from "react";
 import "../../styles/pages/guest/GuestBookingSearchPage.scss";
+import useGuestBookingSearchPage from "./hooks/useGuestBookingSearchPage";
 
 const GuestBookingSearchPage = () => {
-    const [form, setForm] = useState({
-        name: "",
-        phone: "",
-        checkIn: "",
-        bookingNumber: "",
-    });
-
-    const handleChange = (e) => {
-        setForm({ ...form, [e.target.name]: e.target.value });
-    };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-
-        // URL로 정보 전달하여 조회 페이지로 이동
-        const params = new URLSearchParams(form).toString();
-        window.location.href = `/guest/booking-result?${params}`;
-    };
-
+    const { form, handleChange, handleSubmit } = useGuestBookingSearchPage();
     return (
         <div className="guest-booking-search">
             <h1 className="title">비회원 예약확인</h1>
-
             <form className="search-form" onSubmit={handleSubmit}>
                 <label>
                     이용자명
@@ -38,7 +20,6 @@ const GuestBookingSearchPage = () => {
                         required
                     />
                 </label>
-
                 <label>
                     이용자 전화번호
                     <input
@@ -50,7 +31,6 @@ const GuestBookingSearchPage = () => {
                         required
                     />
                 </label>
-
                 <label>
                     입실일자
                     <input
@@ -61,7 +41,6 @@ const GuestBookingSearchPage = () => {
                         required
                     />
                 </label>
-
                 <label>
                     예약번호
                     <input
@@ -73,7 +52,6 @@ const GuestBookingSearchPage = () => {
                         required
                     />
                 </label>
-
                 <button type="submit" className="submit-btn">
                     조회하기
                 </button>

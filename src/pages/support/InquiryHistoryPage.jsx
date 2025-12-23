@@ -1,45 +1,12 @@
 // src/pages/support/InquiryHistoryPage.jsx
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import React from "react";
+import useInquiryHistoryPage from "./hooks/useInquiryHistoryPage";
 import "../../styles/pages/support/InquiryHistoryPage.scss";
 
 const InquiryHistoryPage = () => {
-    const [inquiries, setInquiries] = useState([]);
-    const [loading, setLoading] = useState(true);
-
-    const navigate = useNavigate(); // ⭐ 이동용
-
-    // 🔥 API 실제 연결 준비
-    const fetchInquiryHistory = async () => {
-        try {
-            const token = localStorage.getItem("token");
-
-            const res = await axios.get(
-                `${import.meta.env.VITE_API_BASE_URL}/api/inquiry/my`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
-            );
-
-            setInquiries(res.data.inquiries || []);
-        } catch (error) {
-            console.error("문의 내역 불러오기 실패:", error);
-            setInquiries([]);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    useEffect(() => {
-        fetchInquiryHistory();
-    }, []);
-
+    const { inquiries, loading, navigate } = useInquiryHistoryPage();
     return (
         <div className="inquiry-page">
-            
             {/* 🔹 페이지 헤더 */}
             <div className="inquiry-header">
                 <div className="header-left">
@@ -48,7 +15,6 @@ const InquiryHistoryPage = () => {
                         지금까지 남기신 1:1 문의 내역을 확인할 수 있어요.
                     </p>
                 </div>
-
                 {/* 🔙 고객센터로 돌아가기 */}
                 <button
                     className="back-to-help-btn"
@@ -57,7 +23,6 @@ const InquiryHistoryPage = () => {
                     ← 고객센터로 돌아가기
                 </button>
             </div>
-
             {/* 🔹 콘텐츠 */}
             <div className="inquiry-content">
                 {loading ? (
@@ -78,10 +43,8 @@ const InquiryHistoryPage = () => {
                                     </span>
                                     <span className="inquiry-date">{item.createdAt}</span>
                                 </div>
-
                                 <h2 className="inquiry-subject">{item.subject}</h2>
                                 <p className="inquiry-summary">{item.summary}</p>
-
                                 <div className="inquiry-card-footer">
                                     <button
                                         type="button"

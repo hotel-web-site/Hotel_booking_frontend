@@ -1,70 +1,20 @@
-import React, { useEffect, useState } from "react";
-import {
-  useParams,
-  useNavigate,
-  useSearchParams,
-  useLocation,
-} from "react-router-dom";
+import React from "react";
 import "../../styles/components/booking/BookingComplete.scss";
-
-// API 연동을 위한 인스턴스
-import axiosInstance from "../../api/axiosConfig";
+import useBookingComplete from "./hooks/useBookingComplete";
 
 const BookingComplete = () => {
-  const { hotelId } = useParams();
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const location = useLocation();
-
-  const isGuest = location.pathname.startsWith("/booking-guest") || searchParams.get("guest") === "1";
-
-  const [booking, setBooking] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  // URL에서 전달받은 예약 ID
-  const bookingId = searchParams.get("bookingId");
-
-  useEffect(() => {
-    const fetchBookingData = async () => {
-      if (!bookingId) {
-        alert("예약 번호를 찾을 수 없습니다.");
-        navigate("/");
-        return;
-      }
-
-      try {
-        setLoading(true);
-        // ⭐ 중요: 비회원 예약 조회 시 토큰 없이도 접근 가능한 엔드포인트인지 백엔드 확인 필요
-        const response = await axiosInstance.get(`/bookings/${bookingId}`);
-
-        // 백엔드 응답 구조에 맞춰 데이터 추출 (res.data.data 또는 res.data)
-        const data = response.data.data || response.data;
-
-        setBooking(data);
-      } catch (err) {
-        console.error("예약 정보 로드 실패:", err);
-        const errMsg = err.response?.data?.message || "예약 정보를 불러오는 데 실패했습니다.";
-        alert(errMsg);
-        navigate("/"); // 에러 시 홈으로 리다이렉트
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchBookingData();
-  }, [bookingId, navigate]);
-
-  const formatPrice = (price) => new Intl.NumberFormat("ko-KR").format(Number(price || 0));
-
-  const formatDate = (dateString) => {
-    if (!dateString) return "-";
-    const date = new Date(dateString);
-    // 날짜가 유효하지 않을 경우 대비
-    if (isNaN(date.getTime())) return dateString;
-    return date.toLocaleDateString("ko-KR", {
-      year: "numeric", month: "long", day: "numeric", weekday: "short",
-    });
-  };
+  const {
+    hotelId,
+    isGuest,
+    booking,
+    loading,
+    bookingId,
+    formatPrice,
+    formatDate,
+    paymentStatus,
+    payment,
+    navigate,
+  } = useBookingComplete();
 
   if (loading) return <div className="booking-complete loading">예약 정보를 확인 중입니다...</div>;
   if (!booking) return <div className="booking-complete error">정보를 불러올 수 없습니다.</div>;
